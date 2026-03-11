@@ -1,4 +1,4 @@
-# train_v1 怎么看（阅读指南）
+﻿# train_v1 怎么看（阅读指南）
 
 ## 为什么 `train_v1.jsonl` 看起来“很横、很长”
 
@@ -42,3 +42,15 @@ python scripts/export_dataset_readable.py
 - 当前使用 train/val/test 三分集：64/8/8。
 - 切分粒度为 source_case_id（同一 case 不会同时出现在多个 split）。
 - 读取建议：先看 train_v1_readable.md，再抽查 val/test 的 source_case_id 是否未在 train 出现。
+
+## 当前数据分集结构（2026-03-11）
+- 训练集：data/processed/train_v1.jsonl（唯一一套）
+- 验证集：data/processed/val_v1.jsonl（唯一一套）
+- 项目内测试集（in-domain）：data/processed/test_v1.jsonl
+- 外部测试集（external eval）：data/external_eval/processed/external_eval_v1.jsonl
+
+使用建议：
+1. 训练调参主要看 train/val。
+2. 阶段性汇报同时给出 test_v1 与 external_eval_v1 两组结果。
+3. external_eval_v1 默认只评测，不参与训练。
+

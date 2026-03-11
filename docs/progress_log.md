@@ -113,3 +113,7 @@ python scripts/check_dataset_v1.py
 - 新增脚本：build_external_eval_v1.py / check_external_eval_v1.py。
 - 产物：external_eval_v1.jsonl + readable.json + readable.md（共32样本）。
 - 校验结果：External eval check passed（含与主训练case标题/ID防重合）。
+
+## 2026-03-11（数据分集口径确认）
+- 已确认当前口径：1 套 train + 1 套 val + 2 套 test（test_v1 + external_eval_v1）。
+- 目的：同时覆盖同分布评测与外部泛化评测，减少单一测试结论偏差。
