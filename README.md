@@ -30,6 +30,7 @@
 - `docs/progress_log.md`: 每日执行与复盘
 - `docs/interview_notes.md`: Why 与 Q&A
 - `docs/rental_server_guide.md`: 租服务器建议（4090 是否够用、成本和时长估算）
+- `scripts/server_rental_init.sh`: 租用服务器一键初始化脚本
 
 ## 当前状态
 
