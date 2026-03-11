@@ -261,6 +261,10 @@ export OMP_NUM_THREADS=8
 bash scripts/download_qwen3_modelscope.sh
 ```
 
+补充说明：
+- 如果下载脚本只有 `pip` 安装输出、没有打印 `MODEL_PATH=...`，优先怀疑脚本没有真正执行下载逻辑。
+- 本项目已将实现固定为 `conda run -n base python -c ...`，避免 `conda run + heredoc` 在服务器上失效。
+
 验收：
 - 下载脚本会打印 `MODEL_PATH=...`
 - 该目录下应存在 `config.json` 和 `tokenizer_config.json`

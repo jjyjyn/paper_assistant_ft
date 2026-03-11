@@ -11,9 +11,4 @@ MODEL_ID="${MODEL_ID:-Qwen/Qwen3-4B}"
 mkdir -p "${CACHE_DIR}"
 
 conda run -n base python -m pip install -U modelscope
-conda run -n base python - <<PY
-from modelscope.hub.snapshot_download import snapshot_download
-
-path = snapshot_download("${MODEL_ID}", cache_dir="${CACHE_DIR}")
-print(f"MODEL_PATH={path}")
-PY
+conda run -n base python -c "from modelscope.hub.snapshot_download import snapshot_download; path = snapshot_download('${MODEL_ID}', cache_dir='${CACHE_DIR}'); print(f'MODEL_PATH={path}')"

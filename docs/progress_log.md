@@ -301,6 +301,9 @@ python scripts/check_external_eval_v1.py
 - 新增 `scripts/download_qwen3_modelscope.sh`
   - 作用：通过 ModelScope 官方源下载 `Qwen/Qwen3-4B`
   - 目的：绕开 `huggingface.co` 超时
+- 修正下载脚本实现：
+  - 原写法使用 `conda run -n base python - <<PY`，在实际服务器上未把 heredoc 正常传入 Python
+  - 现改为 `conda run -n base python -c ...`，确保脚本会真实执行 `snapshot_download`
 
 ### 文档同步
 
