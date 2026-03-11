@@ -149,3 +149,24 @@
   - 正式配置可运行
   - 输出目录、日志、loss 曲线都可稳定产出
   - 该项目已经从“训练前准备”推进到“正式训练已完成，待评测/待分析”
+
+## 2026-03-11 补充：Evaluation Ready
+
+- 仓库已补充正式评测入口：
+  - `scripts/eval_lora_model.py`
+  - `scripts/run_eval_v1.sh`
+- 评测覆盖两套数据：
+  - `data/processed/test_v1.jsonl`
+  - `data/external_eval/processed/external_eval_v1.jsonl`
+- 评测输出包括：
+  - 逐条预测 `*.jsonl`
+  - 汇总指标 `*_summary.json`
+  - 可读报告 `*_report.md`
+- 当前评测口径：
+  - `exact_match_rate`
+  - `avg_char_f1`
+  - 分任务统计
+  - 最差样例列表
+- 结论：
+  - 现在项目已从“只有训练结果”推进到“具备可执行评测流程”
+  - 下一步应在服务器运行 `bash scripts/run_eval_v1.sh`，拿到 in-domain 与 external 两组结果

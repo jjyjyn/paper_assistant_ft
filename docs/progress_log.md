@@ -557,3 +557,67 @@ python scripts/check_external_eval_v1.py
   - external_eval 表现分析
   - 失败样例归因
   - 面向老师汇报的话术收敛
+
+## 2026-03-11（补充正式评测脚本与评测口径）
+
+### 触发原因
+
+- `full` 已完成，项目下一阶段不应继续停留在“训练成功”层面。
+- 当前真正需要解决的是：
+  - 如何稳定复现评测
+  - 如何同时报告 in-domain 与 external 结果
+  - 如何把生成式输出变成可读、可汇报、可抽检的评测材料
+
+### 新增内容
+
+- 新增脚本：
+  - `scripts/eval_lora_model.py`
+  - `scripts/run_eval_v1.sh`
+
+### 设计思路
+
+- 不依赖额外服务，直接加载：
+  - base model：`Qwen3-4B`
+  - adapter：`outputs/qwen_lora_v1_full`
+- 逐条读取 JSONL 评测集样本，按训练时同类 `instruction + input` 形式构造用户提示。
+- 使用 `tokenizer.apply_chat_template(...)` 构造 Qwen 对话输入，保证推理格式尽量贴近训练格式。
+- 每条样本写出：
+  - 原始 instruction
+  - 原始 input
+  - reference
+  - prediction
+  - `exact_match`
+  - `char_f1`
+
+### 为什么选这套指标
+
+- 当前任务是生成式、结构化、多句输出，不适合只用单一分类准确率理解。
+- 因此先采用两层口径：
+  - `exact_match_rate`：判断模型是否能稳定复现标准答案
+  - `avg_char_f1`：作为中文生成任务的粗粒度重合度参考
+- 同时输出 `report.md`，方便做人工抽检。
+- 这意味着评测不是“只看一个数”，而是：
+  - 自动指标做快筛
+  - 可读报告做质检
+
+### 运行方式
+
+- 服务器执行：
+  - `bash scripts/run_eval_v1.sh`
+- 输出目录形如：
+  - `outputs/evals/qwen_lora_v1_full_<timestamp>/`
+- 主要文件：
+  - `test_v1_predictions.jsonl`
+  - `test_v1_summary.json`
+  - `test_v1_report.md`
+  - `external_eval_v1_predictions.jsonl`
+  - `external_eval_v1_summary.json`
+  - `external_eval_v1_report.md`
+
+### 阶段结论
+
+- 截至 2026-03-11，项目已经具备从训练到评测的最小闭环执行能力。
+- 当前下一步不是继续改训练脚本，而是：
+  - 跑出 test/external 两组评测结果
+  - 选取高分样例与低分样例
+  - 做失败归因与汇报材料沉淀

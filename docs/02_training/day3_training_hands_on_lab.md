@@ -339,3 +339,57 @@ PY
 - “这次 full 的重点不是堆算力，而是把正式训练配置真实跑完，拿到正式产物、日志和 loss 曲线。”
 - “由于当前 v1 数据规模不大，所以 full 只用了约一分钟，但它已经足够证明 LoRA 微调闭环在这条 Qwen3 路线上成立。”
 - “下一步我会把重点放在 in-domain 和 external 的评测，以及失败样例分析上，而不是盲目继续拉长训练时间。”
+
+---
+
+## 12. 流程 7：正式评测（test_v1 + external_eval_v1）
+
+### 原理
+
+- 训练完成不等于项目完成。
+- 你至少要回答两个问题：
+  - 模型在项目内分布上表现如何？
+  - 模型离开当前分布后是否明显退化？
+- 因此评测必须同时覆盖：
+  - `test_v1`：项目内测试
+  - `external_eval_v1`：独立外部分布测试
+
+### 操作
+
+```bash
+cd ~/paper_assistant_ft
+export MODEL_PATH=/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B
+export ADAPTER_PATH=outputs/qwen_lora_v1_full
+bash scripts/run_eval_v1.sh
+```
+
+### 输出
+
+- 目录形如：`outputs/evals/qwen_lora_v1_full_<timestamp>/`
+- 每套数据都会生成：
+  - `*_predictions.jsonl`
+  - `*_summary.json`
+  - `*_report.md`
+
+### 当前指标口径
+
+- `exact_match_rate`
+- `avg_char_f1`
+- 分任务统计
+- 最差样例列表
+
+### 怎么理解这些指标
+
+- `exact_match_rate` 更严格，适合看模型是否能稳定复现目标格式和表述。
+- `char_f1` 更宽松，适合看生成内容与参考答案的大致重合程度。
+- 对这个项目来说，自动指标只能做第一层筛选。
+- 真正能支撑你给老师汇报的，还需要：
+  - 读 `report.md`
+  - 抽高分样例
+  - 抽低分样例
+  - 总结失败模式
+
+### 你可以这样讲
+
+- “我没有把评测简化成一个准确率数字，而是同时保留了严格匹配、字符级重合度和逐条可读报告。”
+- “这样做的目的不是追求某个漂亮分数，而是让结果既可快速比较，也能回到具体样例做失效分析。”
