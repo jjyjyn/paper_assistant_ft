@@ -45,11 +45,13 @@ Each line is a JSON object:
 
 - Source library: `data/raw/paper_cases_v1.json`.
 - Build method: template expansion for 4 tasks per case.
-- Split: deterministic shuffle by seed (`20260311`), 90/10 train/val.
+- Split: deterministic case-level shuffle by seed (`20260311`), with train/val/test.
+- Leakage guard: cross-split duplicate `id` and `source_case_id` are forbidden.
 
 ## Current v1 target
 
 - Cases: 20
 - Samples per case: 4
 - Total samples: 80
-- Expected split: train 72 / val 8
+- Expected split (main): train 64 / val 8 / test 8
+- External eval (independent): 8 cases / 32 samples

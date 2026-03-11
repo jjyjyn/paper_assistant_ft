@@ -26,7 +26,8 @@ python scripts/check_dataset_v1.py
 3. 人工抽检 10 条
 
 - 从 `train_v1.jsonl` 抽 6 条
-- 从 `val_v1.jsonl` 抽 4 条
+- 从 `val_v1.jsonl` 抽 2 条
+- 从 `test_v1.jsonl` 抽 2 条
 - 检查是否“输入可支撑输出、无幻觉、结构清晰”
 
 4. 手动改 3 条样本
@@ -58,8 +59,9 @@ python scripts/check_dataset_v1.py
 
 ### 4) 分布规则
 
-- 训练集和验证集都要覆盖四类任务
+- 训练集、验证集、测试集都要覆盖四类任务
 - 不允许某一类在 val 中为 0
+- 不允许同一 `source_case_id` 跨 split 出现（防泄漏）
 
 ## 三、标注一致性（简单标准）
 
@@ -71,5 +73,19 @@ python scripts/check_dataset_v1.py
 ## 四、你可以怎么讲这段经历
 
 - “我不是只会调用训练命令，我能把原始案例转成可训练 JSONL，并做自动校验与人工抽检。”
-- “我做了任务分层切分，保证 train/val 都有四类任务，避免评估失真。”
+- “我做了 case-level 切分，保证 train/val/test 都有四类任务，并拦截跨 split 泄漏。”
 - “我记录了修改原因，保证数据改动可追踪，可复盘。”
+
+## 五、清洗常见问题与处理（面试可直接讲）
+
+1. 问题：输出里出现 input 没有的指标或结论（幻觉）
+- 处理：回到 `data/raw/paper_cases_v1.json` 修正源信息；重跑 build/check，不直接手改 jsonl。
+
+2. 问题：样本表达过于模板化，信息密度低
+- 处理：在 raw case 的 `result/limitations` 补充可量化细节与边界条件，再重建样本。
+
+3. 问题：同一论文案例跨 train/val/test（数据泄漏）
+- 处理：使用 case-level split，并在 check 脚本里强制校验 `source_case_id` 不跨集合重复。
+
+4. 问题：只在 in-domain 上效果好，外部泛化差
+- 处理：保留独立 external_eval，不参与训练；汇报时同时给出 in-domain + external 结果。

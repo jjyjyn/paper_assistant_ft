@@ -23,8 +23,9 @@ python scripts/build_dataset_v1.py
 预期输出（数量可能一致）：
 
 - `Built samples: 80`
-- `Train samples: 72`
+- `Train samples: 64`
 - `Val samples: 8`
+- `Test samples: 8`
 
 你要记录：
 
@@ -42,11 +43,11 @@ python scripts/check_dataset_v1.py
 预期输出：
 
 - `Dataset check passed.`
-- train/val 四类任务都有数量
+- train/val/test 四类任务都有数量
 
 你要记录：
 
-- 每类任务在 train/val 的数量
+- 每类任务在 train/val/test 的数量
 
 ---
 
@@ -60,12 +61,13 @@ python scripts/export_dataset_readable.py
 
 - `data/processed/train_v1_readable.md`
 - `data/processed/val_v1_readable.md`
+- `data/processed/test_v1_readable.md`
 
 ---
 
 ## Step 4. 人工抽检（必须）
 
-打开 `train_v1_readable.md`，抽检 6 条；`val_v1_readable.md` 抽检 4 条。
+打开 `train_v1_readable.md` 抽检 6 条；`val_v1_readable.md` 抽检 2 条；`test_v1_readable.md` 抽检 2 条。
 
 逐条回答：
 

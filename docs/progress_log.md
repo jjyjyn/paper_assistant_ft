@@ -168,3 +168,29 @@ python scripts/check_external_eval_v1.py
 1. 当前已从“训练待启动”推进到“训练执行准备完成”。
 2. 训练执行顺序固定为：`server init -> data check -> smoke -> full`。
 3. 文档需要持续记录：每次训练的配置、日志路径、loss 变化、失败原因与修复。
+
+## 2026-03-11（训练前文档完备性审计与修正）
+
+### 审计目标
+
+- 检查“训练前准备”是否已可对外稳定复述（保研/面试场景）。
+- 检查 docs 是否存在旧口径（72/8、90/10）导致前后冲突。
+
+### 发现与修正
+
+1. `docs/dataset_schema.md`
+- 旧口径：90/10 train/val 与 72/8。
+- 修正：case-level `64/8/8` + external_eval `32`，并补充防泄漏说明。
+
+2. `docs/day2_data_hands_on_lab.md`
+- 旧口径：Step 1 仍写 train 72 / val 8。
+- 修正：更新为 train 64 / val 8 / test 8；抽检改为 train/val/test = 6/2/2。
+
+3. `docs/data_cleaning_labeling_guide.md`
+- 补充：train/val/test 覆盖要求与 `source_case_id` 防泄漏规则。
+- 新增：清洗常见问题与处理（幻觉、模板化、泄漏、外部泛化不足）。
+
+### 结论
+
+- 当前“训练前准备 + 数据准备 + 清洗问题 + 面试追问”四块内容已成体系。
+- 剩余工作重心转到：服务器执行 smoke/full，并把真实训练日志继续回填到 docs。
