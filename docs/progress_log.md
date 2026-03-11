@@ -64,3 +64,23 @@ python scripts/check_dataset_v1.py
 1. 租用 4090 服务器并初始化环境
 2. 执行 smoke 训练（50-100 step）
 3. 根据显存/速度反馈调整训练超参
+
+---
+
+## 2026-03-11（文档增强）
+
+### 触发原因
+
+- 用户希望获得“可亲手操作、可面试复述”的完整闭环，而不是简略说明。
+
+### 新增内容
+
+- `docs/llm_finetune_end2end_playbook.md`
+- `docs/day2_data_hands_on_lab.md`
+- `docs/interview_notes_categorized.md`
+- `docs/dataset_reading_guide.md`
+- `docs/README_docs.md` 导航增强
+
+### 目标
+
+- 把“我会执行命令”升级为“我能讲清楚每一步为什么、怎么做、结果是什么”。
