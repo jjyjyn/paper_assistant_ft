@@ -5,6 +5,7 @@
 - `progress_log.md`：每天做了什么、命令、问题、结论
 - `project_plan.md`：当前阶段和下一步计划
 - `day2_data_hands_on_lab.md`：Day2 逐步实操单（手把手）
+- `day3_training_hands_on_lab.md`：Phase3 训练执行与复述手册（原理+操作+验收+常见坑）
 
 ## 2) 按面试复习
 

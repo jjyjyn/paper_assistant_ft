@@ -122,3 +122,49 @@ python scripts/check_dataset_v1.py
 - Added migration handoff document: `docs/chat_migration_handoff_2026-03-11.md`.
 - Document includes: fixed constraints, current dataset/eval status, next-step execution order, and paste-ready prompt block for starting a new Codex chat.
 - Goal: avoid token-limit context loss and continue directly from Phase 2 -> Phase 3 (training).
+
+## 2026-03-11（新会话迁移后：Phase 3 训练前准备）
+
+### 本轮目标
+
+- 在新对话窗口无上下文丢失地接续阶段 3。
+- 完成训练前可执行性复核，并把训练入口补齐到“一条 smoke + 一条 full”。
+
+### 本轮执行命令（本地）
+
+```bash
+python scripts/build_dataset_v1.py
+python scripts/check_dataset_v1.py
+python scripts/build_external_eval_v1.py
+python scripts/check_external_eval_v1.py
+```
+
+### 本轮结果
+
+- 主数据构建与校验通过：`train/val/test = 64/8/8`。
+- 外部评测构建与校验通过：`external_eval_v1 = 32`。
+- 数据链路状态：可复现、可训练、可评测。
+
+### 本轮代码/配置更新
+
+- 更新：`scripts/run_train_smoke.sh`
+  - 模型自动探测顺序改为优先 Qwen3-4B，回退 Qwen2.5-3B。
+  - 增加 `BASE_CONFIG` 可覆盖参数，便于复用 smoke 脚本。
+- 新增：`configs/lora_sft_qwen_v1_full.yaml`
+  - 正式训练配置入口（默认 3 epoch，保留输出目录）。
+- 新增：`scripts/run_train_full.sh`
+  - 正式训练启动脚本，与 smoke 保持同一模型探测逻辑。
+
+### 本轮文档同步
+
+- 更新：`docs/project_plan.md`（Phase 3 状态与执行清单对齐）。
+- 更新：`docs/README_docs.md`（加入 Day3 手册导航）。
+- 更新：`docs/llm_finetune_end2end_playbook.md`（补 full 训练入口）。
+- 更新：`docs/interview_notes.md`（新增 Phase 3 高频追问）。
+- 新增：`docs/day3_training_hands_on_lab.md`（按“原理+操作+验收+常见坑”沉淀）。
+
+### 关键结论（阶段口径）
+
+1. 当前已从“训练待启动”推进到“训练执行准备完成”。
+2. 训练执行顺序固定为：`server init -> data check -> smoke -> full`。
+3. 文档需要持续记录：每次训练的配置、日志路径、loss 变化、失败原因与修复。

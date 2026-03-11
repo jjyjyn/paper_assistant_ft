@@ -99,6 +99,8 @@ python scripts/export_dataset_readable.py
 
 - `configs/lora_sft_qwen25_3b_v1.yaml`
 - `scripts/run_train_smoke.sh`
+- `configs/lora_sft_qwen_v1_full.yaml`
+- `scripts/run_train_full.sh`
 
 ### 4.3 冒烟成功标准
 
@@ -115,6 +117,14 @@ python scripts/export_dataset_readable.py
 1. 跑 smoke
 2. 看速度与显存占用
 3. 调整超参后开正式训练
+
+最小命令块：
+
+```bash
+export MODEL_PATH=~/models/Qwen/Qwen3-4B-Instruct
+bash scripts/run_train_smoke.sh
+bash scripts/run_train_full.sh
+```
 
 ### 5.2 常调参数
 

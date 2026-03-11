@@ -3,8 +3,8 @@
 ## 当前阶段
 
 - 阶段 1：环境与仓库跑通（已完成）
-- 阶段 2：数据集第一版制作（已完成 v1 初版）
-- 阶段 3：LoRA 微调训练（待启动）
+- 阶段 2：数据集第一版制作（已完成）
+- 阶段 3：LoRA 微调训练（进行中：已完成训练前准备）
 
 ## 阶段状态
 
@@ -16,64 +16,68 @@
 2. 数据集第一版（Done - v1）
 - 已完成四类任务统一 schema
 - 已完成结构化案例库 + 自动扩展脚本
-- 已产出并校验：
-  - `data/processed/train_v1.jsonl`（72）
-  - `data/processed/val_v1.jsonl`（8）
-- 校验结果：四类任务在 train/val 全覆盖
+- 主数据分集（case-level）：`train/val/test = 64/8/8`
+- 外部评测分集：`external_eval_v1 = 32`（8 case x 4 任务）
+- 已通过 build/check/export + 防泄漏校验
 
-3. LoRA 微调训练（Next）
-- 在新租 4090 节点执行 smoke run（50-100 step）
-- 通过后执行正式训练
+3. LoRA 微调训练（In Progress）
+- 已完成训练前检查（主数据 + external_eval 校验全部通过）
+- 已完成 smoke 训练脚本升级：优先 `Qwen3-4B-Instruct`，兼容回退 `Qwen2.5-3B-Instruct`
+- 已新增正式训练入口：
+  - `configs/lora_sft_qwen_v1_full.yaml`
+  - `scripts/run_train_full.sh`
 
-## 明日执行清单（训练日）
+## 今日执行清单（Phase 3 启动日）
 
 1. 服务器准备
-- 租用 `RTX 4090 24GB`
-- 拉取仓库并执行 `scripts/server_rental_init.sh`
-- 验证：`torch.cuda.is_available()` 和 `llamafactory-cli version`
+- 执行：`bash scripts/server_rental_init.sh`
+- 验收：
+  - `torch.cuda.is_available() == True`
+  - `llamafactory-cli version` 正常输出
 
-2. 数据准备
+2. 数据口径冻结与复核
 - 执行：
   - `python scripts/build_dataset_v1.py`
   - `python scripts/check_dataset_v1.py`
+  - `python scripts/build_external_eval_v1.py`
+  - `python scripts/check_external_eval_v1.py`
+- 验收：
+  - 主数据 `64/8/8`
+  - external_eval `32`
+  - 检查脚本均输出 `passed`
 
-3. 冒烟训练
-- 执行：`bash scripts/run_train_smoke.sh`
-- 完成标准：
-  - 成功启动并完成一个短训练
-  - 生成日志和输出目录
+3. 冒烟训练（低成本验链路）
+- 执行：
+  - `export MODEL_PATH=~/models/Qwen/Qwen3-4B-Instruct`
+  - `bash scripts/run_train_smoke.sh`
+- 验收：
+  - 训练完整启动并结束
+  - `outputs/` 下出现日志和 checkpoint
+  - 无 OOM/路径错误/字段错误
 
-4. 正式训练准备
-- 根据 smoke 显存和速度调整：
-  - `per_device_train_batch_size`
-  - `gradient_accumulation_steps`
-  - `cutoff_len`
+4. 正式训练（smoke 通过后）
+- 执行：
+  - `export MODEL_PATH=~/models/Qwen/Qwen3-4B-Instruct`
+  - `bash scripts/run_train_full.sh`
+- 验收：
+  - loss 曲线可见且总体下降
+  - `outputs/qwen_lora_v1_full` 产物完整
 
 ## 风险与应对
 
 - 风险：学校服务器节点 GPU 不稳定
-  - 应对：默认在租用 4090 上训练，学校节点只保留为备份
+  - 应对：默认在租用 4090 上训练，学校节点仅做备份
 
 - 风险：训练时间超预算
-  - 应对：先小步数验证，再开长训练；中途基于 loss 曲线早停
+  - 应对：先 smoke 再 full；根据显存和吞吐调整 batch/accum/cutoff_len
 
-## 阶段2里程碑更新（2026-03-11）
-- 数据集已升级为 train/val/test 三分集。
-- 已启用 case-level split，避免同一论文案例跨集合泄漏。
-- 完成标准：
-  1) build/check/export 全部可执行；
-  2) check 脚本能自动拦截 id/source_case_id 泄漏；
-  3) 训练前数据版本已固定可复现。
+- 风险：模型路径命名不一致（Qwen3/Qwen2.5 目录差异）
+  - 应对：脚本自动探测；必要时手动设置 `MODEL_PATH`
 
-## 阶段2补充里程碑（外部评测）
-- 已建立 external eval 独立数据链路（raw -> build -> check -> processed）。
-- 当前 external_eval_v1：8 cases / 32 samples（四任务均衡）。
-- 完成标准新增：训练报告需同时给出 in-domain(test_v1) 与 external_eval 两组结果。
+## 阶段3固定口径（训练与汇报）
 
-## 阶段3前数据口径（固定）
-- train: data/processed/train_v1.jsonl
-- val: data/processed/val_v1.jsonl
-- test(in-domain): data/processed/test_v1.jsonl
-- test(external): data/external_eval/processed/external_eval_v1.jsonl
-- 训练与早停基于 train/val；最终汇报同时展示两套测试结果。
-
+- 训练集：`data/processed/train_v1.jsonl`
+- 验证集：`data/processed/val_v1.jsonl`
+- 项目内测试集：`data/processed/test_v1.jsonl`
+- 外部测试集：`data/external_eval/processed/external_eval_v1.jsonl`
+- 原则：训练与早停只用 train/val；汇报必须同时给出 in-domain + external 两组结果

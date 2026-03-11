@@ -45,12 +45,18 @@ Paste everything between the two lines into the first message of the new chat.
 - docs/data_cleaning_labeling_guide.md
 - docs/llm_finetune_end2end_playbook.md
 - docs/day2_data_hands_on_lab.md
+- docs/day3_training_hands_on_lab.md
 - docs/data_preparation/case_test_log.md
 - docs/external_eval_guide.md
 
 5) 关键结论：
 - 现在是 “1 套 train + 1 套 val + 2 套 test（in-domain + external）”。
-- 阶段 2（数据第一版）已经达到可训练标准，下一步是训练与评测闭环。
+- 阶段 3 已进入训练执行准备：数据复核已通过，smoke/full 训练入口已就绪。
+
+6) 训练入口状态（已补齐）：
+- smoke: scripts/run_train_smoke.sh（优先 Qwen3-4B，回退 Qwen2.5-3B）
+- full: scripts/run_train_full.sh
+- full config: configs/lora_sft_qwen_v1_full.yaml
 
 你现在要做的事（按顺序）：
 1) 先检查本地仓库状态与最近提交，给我一句确认。
@@ -93,3 +99,38 @@ If Codex in new chat asks for state, paste:
 
 - Do not paste passwords/tokens/API keys into chat.
 - Keep this handoff file updated when phase changes (Phase 2 -> Phase 3 -> Phase 4).
+
+## 6. Hard Rules (Do Not Lose)
+
+### 6.1 Must Keep (Do Not Delete)
+
+- Keep historical notes and logs. Do not delete old interview/docs content.
+- Keep these files continuously maintained:
+  - `docs/progress_log.md`
+  - `docs/project_plan.md`
+  - `docs/interview_notes.md`
+- Keep the fixed route unchanged unless user explicitly approves changes:
+  - LLaMA-Factory + Qwen3-4B-Instruct + LoRA SFT
+- Keep split strategy unchanged:
+  - train/val/test are case-level split
+  - external_eval is independent test set
+- Keep leakage checks (id and source_case_id) enabled.
+
+### 6.2 Can Change (With Traceability)
+
+- You can add new cases in raw data and regenerate datasets.
+- You can refine prompt templates and outputs for better label quality.
+- You can tune training hyperparameters (batch size, grad acc, lr, cutoff_len).
+- Any change above must be recorded in:
+  - `docs/progress_log.md` (what changed)
+  - `docs/interview_notes.md` (why changed)
+
+### 6.3 Execution Discipline
+
+- For each phase step, always include:
+  - what we do
+  - why we do it
+  - how to verify done
+  - common failure points
+- Prefer copy-paste command blocks for server operations.
+- Append docs by Day/topic; do not overwrite older sections.

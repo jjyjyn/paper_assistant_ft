@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Smoke run for Day 2/3
+# Full training run for Day 3+
 # Run from repo root:
-#   bash scripts/run_train_smoke.sh
+#   bash scripts/run_train_full.sh
 
 source "$(conda info --base)/etc/profile.d/conda.sh"
 conda activate paper_ft
@@ -29,14 +29,14 @@ if [[ -z "${MODEL_PATH}" ]]; then
   fi
 fi
 
-BASE_CONFIG="${BASE_CONFIG:-configs/lora_sft_qwen25_3b_v1.yaml}"
-TMP_CONFIG="$(mktemp /tmp/lora_sft_smoke.XXXX.yaml)"
+BASE_CONFIG="${BASE_CONFIG:-configs/lora_sft_qwen_v1_full.yaml}"
+TMP_CONFIG="$(mktemp /tmp/lora_sft_full.XXXX.yaml)"
 cp "${BASE_CONFIG}" "${TMP_CONFIG}"
 sed -i "s|^model_name_or_path:.*|model_name_or_path: ${MODEL_PATH}|" "${TMP_CONFIG}"
 
 echo "Using model: ${MODEL_PATH}"
 echo "Using base config: ${BASE_CONFIG}"
-echo "Start LLaMA-Factory smoke training..."
+echo "Start LLaMA-Factory full training..."
 llamafactory-cli train "${TMP_CONFIG}"
 
-echo "Smoke training finished."
+echo "Full training finished."
