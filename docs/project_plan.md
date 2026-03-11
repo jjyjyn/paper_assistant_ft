@@ -49,7 +49,7 @@
 
 3. 冒烟训练（低成本验链路）
 - 执行：
-  - `export MODEL_PATH=/root/autodl-tmp/models/Qwen/Qwen3-4B`
+  - `export MODEL_PATH=/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B`
   - `bash scripts/run_train_smoke.sh`
 - 验收：
   - 训练完整启动并结束
@@ -58,7 +58,7 @@
 
 4. 正式训练（smoke 通过后）
 - 执行：
-  - `export MODEL_PATH=/root/autodl-tmp/models/Qwen/Qwen3-4B`
+  - `export MODEL_PATH=/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B`
   - `bash scripts/run_train_full.sh`
 - 验收：
   - loss 曲线可见且总体下降

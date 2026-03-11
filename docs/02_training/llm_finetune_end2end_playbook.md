@@ -147,7 +147,7 @@ python scripts/export_dataset_readable.py
 最小命令块：
 
 ```bash
-export MODEL_PATH=/root/autodl-tmp/models/Qwen/Qwen3-4B
+export MODEL_PATH=/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B
 bash scripts/run_train_smoke.sh
 bash scripts/run_train_full.sh
 ```

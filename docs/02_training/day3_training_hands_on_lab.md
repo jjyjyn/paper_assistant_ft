@@ -98,7 +98,7 @@ python scripts/check_external_eval_v1.py
 
 ```bash
 cd ~/paper_assistant_ft
-export MODEL_PATH=/root/autodl-tmp/models/Qwen/Qwen3-4B
+export MODEL_PATH=/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B
 bash scripts/run_train_smoke.sh
 ```
 
@@ -168,7 +168,7 @@ bash scripts/run_train_smoke.sh
 
 ```bash
 cd ~/paper_assistant_ft
-export MODEL_PATH=/root/autodl-tmp/models/Qwen/Qwen3-4B
+export MODEL_PATH=/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B
 bash scripts/run_train_full.sh
 ```
 

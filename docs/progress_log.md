@@ -312,3 +312,5 @@ python scripts/check_external_eval_v1.py
   - Hugging Face 超时归因
   - ModelScope 下载方案
   - AutoDL 数据盘优先路径
+- 将训练命令中的默认 `MODEL_PATH` 进一步对齐到本次实测下载目录：
+  - `/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B`

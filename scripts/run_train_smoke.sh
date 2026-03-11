@@ -12,7 +12,9 @@ python scripts/check_dataset_v1.py
 
 MODEL_PATH="${MODEL_PATH:-}"
 if [[ -z "${MODEL_PATH}" ]]; then
-  if [[ -d "${HOME}/autodl-tmp/models/Qwen/Qwen3-4B" ]]; then
+  if [[ -d "${HOME}/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B" ]]; then
+    MODEL_PATH="${HOME}/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B"
+  elif [[ -d "${HOME}/autodl-tmp/models/Qwen/Qwen3-4B" ]]; then
     MODEL_PATH="${HOME}/autodl-tmp/models/Qwen/Qwen3-4B"
   elif [[ -d "${HOME}/models/Qwen/Qwen3-4B" ]]; then
     MODEL_PATH="${HOME}/models/Qwen/Qwen3-4B"
@@ -31,7 +33,7 @@ if [[ -z "${MODEL_PATH}" ]]; then
   else
     echo "Model path not found."
     echo "Set MODEL_PATH, e.g.:"
-    echo "  export MODEL_PATH=${HOME}/autodl-tmp/models/Qwen/Qwen3-4B"
+    echo "  export MODEL_PATH=${HOME}/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B"
     echo "  # fallback: ${HOME}/models/Qwen/Qwen2___5-3B-Instruct"
     exit 1
   fi

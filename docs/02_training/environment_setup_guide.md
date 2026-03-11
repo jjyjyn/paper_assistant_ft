@@ -235,7 +235,7 @@ if torch.cuda.is_available():
 PY
 
 cd ~/paper_assistant_ft
-export MODEL_PATH=/root/autodl-tmp/models/Qwen/Qwen3-4B
+export MODEL_PATH=/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B
 bash scripts/run_train_smoke.sh
 ```
 
@@ -268,6 +268,7 @@ bash scripts/download_qwen3_modelscope.sh
 验收：
 - 下载脚本会打印 `MODEL_PATH=...`
 - 该目录下应存在 `config.json` 和 `tokenizer_config.json`
+- 当前实测路径：`/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B`
 
 ## 9. 你给老师讲这一段时可以怎么说
 
