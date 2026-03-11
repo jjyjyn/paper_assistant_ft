@@ -194,3 +194,86 @@ python scripts/check_external_eval_v1.py
 
 - 当前“训练前准备 + 数据准备 + 清洗问题 + 面试追问”四块内容已成体系。
 - 剩余工作重心转到：服务器执行 smoke/full，并把真实训练日志继续回填到 docs。
+
+## 2026-03-11（租用服务器环境配置与版本固定）
+
+### 本轮目标
+
+- 在 AutoDL 租用服务器上完成一套可复现的训练环境。
+- 不是只“装上能跑”，而是把版本冲突和真实报错归因清楚。
+
+### 环境选择
+
+- 平台：AutoDL
+- 配置：北京 B 区 `RTX 4090 24GB`
+- 镜像：`Miniconda / conda3 / Python 3.10 / Ubuntu 22.04`
+- 执行策略：
+  - 无卡模式：装环境、拉代码、跑数据检查
+  - GPU 模式：只负责训练
+
+### 实际遇到的问题
+
+1. `tmux` 缺失
+- 归因：系统层工具缺失
+- 处理：`apt-get install -y tmux`
+
+2. `MODEL_PATH` 指向不存在目录
+- 归因：路径层错误
+- 处理：先查目录，再设置真实模型路径
+
+3. `huggingface_hub` / `transformers` / `tokenizers` 版本冲突
+- 归因：Python 依赖链被错误升级
+- 处理：删除旧环境，重建 conda 环境并钉死兼容版本
+
+4. `torchvision::nms does not exist`
+- 归因：`torch` 与 `torchvision` 二进制版本不匹配
+- 处理：使用同一套 CUDA wheel 重装
+
+### 最终固定版本
+
+- `torch==2.4.1+cu121`
+- `torchvision==0.19.1+cu121`
+- `transformers==4.52.4`
+- `tokenizers==0.21.1`
+- `huggingface_hub==0.36.2`
+- `llamafactory==0.9.3`
+
+### 验证结果
+
+- 无卡模式版本验证通过
+- `check_dataset_v1.py` -> `Dataset check passed.`
+- `check_external_eval_v1.py` -> `External eval check passed.`
+- 说明：无卡模式下 `cuda: False` 为预期现象，不代表环境失败
+
+### 结论
+
+- 环境配置阶段已从“经验性安装”升级为“有版本基线、有故障归因、有验证输出”的可复现流程。
+
+## 2026-03-11（docs 结构重组与阶段归档）
+
+### 触发原因
+
+- 根目录文档过多，按阶段复盘和按老师追问准备都不方便。
+- 仅靠零散文档难以支撑“从数据到训练到面试”的完整叙事。
+
+### 本次重组结果
+
+- 根目录只保留总控文档：
+  - `README_docs.md`
+  - `project_plan.md`
+  - `progress_log.md`
+  - `interview_notes.md`
+  - `chat_migration_handoff_2026-03-11.md`
+- 数据阶段文档归入：`docs/01_data/`
+- 训练阶段文档归入：`docs/02_training/`
+- 面试阶段文档归入：`docs/03_interview/`
+
+### 本次新增文档
+
+- `docs/02_training/environment_setup_guide.md`
+- `docs/03_interview/teacher_question_bank.md`
+
+### 目标
+
+- 让你后面按阶段读，就能把项目完整讲下来。
+- 让“老师可能怎么问”与“你该去哪份文档看”形成一一对应关系。

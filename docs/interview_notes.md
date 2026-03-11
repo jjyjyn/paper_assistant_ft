@@ -1,5 +1,7 @@
 # 面试与答辩笔记（Interview Notes）
 
+> 这是“快读版”。如果你要按环节准备老师追问，先看 `docs/03_interview/teacher_question_bank.md`。
+
 ## Why：今天的数据方案为什么这么设计
 
 ### 为什么先做“结构化案例库 + 模板扩展”
@@ -50,3 +52,14 @@
 
 3. 你怎么控制 GPU 成本？
 - 回答：先做短时 smoke，确认链路和显存后再开 full；每次只改少量超参并记录效果，避免反复长训试错。
+
+## 环境配置阶段常见追问
+
+1. 为什么要自己建 conda 环境，而不是直接用平台默认环境？
+- 回答：默认环境不可控，依赖冲突很难复现。我把训练环境独立到 `paper_ft`，并固定了 `torch/transformers/tokenizers/huggingface_hub/llamafactory` 版本，后续复现更稳。
+
+2. 你真实遇到过什么环境问题？
+- 回答：遇到过 `tmux` 缺失、模型路径错误、`huggingface_hub` 版本冲突、`torchvision::nms` 报错。我最后通过重建 conda 环境并统一 CUDA wheel 版本解决。
+
+3. 为什么用无卡模式先配环境？
+- 回答：环境安装和数据检查主要吃网络和磁盘，不一定需要 GPU；先用无卡模式处理这些准备工作，再切回 GPU 跑训练，成本更合理。

@@ -40,14 +40,17 @@ Paste everything between the two lines into the first message of the new chat.
 - overlap 检查：external 与主训练 raw 在 case_id/title 上做去重校验
 
 4) docs 侧已有数据学习与复盘材料：
-- docs/dataset_schema.md
-- docs/dataset_reading_guide.md
-- docs/data_cleaning_labeling_guide.md
-- docs/llm_finetune_end2end_playbook.md
-- docs/day2_data_hands_on_lab.md
-- docs/day3_training_hands_on_lab.md
-- docs/data_preparation/case_test_log.md
-- docs/external_eval_guide.md
+- docs/README_docs.md
+- docs/01_data/dataset_schema.md
+- docs/01_data/dataset_reading_guide.md
+- docs/01_data/data_cleaning_labeling_guide.md
+- docs/01_data/day2_data_hands_on_lab.md
+- docs/01_data/external_eval_guide.md
+- docs/01_data/data_preparation/case_test_log.md
+- docs/02_training/environment_setup_guide.md
+- docs/02_training/day3_training_hands_on_lab.md
+- docs/02_training/llm_finetune_end2end_playbook.md
+- docs/03_interview/teacher_question_bank.md
 
 5) 关键结论：
 - 现在是 “1 套 train + 1 套 val + 2 套 test（in-domain + external）”。
@@ -57,6 +60,11 @@ Paste everything between the two lines into the first message of the new chat.
 - smoke: scripts/run_train_smoke.sh（优先 Qwen3-4B，回退 Qwen2.5-3B）
 - full: scripts/run_train_full.sh
 - full config: configs/lora_sft_qwen_v1_full.yaml
+
+7) 环境配置状态（已记录）：
+- 已在租用服务器上完成一轮真实环境配置与故障排查记录。
+- 已记录问题：tmux 缺失、MODEL_PATH 指向错误、huggingface_hub/transformers 冲突、torchvision NMS 报错、无卡/有卡模式差异。
+- 详细文档：docs/02_training/environment_setup_guide.md
 
 你现在要做的事（按顺序）：
 1) 先检查本地仓库状态与最近提交，给我一句确认。

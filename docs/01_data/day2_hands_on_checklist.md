@@ -17,7 +17,7 @@
 
 - [ ] 给 `build_dataset_v1.py` 增加参数：`--max_cases`
 - [ ] 把抽检结果汇总成 5 条“常见错误模式”
-- [ ] 在 `docs/interview_notes_categorized.md` 增加 3 条“老师追问-回答”
+- [ ] 在 `docs/03_interview/interview_notes_categorized.md` 增加 3 条“老师追问-回答”
 
 ## 明日训练前（租机后）
 

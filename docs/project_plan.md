@@ -22,6 +22,7 @@
 
 3. LoRA 微调训练（In Progress）
 - 已完成训练前检查（主数据 + external_eval 校验全部通过）
+- 已完成租用服务器环境重建与版本固定（无卡模式验证通过）
 - 已完成 smoke 训练脚本升级：优先 `Qwen3-4B-Instruct`，兼容回退 `Qwen2.5-3B-Instruct`
 - 已新增正式训练入口：
   - `configs/lora_sft_qwen_v1_full.yaml`
