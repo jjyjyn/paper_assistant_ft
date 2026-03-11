@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
@@ -54,13 +55,28 @@ def build_user_prompt(instruction: str, input_text: str) -> str:
     return instruction or input_text
 
 
+def strip_think_content(text: str) -> str:
+    text = text.strip()
+    if not text:
+        return text
+
+    # Remove complete think blocks first.
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
+
+    # If generation was truncated inside a think block, drop the remainder.
+    if text.startswith("<think>"):
+        return ""
+
+    return text.strip()
+
+
 def generate_prediction(
     model: Any,
     tokenizer: Any,
     instruction: str,
     input_text: str,
     max_new_tokens: int,
-) -> str:
+) -> tuple[str, str]:
     import torch
 
     user_prompt = build_user_prompt(instruction, input_text)
@@ -81,12 +97,17 @@ def generate_prediction(
             inputs,
             max_new_tokens=max_new_tokens,
             do_sample=False,
+            temperature=None,
+            top_p=None,
+            top_k=None,
             pad_token_id=tokenizer.pad_token_id,
             eos_token_id=tokenizer.eos_token_id,
         )
 
     new_tokens = output_ids[0, inputs.shape[-1] :]
-    return tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
+    raw_prediction = tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
+    cleaned_prediction = strip_think_content(raw_prediction)
+    return raw_prediction, cleaned_prediction
 
 
 def save_json(path: Path, payload: dict[str, Any]) -> None:
@@ -145,6 +166,10 @@ def save_markdown(path: Path, rows: list[dict[str, Any]], summary: dict[str, Any
         lines.append("")
         lines.append("### Prediction")
         lines.append(row["prediction"])
+        if row.get("raw_prediction") and row["raw_prediction"] != row["prediction"]:
+            lines.append("")
+            lines.append("### Raw Prediction")
+            lines.append(row["raw_prediction"])
 
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -184,6 +209,12 @@ def main() -> None:
         torch_dtype=dtype,
         trust_remote_code=True,
     )
+    if hasattr(base_model, "generation_config"):
+        base_model.generation_config.do_sample = False
+        for attr in ("temperature", "top_p", "top_k"):
+            if hasattr(base_model.generation_config, attr):
+                setattr(base_model.generation_config, attr, None)
+
     model = PeftModel.from_pretrained(base_model, args.adapter_path)
     if torch.cuda.is_available():
         model = model.to("cuda")
@@ -193,7 +224,7 @@ def main() -> None:
     task_buckets: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
     for record in records:
-        prediction = generate_prediction(
+        raw_prediction, prediction = generate_prediction(
             model=model,
             tokenizer=tokenizer,
             instruction=record["instruction"],
@@ -208,6 +239,7 @@ def main() -> None:
             "instruction": record["instruction"],
             "input": record["input"],
             "reference": record["output"],
+            "raw_prediction": raw_prediction,
             "prediction": prediction,
             "exact_match": exact_match(prediction, record["output"]),
             "char_f1": char_f1_score(prediction, record["output"]),

@@ -170,3 +170,28 @@
 - 结论：
   - 现在项目已从“只有训练结果”推进到“具备可执行评测流程”
   - 下一步应在服务器运行 `bash scripts/run_eval_v1.sh`，拿到 in-domain 与 external 两组结果
+
+## 2026-03-12 补充：First Evaluation Run Finished
+
+- 已完成首轮正式评测，目录为：
+  - `outputs/evals/qwen_lora_v1_full_2026-03-11_234402/`
+- 首轮结果：
+  - `test_v1`：
+    - `exact_match_rate = 0.0000`
+    - `avg_char_f1 = 0.3804`
+  - `external_eval_v1`：
+    - `exact_match_rate = 0.0000`
+    - `avg_char_f1 = 0.4090`
+- 当前判断：
+  - 这轮结果可以用于发现失败模式
+  - 但不应直接当作最终模型效果结论
+
+原因：
+- 报告显示预测中普遍出现 `<think> ... </think>` 推理内容泄露。
+- 这会显著拉低 `exact_match_rate`，并污染 `char_f1`。
+- 因此当前首轮评测更适合作为“输出控制问题定位”，而不是“最终任务能力打分”。
+
+下一步：
+- 使用已修正的 `scripts/eval_lora_model.py` 重新评测
+- 在评测时剥离 `<think>` 残留，并保留 `raw_prediction` 供失败分析
+- 再更新最终版 in-domain / external 结果
