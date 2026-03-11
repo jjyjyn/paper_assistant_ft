@@ -481,3 +481,79 @@ python scripts/check_external_eval_v1.py
 - 下一步应执行：
   - `bash scripts/run_train_full.sh`
   - 并同步记录 full 训练日志、loss、checkpoint 和评测计划
+
+## 2026-03-11（Qwen3 Full 训练真实跑通）
+
+### 触发原因
+
+- 在 `smoke` 已通过的前提下，进入正式训练阶段。
+- 当前目标不再是验证链路能否启动，而是拿到：
+  - 正式输出目录
+  - 正式 loss 曲线
+  - 正式训练日志
+  - 可用于后续评测和案例分析的主实验产物
+
+### 实际结果
+
+- `Qwen3-4B` 成功完成一次真实 `full` 训练。
+- 训练末尾输出：
+  - `Full training finished.`
+- 同时写出：
+  - `outputs/qwen_lora_v1_full/`
+  - `outputs/qwen_lora_v1_full/training_loss.png`
+
+### 关键指标
+
+- `train_runtime: 65.0085`
+- `train_loss: 1.6736689408620198`
+- `train_samples_per_second: 2.953`
+- `train_steps_per_second: 0.369`
+- `epoch: 3.0`
+
+### 训练过程中的代表性 loss
+
+- `epoch: 1.25` 时：
+  - `loss: 2.1071`
+  - `grad_norm: 0.9666892290115356`
+  - `learning_rate: 8.117449009293668e-05`
+- `epoch: 2.5` 时：
+  - `loss: 1.4035`
+  - `grad_norm: 0.8593475222587585`
+  - `learning_rate: 1.3347406408508695e-05`
+
+### 如何解释这些数字
+
+- 这次 `full` 的时间很短，不是因为训练没有真正发生，而是因为当前 v1 数据规模较小。
+- `train_loss = 1.6737` 是整轮训练的聚合结果，不等于最后一次打印的单步 loss。
+- 从 `2.1071 -> 1.4035` 的中间过程可以看到，训练过程中 loss 总体在下降。
+- 因此当前阶段最重要的结论不是“模型已经最优”，而是：
+  - 正式训练配置已经真实跑通
+  - 正式训练产物已经成功落盘
+  - 后续可以进入评测与失败案例复盘阶段
+
+### 非阻塞 warning
+
+- 日志中出现：
+  - `No metric eval_loss to plot.`
+  - `No metric eval_accuracy to plot.`
+- 这不代表训练失败。
+- 更准确地说，它说明当前这轮 `full` 主要完成了训练与训练曲线落盘，还没有在同一轮流程中产出对应的 eval 曲线。
+- 因此下一步应补：
+  - in-domain test 评测
+  - external_eval 评测
+  - 成功样例/失败样例分析
+
+### 阶段结论
+
+- 截至 2026-03-11，Phase 3 已从“smoke 已通过”推进到“full 已完成”。
+- 当前项目已经具备：
+  - 数据准备闭环
+  - 环境搭建闭环
+  - 模型获取闭环
+  - smoke 训练闭环
+  - full 训练闭环
+- 下一步优先级应转为：
+  - 评测脚本与结果汇总
+  - external_eval 表现分析
+  - 失败样例归因
+  - 面向老师汇报的话术收敛

@@ -122,3 +122,30 @@
 
 说明：
 - `output_dir` 仍保留旧命名 `qwen25_3b_lora_v1_smoke`，这是配置文件历史命名遗留，不影响本次 `smoke` 的真实性和有效性。
+
+## 2026-03-11 补充：Full Training Passed
+
+- `Qwen3-4B` 已在 GPU 模式下完成一次真实 `full` 训练。
+- 本次 `full` 关键结果：
+  - `train_runtime = 65.0085s`
+  - `train_loss = 1.6737`
+  - `train_samples_per_second = 2.953`
+  - `train_steps_per_second = 0.369`
+  - `epoch = 3.0`
+- 训练过程中记录到的代表性 loss：
+  - `epoch = 1.25` 时，`loss = 2.1071`
+  - `epoch = 2.5` 时，`loss = 1.4035`
+- 训练成功写出：
+  - `outputs/qwen_lora_v1_full/`
+  - `outputs/qwen_lora_v1_full/training_loss.png`
+- 结论：
+  - 当前 `Qwen3-4B + LoRA + v1 数据集 + 当前环境` 已完成正式训练闭环
+  - 这一步的价值不在于长时间刷算力，而在于拿到正式训练产物、loss 曲线和可复现日志
+  - 下一步应从“训练是否能跑”转到“效果如何评估”和“失败案例如何复盘”
+
+说明：
+- 本次 `full` 只用时约 `65s`，是因为当前 v1 数据规模较小，不代表训练无效。
+- 对当前阶段而言，这个 `full` 已足够证明：
+  - 正式配置可运行
+  - 输出目录、日志、loss 曲线都可稳定产出
+  - 该项目已经从“训练前准备”推进到“正式训练已完成，待评测/待分析”
