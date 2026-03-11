@@ -314,3 +314,49 @@ python scripts/check_external_eval_v1.py
   - AutoDL 数据盘优先路径
 - 将训练命令中的默认 `MODEL_PATH` 进一步对齐到本次实测下载目录：
   - `/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B`
+
+## 2026-03-11（ModelScope 模型下载完成与文件级验收）
+
+### 本轮目标
+
+- 在无卡模式下完成 `Qwen3-4B` 预下载，避免占用 GPU 时长做大文件传输。
+- 把“模型在不在”从口头判断升级为文件级验收。
+
+### 实际执行
+
+1. 服务器进入无卡模式
+- 原因：模型下载主要消耗网络和磁盘，不消耗 GPU 计算。
+
+2. 拉取修正后的仓库代码
+- `git pull --ff-only`
+
+3. 通过 ModelScope 下载模型
+- 成功信息：
+  - `MODEL_PATH=/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B`
+  - `Download model 'Qwen/Qwen3-4B' successfully.`
+
+4. 做文件级验收，而不是只看进度条
+- `config.json`：存在
+- `tokenizer_config.json`：存在
+- `model-00001-of-00003.safetensors`：约 `3.7G`
+- `model-00002-of-00003.safetensors`：约 `3.8G`
+- `model-00003-of-00003.safetensors`：约 `96M`
+- 总目录体积：`7.6G`
+
+### 经验总结
+
+- SSH/VSCode 终端里的下载进度条会出现残影，不能把日志中的 `0%` 刷屏误判为下载失败。
+- 对大模型下载，最终判断标准应当是：
+  - 有成功日志
+  - 返回 shell 提示符
+  - 关键文件存在
+  - 文件体积合理
+
+### 阶段结论
+
+- 截至 2026-03-11，Phase 3 的训练前准备已经闭环。
+- 当前服务器已经达到：
+  - environment ready
+  - data ready
+  - model ready
+  - GPU smoke ready

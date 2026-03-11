@@ -82,3 +82,23 @@
 - 项目内测试集：`data/processed/test_v1.jsonl`
 - 外部测试集：`data/external_eval/processed/external_eval_v1.jsonl`
 - 原则：训练与早停只用 train/val；汇报必须同时给出 in-domain + external 两组结果
+
+## 2026-03-11 补充：GPU Smoke Ready
+
+- 当前状态不是“还在准备环境”，而是“训练前准备已经闭环”。
+- 已完成的前置条件：
+  - `paper_ft` 环境固定并通过 `pip check`
+  - `check_dataset_v1.py` 通过
+  - `check_external_eval_v1.py` 通过
+  - `Qwen3-4B` 模型已下载到服务器本地
+- 当前实测模型路径：
+  - `/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B`
+- 当前实测模型目录：
+  - `config.json` 存在
+  - `tokenizer_config.json` 存在
+  - 三个权重分片存在
+  - 总大小约 `7.6G`
+- 因此下一步不是继续下载或继续配环境，而是：
+  - 切回 GPU 模式
+  - 先做 `cuda` 验证
+  - 直接执行 `bash scripts/run_train_smoke.sh`

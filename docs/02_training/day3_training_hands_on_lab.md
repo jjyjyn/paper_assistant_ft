@@ -215,3 +215,44 @@ bash scripts/run_train_full.sh
 ## 8. 60 秒口头复述模板（可直接背）
 
 “我的流程是先把训练环境和数据口径固定，再用 smoke 低成本验证训练链路，确认无路径和显存问题后再启动 full 训练。训练过程中我重点记录 loss、吞吐和异常日志，所有改动都回写文档，保证实验可复现。评测上我会同时看 in-domain test 和 external_eval，避免只在单一分布上得出乐观结论。”
+
+---
+
+## 9. 补充：模型预下载与 GPU 开机前检查
+
+### 原理
+
+- 大模型下载不应占用付费 GPU 时间。
+- 真正省钱的做法是：无卡模式完成模型预下载，GPU 模式只跑训练。
+
+### 操作
+
+无卡模式完成后，至少确认：
+
+```bash
+du -sh /root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B
+ls -lh /root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B/config.json
+ls -lh /root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B/tokenizer_config.json
+```
+
+GPU 开机后再执行：
+
+```bash
+python - <<'PY'
+import torch
+print("cuda:", torch.cuda.is_available())
+if torch.cuda.is_available():
+    print("gpu:", torch.cuda.get_device_name(0))
+PY
+```
+
+### 验收
+
+- 模型目录约 `7.6G`
+- 配置文件存在
+- `cuda: True`
+- GPU 名称包含 `RTX 4090`
+
+### 你可以这样讲
+
+- “我把模型下载前移到无卡模式，把 GPU 时间专门留给训练，这样既节省成本，也让训练窗口更纯净。”

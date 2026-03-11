@@ -275,3 +275,36 @@ bash scripts/download_qwen3_modelscope.sh
 - “我没有把环境安装当成机械步骤，而是把它当成工程链路验证的一部分。”
 - “这次我实际遇到了模型路径错误、依赖版本冲突、`torchvision` 二进制不匹配等问题，最后通过重建 conda 环境并钉住兼容版本解决。”
 - “我把无卡模式和有卡模式分开使用，先低成本完成依赖安装和数据检查，再切回 GPU 跑训练，这样成本更可控。”
+
+## 10. 模型预下载完成后的就绪判断
+
+### 10.1 不要只看下载进度条
+
+- 大模型下载时，`tqdm` 在 SSH/VSCode 终端里可能留下旧进度条残影。
+- 出现某一行 `0%` 不代表重新开始下载，也不代表失败。
+
+### 10.2 真正可信的完成信号
+
+- 下载工具明确打印 `successfully`
+- 终端返回 shell 提示符
+- 关键文件存在
+- 文件大小与模型规模匹配
+
+### 10.3 本项目这次的实测结果
+
+- 模型路径：`/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B`
+- 文件级验收：
+  - `config.json`
+  - `tokenizer_config.json`
+  - `model-00001-of-00003.safetensors` 约 `3.7G`
+  - `model-00002-of-00003.safetensors` 约 `3.8G`
+  - `model-00003-of-00003.safetensors` 约 `96M`
+  - 总目录约 `7.6G`
+
+### 10.4 对训练启动意味着什么
+
+- 一旦切回 GPU 模式，不需要再重新下载模型。
+- GPU 开机后的工作应只剩：
+  - `cuda` 验证
+  - `smoke`
+  - `full`
