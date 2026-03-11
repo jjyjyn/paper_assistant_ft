@@ -102,3 +102,23 @@
   - 切回 GPU 模式
   - 先做 `cuda` 验证
   - 直接执行 `bash scripts/run_train_smoke.sh`
+
+## 2026-03-11 补充：Smoke Training Passed
+
+- `Qwen3-4B` 已在 GPU 模式下完成一次真实 `smoke` 训练。
+- 本次 `smoke` 关键结果：
+  - `train_runtime = 24.392s`
+  - `train_loss = 2.1789`
+  - `train_samples_per_second = 2.624`
+  - `train_steps_per_second = 0.328`
+  - `epoch = 1.0`
+- 训练成功写出：
+  - `outputs/qwen25_3b_lora_v1_smoke/`
+  - `outputs/qwen25_3b_lora_v1_smoke/checkpoint-8/`
+- 结论：
+  - 链路已通
+  - `Qwen3-4B + LoRA + 当前数据集 + 当前环境` 可以稳定启动并完整结束
+  - 下一步可进入 `full`
+
+说明：
+- `output_dir` 仍保留旧命名 `qwen25_3b_lora_v1_smoke`，这是配置文件历史命名遗留，不影响本次 `smoke` 的真实性和有效性。

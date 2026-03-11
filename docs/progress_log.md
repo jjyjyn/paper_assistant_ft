@@ -422,3 +422,62 @@ python scripts/check_external_eval_v1.py
 
 - 当前 `paper_ft` 环境已经升级到适配 Qwen3 的 PyTorch 版本线。
 - 训练前准备再次通过验证，下一步应切回 GPU 模式重跑 `smoke`。
+
+## 2026-03-11（Qwen3 Smoke 训练真实跑通）
+
+### 触发原因
+
+- 在完成：
+  - ModelScope 模型下载
+  - PyTorch 2.6 升级
+  - `numpy/fsspec/pillow` 回钉
+  之后，重新进入 GPU 模式执行 `smoke`
+
+### 实际结果
+
+- `Qwen3-4B` 成功完成一次真实 `smoke` 训练
+- 训练末尾输出：
+  - `Training completed.`
+  - `Smoke training finished.`
+
+### 关键指标
+
+- `train_runtime: 24.392`
+- `train_loss: 2.178870439529419`
+- `train_samples_per_second: 2.624`
+- `train_steps_per_second: 0.328`
+- `epoch: 1.0`
+
+### 产物
+
+- 输出目录：
+  - `outputs/qwen25_3b_lora_v1_smoke/`
+- 检查点：
+  - `outputs/qwen25_3b_lora_v1_smoke/checkpoint-8/`
+- 同时保存了：
+  - `chat_template.jinja`
+  - `tokenizer_config.json`
+  - `special_tokens_map.json`
+
+### 如何解释这次 smoke 成功
+
+- 这次成功证明的不只是“脚本能运行”
+- 更准确地说，它证明了：
+  - Qwen3 模型路径正确
+  - tokenizer/template 正常
+  - 数据集 schema 正常
+  - LoRA 训练链路正常
+  - 当前 GPU / torch / transformers / LLaMA-Factory 版本矩阵可用
+
+### 仍需注意的点
+
+- `output_dir` 名称还是 `qwen25_3b_lora_v1_smoke`
+- 这是 smoke 配置文件沿用旧命名造成的历史遗留
+- 本次训练实际模型仍然是 `Qwen3-4B`，因为脚本在运行前已动态覆写 `model_name_or_path`
+
+### 阶段结论
+
+- 截至 2026-03-11，Phase 3 已从“训练前准备完成”推进到“smoke 已通过”。
+- 下一步应执行：
+  - `bash scripts/run_train_full.sh`
+  - 并同步记录 full 训练日志、loss、checkpoint 和评测计划

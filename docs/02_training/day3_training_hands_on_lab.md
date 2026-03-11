@@ -256,3 +256,38 @@ PY
 ### 你可以这样讲
 
 - “我把模型下载前移到无卡模式，把 GPU 时间专门留给训练，这样既节省成本，也让训练窗口更纯净。”
+
+---
+
+## 10. 补充：一次真实通过的 Smoke 训练应长什么样
+
+### 真实结果样例
+
+- 模型：`Qwen3-4B`
+- 训练时长：约 `24.39s`
+- `train_loss`: `2.1789`
+- `train_samples_per_second`: `2.624`
+- `train_steps_per_second`: `0.328`
+- `epoch`: `1.0`
+
+### 你应该重点看什么
+
+- 是否打印 `Training completed.`
+- 是否打印 `Smoke training finished.`
+- 是否生成 checkpoint
+- 是否有明显的：
+  - OOM
+  - 路径错误
+  - tokenizer / template 错误
+  - 模型初始化错误
+
+### 本项目这次的 smoke 产物
+
+- `outputs/qwen25_3b_lora_v1_smoke/`
+- `outputs/qwen25_3b_lora_v1_smoke/checkpoint-8/`
+
+### 如何向老师解释“为什么这次 smoke 算成功”
+
+- “因为它不是只跑到一半，而是完整走完了数据读取、模型加载、训练、checkpoint 保存和训练收尾。”
+- “而且它是在真实 Qwen3 路线上跑通的，不是退回到旧模型凑出来的成功。”
+- “所以这一步已经足够证明训练链路可用，后面可以合理进入 full。”

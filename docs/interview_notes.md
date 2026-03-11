@@ -75,3 +75,6 @@
 
 7. 升级 `torch` 后为什么还要回钉 `numpy/fsspec/pillow`？
 - 回答：因为 `pip` 会把未显式锁定的依赖解析成最新版本，这次把 `numpy/fsspec/pillow` 带偏后又和 `llamafactory/datasets/gradio` 冲突；所以我把它们回钉到项目兼容版本，并用 `pip check` 做最终验收。
+
+8. 你怎么证明这不是“准备好了”，而是真的跑通了一次训练？
+- 回答：因为我已经完成了一次真实 `smoke` 训练，记录到了训练时长、loss、吞吐、checkpoint 和输出目录；这说明链路不是停留在环境层，而是已经完成了真实训练闭环。
