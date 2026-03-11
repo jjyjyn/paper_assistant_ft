@@ -32,3 +32,5 @@
 - 每次改数据都要写“改动原因”
 
 - data_preparation/case_test_log.md：case 级别修改与样本变化日志（持续追加）。
+
+- external_eval_guide.md：外部评测集构建、校验、扩展与使用规范。

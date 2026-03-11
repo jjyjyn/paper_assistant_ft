@@ -64,3 +64,8 @@
   1) build/check/export 全部可执行；
   2) check 脚本能自动拦截 id/source_case_id 泄漏；
   3) 训练前数据版本已固定可复现。
+
+## 阶段2补充里程碑（外部评测）
+- 已建立 external eval 独立数据链路（raw -> build -> check -> processed）。
+- 当前 external_eval_v1：8 cases / 32 samples（四任务均衡）。
+- 完成标准新增：训练报告需同时给出 in-domain(test_v1) 与 external_eval 两组结果。

@@ -1,0 +1,74 @@
+[
+  {
+    "case_id": "ext_case_001",
+    "title": "Cross-Modal Citation Grounding for Figure-Centric Papers",
+    "problem": "图表密集型论文中，文字结论与图中证据常出现对应不清，导致引用解释不可靠。",
+    "method": "构建图文双通道检索器，并在候选证据上执行区域级对齐打分，再生成带证据编号的解释。",
+    "baseline": "Text-only retrieval, Caption-only retrieval",
+    "result": "在 FigureQA-Cite 基准上，证据命中率提升 9.8%，错误引用率下降 27%。",
+    "limitations": "当图像质量较差或坐标标注缺失时，对齐稳定性明显下降。"
+  },
+  {
+    "case_id": "ext_case_002",
+    "title": "Adaptive Unit Normalization for Scientific Table Extraction",
+    "problem": "跨论文比较实验指标时，单位不统一导致结论偏差。",
+    "method": "先识别单位与量纲，再执行规则+模型混合归一化，将表格值映射到统一标准单位。",
+    "baseline": "Regex-only normalization, Manual post-processing",
+    "result": "在单位归一化测试集上，标准化准确率从 81.4% 提升到 92.7%。",
+    "limitations": "对新出现的非标准单位缩写仍需人工词典补充。"
+  },
+  {
+    "case_id": "ext_case_003",
+    "title": "Debate-Style Verifier for Mathematical Proof Assistants",
+    "problem": "模型在数学证明问答中容易给出看似合理但逻辑断裂的解释。",
+    "method": "引入主张-反驳双代理辩论，并由裁决器基于步骤一致性与反例覆盖度打分。",
+    "baseline": "Single-pass chain-of-thought verifier",
+    "result": "在 ProofBench-ZH 上，步骤一致性评分提升 11.6%，致命逻辑错误率下降 18%。",
+    "limitations": "多代理流程推理成本较高，延迟显著增加。"
+  },
+  {
+    "case_id": "ext_case_004",
+    "title": "Sparse Activation Routing for Biomedical Chinese LLMs",
+    "problem": "生物医学长文本问答中，模型推理成本高且关键实体易被噪声干扰。",
+    "method": "在中间层加入稀疏激活路由，仅激活与医学实体子图相关的专家通道。",
+    "baseline": "Dense MoE routing, Vanilla dense transformer",
+    "result": "在 MedLongQA-ZH 上，推理吞吐提升 1.31 倍，F1 提升 3.9 个百分点。",
+    "limitations": "当实体链接错误时，路由会放大误检影响。"
+  },
+  {
+    "case_id": "ext_case_005",
+    "title": "Temporal Drift Benchmark for Continual Paper QA",
+    "problem": "模型对旧论文结论记忆稳定，但对新版本结论更新不及时。",
+    "method": "构建按时间切片的问答评测集，分别衡量历史记忆保持率与新事实吸收率。",
+    "baseline": "Static random split benchmark",
+    "result": "发现主流模型在新事实吸收率上平均仅 46%，明显低于历史记忆保持率。",
+    "limitations": "时间戳依赖元数据质量，跨来源数据存在对齐噪声。"
+  },
+  {
+    "case_id": "ext_case_006",
+    "title": "Noise-Robust OCR-to-Reasoning Pipeline for Scanned Papers",
+    "problem": "扫描版论文 OCR 噪声高，导致后续问答链路错误累积。",
+    "method": "先进行版面纠错与术语恢复，再做结构化检索与答案生成的两阶段推理。",
+    "baseline": "Direct OCR text QA",
+    "result": "在 ScanPaperQA 数据上，端到端准确率提升 8.4%，幻觉率下降 22%。",
+    "limitations": "对复杂公式区域仍存在识别缺失，影响深度推理。"
+  },
+  {
+    "case_id": "ext_case_007",
+    "title": "Evidence Graph Clustering for Retrieval Compression",
+    "problem": "多文档检索返回证据冗余严重，占用上下文窗口并干扰推理。",
+    "method": "将候选证据构建为相似度图，聚类后仅保留中心证据与关键差异证据。",
+    "baseline": "Top-k truncation, MMR reranking",
+    "result": "在 MultiDoc-Reason 基准上，证据冗余降低 35%，答案一致性提升 6.1%。",
+    "limitations": "聚类阈值敏感，阈值设置不当会丢失少量关键边角证据。"
+  },
+  {
+    "case_id": "ext_case_008",
+    "title": "Counterexample Mining for Safety Claim Verification",
+    "problem": "安全性相关论文常给出强结论，但反例覆盖不足导致结论泛化风险高。",
+    "method": "自动挖掘条件反例并执行对抗验证，报告结论成立边界与失效场景。",
+    "baseline": "Claim-only verification",
+    "result": "在 SafetyClaim-ZH 集合上，虚高结论检出率提升 14.7%。",
+    "limitations": "反例生成质量依赖检索语料，低资源领域覆盖仍不足。"
+  }
+]

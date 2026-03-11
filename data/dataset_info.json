@@ -25,5 +25,14 @@
       "query": "input",
       "response": "output"
     }
+  },
+  "paper_assistant_external_eval_v1": {
+    "file_name": "external_eval/processed/external_eval_v1.jsonl",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
   }
 }

@@ -107,3 +107,9 @@ python scripts/check_dataset_v1.py
 - 切分结果：train/val/test = 64/8/8（对应 case 数 16/2/2）。
 - 新增检查：三组间 id 不重叠、source_case_id 不重叠，防止数据泄漏。
 - 运行结果：python scripts/check_dataset_v1.py -> Dataset check passed.
+
+## 2026-03-11（外部评测集闭环补齐）
+- 新增外部评测原始集：data/external_eval/raw/external_eval_cases_v1.json（8 cases）。
+- 新增脚本：build_external_eval_v1.py / check_external_eval_v1.py。
+- 产物：external_eval_v1.jsonl + readable.json + readable.md（共32样本）。
+- 校验结果：External eval check passed（含与主训练case标题/ID防重合）。
