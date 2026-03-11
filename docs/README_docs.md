@@ -13,6 +13,7 @@
 ## 3) 按数据工程学习
 
 - `dataset_schema.md`：字段定义与规则
+- `dataset_reading_guide.md`：怎么读 train_v1/val_v1
 - `data_cleaning_labeling_guide.md`：清洗与标注实操
 - `day2_hands_on_checklist.md`：你要亲手做的打卡清单
 
