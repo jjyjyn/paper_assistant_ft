@@ -117,3 +117,8 @@ python scripts/check_dataset_v1.py
 ## 2026-03-11（数据分集口径确认）
 - 已确认当前口径：1 套 train + 1 套 val + 2 套 test（test_v1 + external_eval_v1）。
 - 目的：同时覆盖同分布评测与外部泛化评测，减少单一测试结论偏差。
+
+## 2026-03-11 Chat Migration Prep
+- Added migration handoff document: `docs/chat_migration_handoff_2026-03-11.md`.
+- Document includes: fixed constraints, current dataset/eval status, next-step execution order, and paste-ready prompt block for starting a new Codex chat.
+- Goal: avoid token-limit context loss and continue directly from Phase 2 -> Phase 3 (training).
