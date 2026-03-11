@@ -15,3 +15,6 @@
 2. 再改 `data/raw/paper_cases_v1.json` 的某条 case。
 3. 运行 `python scripts/build_dataset_v1.py` 重建数据。
 4. 在 `train_v1_readable.md` 中验证映射是否符合预期。
+
+## Case测试日志（新增）
+- case_test_log.md：记录每次 case 修改及其在 train/val 样本中的变化。

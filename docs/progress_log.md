@@ -89,3 +89,8 @@ python scripts/check_dataset_v1.py
 
 - 新增 `docs/data_preparation/` 目录，作为数据准备专题分支。
 - 新增 `case_004 -> v1_0015` 一一映射文档，解释 case 字段如何进入训练样本。
+
+## 2026-03-11（case 测试记录补充）
+- 新增 docs/data_preparation/case_test_log.md。
+- 已记录 case_004 的修改内容、重建命令、以及对 v1_0013~v1_0016 的映射影响。
+- 后续每次 case 修改都按模板追加，不覆盖历史记录。
