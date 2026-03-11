@@ -175,6 +175,49 @@ apt-get install -y tmux
 结论：
 - 这类错误属于“底层二进制包不匹配”，继续在旧环境里修价值不高
 
+### 6.7 `TypeError: argument of type 'NoneType' is not iterable`
+
+现象：
+- `smoke` 已经读到数据、开始加载 `Qwen3` 权重
+- 在 `Qwen3ForCausalLM` 初始化阶段崩溃
+
+归因：
+- 不是数据错误
+- 不是模型文件损坏
+- 重点是 Qwen3 与当前 PyTorch 版本线不兼容
+- `transformers==4.52.4` 可用，但 `torch==2.4.1+cu121` 偏低
+
+处理：
+- 将 `torch/torchvision/torchaudio` 升级到：
+  - `torch==2.6.0+cu124`
+  - `torchvision==0.21.0+cu124`
+  - `torchaudio==2.6.0+cu124`
+- 升级时优先在无卡模式执行，避免浪费 GPU 时长
+
+补充问题：
+- 升级 `torch` 后，`pip` 可能顺手把若干依赖带到最新版本
+- 本次实测被带偏的关键包有：
+  - `numpy`
+  - `fsspec`
+  - `pillow`
+
+回钉方案：
+```bash
+python -m pip install --no-cache-dir --force-reinstall --no-deps \
+  "numpy==1.26.4" \
+  "fsspec==2025.3.0" \
+  "pillow==11.3.0"
+```
+
+验收：
+- `torch: 2.6.0+cu124`
+- `torchvision: 0.21.0+cu124`
+- `torchaudio: 2.6.0+cu124`
+- `numpy: 1.26.4`
+- `fsspec: 2025.3.0`
+- `pillow: 11.3.0`
+- `python -m pip check` 输出 `No broken requirements found.`
+
 ## 7. 环境验证怎么做
 
 ### 7.1 无卡模式验证
@@ -308,3 +351,20 @@ bash scripts/download_qwen3_modelscope.sh
   - `cuda` 验证
   - `smoke`
   - `full`
+
+## 11. 当前训练环境基线
+
+- `torch==2.6.0+cu124`
+- `torchvision==0.21.0+cu124`
+- `torchaudio==2.6.0+cu124`
+- `transformers==4.52.4`
+- `numpy==1.26.4`
+- `fsspec==2025.3.0`
+- `pillow==11.3.0`
+- `llamafactory==0.9.3`
+
+结论：
+- 截至 2026-03-11，这套版本组合已经通过：
+  - 依赖一致性检查
+  - Qwen3 模型下载与本地文件验收
+  - 训练前数据检查

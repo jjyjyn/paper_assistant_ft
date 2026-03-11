@@ -360,3 +360,65 @@ python scripts/check_external_eval_v1.py
   - data ready
   - model ready
   - GPU smoke ready
+
+## 2026-03-11（Qwen3 训练初始化失败，升级到 PyTorch 2.6 修复）
+
+### 触发原因
+
+- 切回 GPU 模式后首次执行 `smoke`，数据读取和模型权重加载都正常。
+- 在 `Qwen3ForCausalLM` 初始化阶段崩溃，关键报错为：
+  - `TypeError: argument of type 'NoneType' is not iterable`
+
+### 关键判断
+
+- 这不是数据问题，也不是模型文件损坏。
+- 报错发生在 `transformers` 初始化 `Qwen3` 模型时，属于版本矩阵不兼容。
+- 结合官方资料与 LLaMA-Factory issue，定位到：
+  - `transformers==4.52.4` 已满足 Qwen3 要求
+  - 但 `torch==2.4.1+cu121` 偏低
+  - Qwen3 路线应升级到 `torch>=2.5`，更稳妥的是 `torch 2.6`
+
+### 处理过程
+
+1. 决定不在 GPU 模式下装大 wheel
+- 原因：升级 `torch/torchvision/torchaudio` 主要消耗网络和磁盘
+- 策略：切回无卡模式完成依赖升级，再切回 GPU 跑训练
+
+2. 通过阿里云 PyTorch wheels 镜像安装
+- 目标版本：
+  - `torch==2.6.0+cu124`
+  - `torchvision==0.21.0+cu124`
+  - `torchaudio==2.6.0+cu124`
+
+3. 安装后出现新的依赖漂移
+- `numpy` 被带到 `2.2.6`
+- `fsspec` 被带到 `2026.2.0`
+- `pillow` 被带到 `12.1.1`
+- 这些版本分别与：
+  - `llamafactory`
+  - `trl`
+  - `datasets`
+  - `gradio`
+  不兼容
+
+4. 回钉兼容版本
+- `numpy==1.26.4`
+- `fsspec==2025.3.0`
+- `pillow==11.3.0`
+
+### 最终验证
+
+- `torch: 2.6.0+cu124`
+- `torchvision: 0.21.0+cu124`
+- `torchaudio: 2.6.0+cu124`
+- `transformers: 4.52.4`
+- `numpy: 1.26.4`
+- `fsspec: 2025.3.0`
+- `pillow: 11.3.0`
+- 无卡模式下 `cuda: False` 为预期现象
+- `python -m pip check` -> `No broken requirements found.`
+
+### 结论
+
+- 当前 `paper_ft` 环境已经升级到适配 Qwen3 的 PyTorch 版本线。
+- 训练前准备再次通过验证，下一步应切回 GPU 模式重跑 `smoke`。
