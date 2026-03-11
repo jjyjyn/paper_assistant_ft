@@ -277,3 +277,35 @@ python scripts/check_external_eval_v1.py
 
 - 让你后面按阶段读，就能把项目完整讲下来。
 - 让“老师可能怎么问”与“你该去哪份文档看”形成一一对应关系。
+
+## 2026-03-11（Qwen3 模型命名纠偏与 HF 超时处理）
+
+### 触发原因
+
+- GPU 模式准备开始 `smoke` 时，发现 `Qwen3-4B-Instruct` 本地目录不存在。
+- 继续尝试从 Hugging Face 下载时，服务器到 `huggingface.co` 连接超时。
+
+### 关键判断
+
+- 训练环境本身是健康的：`numpy/fsspec/transformers/tokenizers/huggingface_hub` 版本校验通过，`pip check` 无破损依赖。
+- 问题分成两层：
+  - 模型命名层：Qwen3 官方 4B 路线应对齐为 `Qwen3-4B`
+  - 网络层：国内租用服务器访问 Hugging Face 不稳定，下载源需要切换
+
+### 代码与流程修正
+
+- 训练脚本自动探测路径改为优先寻找：
+  - `/root/autodl-tmp/models/Qwen/Qwen3-4B`
+  - `~/models/Qwen/Qwen3-4B`
+- 保留 `Qwen2.5-3B-Instruct` 作为 fallback
+- 新增 `scripts/download_qwen3_modelscope.sh`
+  - 作用：通过 ModelScope 官方源下载 `Qwen/Qwen3-4B`
+  - 目的：绕开 `huggingface.co` 超时
+
+### 文档同步
+
+- 将默认模型名从 `Qwen3-4B-Instruct` 更正为 `Qwen3-4B`
+- 在训练文档中增加：
+  - Hugging Face 超时归因
+  - ModelScope 下载方案
+  - AutoDL 数据盘优先路径

@@ -5,7 +5,7 @@
 ## 固定技术路线
 
 - LLaMA-Factory
-- Qwen3-4B-Instruct（执行上先用 Qwen2.5-3B 跑通闭环）
+- Qwen3-4B（执行上先用 Qwen2.5-3B 跑通闭环）
 - LoRA SFT
 
 ## 固定工作流

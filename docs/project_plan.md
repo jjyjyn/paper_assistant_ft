@@ -23,7 +23,7 @@
 3. LoRA 微调训练（In Progress）
 - 已完成训练前检查（主数据 + external_eval 校验全部通过）
 - 已完成租用服务器环境重建与版本固定（无卡模式验证通过）
-- 已完成 smoke 训练脚本升级：优先 `Qwen3-4B-Instruct`，兼容回退 `Qwen2.5-3B-Instruct`
+- 已完成 smoke 训练脚本升级：优先 `Qwen3-4B`，兼容回退 `Qwen2.5-3B-Instruct`
 - 已新增正式训练入口：
   - `configs/lora_sft_qwen_v1_full.yaml`
   - `scripts/run_train_full.sh`
@@ -49,7 +49,7 @@
 
 3. 冒烟训练（低成本验链路）
 - 执行：
-  - `export MODEL_PATH=~/models/Qwen/Qwen3-4B-Instruct`
+  - `export MODEL_PATH=/root/autodl-tmp/models/Qwen/Qwen3-4B`
   - `bash scripts/run_train_smoke.sh`
 - 验收：
   - 训练完整启动并结束
@@ -58,7 +58,7 @@
 
 4. 正式训练（smoke 通过后）
 - 执行：
-  - `export MODEL_PATH=~/models/Qwen/Qwen3-4B-Instruct`
+  - `export MODEL_PATH=/root/autodl-tmp/models/Qwen/Qwen3-4B`
   - `bash scripts/run_train_full.sh`
 - 验收：
   - loss 曲线可见且总体下降

@@ -1,6 +1,6 @@
 # LLaMA-Factory full training config (v1)
 
-model_name_or_path: /path/to/Qwen3-4B-Instruct
+model_name_or_path: /path/to/Qwen3-4B
 stage: sft
 do_train: true
 finetuning_type: lora

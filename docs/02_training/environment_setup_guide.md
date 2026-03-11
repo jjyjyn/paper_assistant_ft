@@ -22,7 +22,7 @@
 
 ### 2.2 为什么这么选
 
-- `4090 24GB` 对 `Qwen3-4B-Instruct + LoRA SFT` 足够
+- `4090 24GB` 对 `Qwen3-4B + LoRA SFT` 足够
 - 单卡成本低，适合先 smoke 再 full 的实验节奏
 - 北京区对本地登录、文件同步更方便
 
@@ -113,7 +113,7 @@ apt-get install -y tmux
 结论：
 - 这是系统层缺工具，不是训练框架问题
 
-### 6.2 `Repo id must be in the form ... '/root/models/Qwen/Qwen3-4B-Instruct'`
+### 6.2 `Repo id must be in the form ... '/root/models/Qwen/Qwen3-4B'`
 
 现象：
 - LLaMA-Factory 启动时把本地路径当成 HuggingFace repo id 解析
@@ -235,9 +235,35 @@ if torch.cuda.is_available():
 PY
 
 cd ~/paper_assistant_ft
-export MODEL_PATH=/root/autodl-tmp/models/Qwen/Qwen3-4B-Instruct
+export MODEL_PATH=/root/autodl-tmp/models/Qwen/Qwen3-4B
 bash scripts/run_train_smoke.sh
 ```
+
+### 6.6 `huggingface.co timed out`
+
+现象：
+- 训练环境版本已经通过 `pip check`，但下载模型时卡在 `huggingface.co` 连接超时。
+
+归因：
+- 问题在网络路径，不在 `paper_ft` 环境。
+- 对中国大陆租用服务器，直接访问 Hugging Face 可能不稳定。
+- 同时暴露出一个命名问题：官方 Qwen3 4B 模型名是 `Qwen/Qwen3-4B`，不是 `Qwen/Qwen3-4B-Instruct`。
+
+处理：
+- 不再在 `paper_ft` 环境中安装 `huggingface_hub[cli]`。
+- 改用 `base` 环境和 ModelScope 官方源下载模型。
+- 本项目的 smoke/full 训练都显式设置 `MODEL_PATH`，避免旧脚本默认路径误导。
+
+推荐命令：
+```bash
+unset OMP_NUM_THREADS
+export OMP_NUM_THREADS=8
+bash scripts/download_qwen3_modelscope.sh
+```
+
+验收：
+- 下载脚本会打印 `MODEL_PATH=...`
+- 该目录下应存在 `config.json` 和 `tokenizer_config.json`
 
 ## 9. 你给老师讲这一段时可以怎么说
 

@@ -14,7 +14,7 @@ Paste everything between the two lines into the first message of the new chat.
 
 固定约束（不要改）：
 1) 题目：基于 Qwen 的中文论文精读与实验解析助手微调项目。
-2) 路线：LLaMA-Factory + Qwen3-4B-Instruct + LoRA SFT。
+2) 路线：LLaMA-Factory + Qwen3-4B + LoRA SFT。
 3) 工作流：本地开发 + 服务器执行 + 手动同步（git / rsync / scp）。
 4) 目标：5 天 first usable，6-7 天 resume-ready。
 5) docs 体系必须持续更新：docs/progress_log.md, docs/project_plan.md, docs/interview_notes.md。
@@ -118,7 +118,7 @@ If Codex in new chat asks for state, paste:
   - `docs/project_plan.md`
   - `docs/interview_notes.md`
 - Keep the fixed route unchanged unless user explicitly approves changes:
-  - LLaMA-Factory + Qwen3-4B-Instruct + LoRA SFT
+  - LLaMA-Factory + Qwen3-4B + LoRA SFT
 - Keep split strategy unchanged:
   - train/val/test are case-level split
   - external_eval is independent test set
