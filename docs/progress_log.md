@@ -94,3 +94,9 @@ python scripts/check_dataset_v1.py
 - 新增 docs/data_preparation/case_test_log.md。
 - 已记录 case_004 的修改内容、重建命令、以及对 v1_0013~v1_0016 的映射影响。
 - 后续每次 case 修改都按模板追加，不覆盖历史记录。
+
+## 2026-03-11（case_005 映射验证）
+- 完成 case_005 的手工改写，并重建数据集（build/check/export）。
+- 确认映射结果：source_case_id=case_005 共 4 条样本（train 3 条 + val 1 条）。
+- 样本 ID：v1_0017, v1_0018, v1_0019, v1_0020。
+- 结论：单个 raw case 改动可稳定传播到四类任务样本，数据闭环验证通过。

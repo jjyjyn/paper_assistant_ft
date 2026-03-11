@@ -54,6 +54,59 @@ python scripts/export_dataset_readable.py
 
 ---
 
+## 记录 #002（2026-03-11）
+
+### 1. 本次测试目标
+
+- 验证：你手改 `case_005` 后，是否完整映射到四类任务样本。
+- 目标 case：`case_005`（Prompt2Table）
+
+### 2. 你做了哪些修改（原始 case 层）
+
+- 修改文件：`data/raw/paper_cases_v1.json`
+- 当前 case 关键信息（你本次修改后）：
+1. `method`：采用两阶段架构，包含关键句检测和值归一化模块，先将文本映射到统一模板。
+2. `result`：在标准信息抽取测试集上，结构化 F1 达到 82.8，较基线规则方法提升 10.9 个百分点。
+3. `limitations`：对隐式表述和单位缺省等场景鲁棒性较弱，领域外泛化能力一般。
+
+### 3. 重建与校验动作
+
+```bash
+python scripts/build_dataset_v1.py
+python scripts/check_dataset_v1.py
+python scripts/export_dataset_readable.py
+```
+
+### 4. 影响到哪些训练样本（映射层）
+
+你验证得到 `source_case_id = case_005` 共 4 条样本，分布如下：
+
+- `v1_0017`：`contribution_extraction`（train）
+- `v1_0018`：`method_comparison`（train）
+- `v1_0019`：`experiment_interpretation`（train）
+- `v1_0020`：`defense_followup`（val）
+
+说明：不是“只生成了 3 条”，而是第 4 条被切分进了验证集。
+
+### 5. 变化结论（复盘口径）
+
+1. 你改的是 raw case（知识源），模型样本会自动按模板重写，不需要手改每条样本。
+2. 同一个 case 会被投影成四种答题能力：贡献提炼、方法对比、实验解释、答辩追问。
+3. 这次 case_005 的改动让输出更“可面试复述”：有方法机制、有定量结果、有边界条件。
+4. 你的数据工程闭环是完整的：改 raw -> build -> check -> readable 验证。
+
+### 6. 本次产物变更文件
+
+- `data/raw/paper_cases_v1.json`
+- `data/processed/train_v1.jsonl`
+- `data/processed/train_v1_readable.json`
+- `data/processed/train_v1_readable.md`
+- `data/processed/val_v1.jsonl`
+- `data/processed/val_v1_readable.json`
+- `data/processed/val_v1_readable.md`
+
+---
+
 ## 后续追加模板（每改一个 case 复制一段）
 
 ```md
@@ -89,4 +142,3 @@ python scripts/export_dataset_readable.py
 - data/raw/...
 - data/processed/...
 ```
-
