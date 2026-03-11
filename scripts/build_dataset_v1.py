@@ -14,9 +14,8 @@ from __future__ import annotations
 import argparse
 import json
 import random
-from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Set, Tuple
 
 
 def make_input(case: Dict[str, str]) -> str:
@@ -111,6 +110,62 @@ def build_samples(cases: List[Dict[str, str]]) -> List[Dict[str, str]]:
     return rows
 
 
+def split_rows_by_case(
+    rows: List[Dict[str, str]],
+    val_ratio: float,
+    test_ratio: float,
+    seed: int,
+) -> Tuple[
+    List[Dict[str, str]],
+    List[Dict[str, str]],
+    List[Dict[str, str]],
+    Set[str],
+    Set[str],
+    Set[str],
+]:
+    if not (0 <= val_ratio < 1):
+        raise ValueError(f"val_ratio must be in [0, 1), got {val_ratio}")
+    if not (0 <= test_ratio < 1):
+        raise ValueError(f"test_ratio must be in [0, 1), got {test_ratio}")
+    if val_ratio + test_ratio >= 1:
+        raise ValueError(
+            f"val_ratio + test_ratio must be < 1, got {val_ratio + test_ratio}"
+        )
+
+    case_ids = sorted({row["source_case_id"] for row in rows})
+    if len(case_ids) < 3:
+        raise ValueError("Need at least 3 cases for train/val/test split.")
+
+    rng = random.Random(seed)
+    rng.shuffle(case_ids)
+
+    n_cases = len(case_ids)
+    n_val = max(1, int(round(n_cases * val_ratio))) if val_ratio > 0 else 0
+    n_test = max(1, int(round(n_cases * test_ratio))) if test_ratio > 0 else 0
+
+    # Keep at least one training case.
+    while n_val + n_test >= n_cases and n_test > 0:
+        n_test -= 1
+    while n_val + n_test >= n_cases and n_val > 0:
+        n_val -= 1
+    if n_val + n_test >= n_cases:
+        raise ValueError("Invalid split ratios; no case left for train split.")
+
+    val_case_ids = set(case_ids[:n_val])
+    test_case_ids = set(case_ids[n_val : n_val + n_test])
+    train_case_ids = set(case_ids[n_val + n_test :])
+
+    train_rows = [row for row in rows if row["source_case_id"] in train_case_ids]
+    val_rows = [row for row in rows if row["source_case_id"] in val_case_ids]
+    test_rows = [row for row in rows if row["source_case_id"] in test_case_ids]
+
+    rng.shuffle(train_rows)
+    rng.shuffle(val_rows)
+    rng.shuffle(test_rows)
+
+    return train_rows, val_rows, test_rows, train_case_ids, val_case_ids, test_case_ids
+
+
 def write_jsonl(path: Path, rows: List[Dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
@@ -135,7 +190,17 @@ def main() -> None:
         default="data/processed/val_v1.jsonl",
         help="Output validation jsonl path.",
     )
-    parser.add_argument("--val_ratio", type=float, default=0.1, help="Validation ratio.")
+    parser.add_argument(
+        "--test_out",
+        default="data/processed/test_v1.jsonl",
+        help="Output test jsonl path.",
+    )
+    parser.add_argument(
+        "--val_ratio", type=float, default=0.1, help="Validation ratio at case level."
+    )
+    parser.add_argument(
+        "--test_ratio", type=float, default=0.1, help="Test ratio at case level."
+    )
     parser.add_argument("--seed", type=int, default=20260311, help="Random seed.")
     args = parser.parse_args()
 
@@ -144,30 +209,33 @@ def main() -> None:
         cases = json.load(f)
 
     rows = build_samples(cases)
-    # Stratified split by task_type to keep all task types in train/val.
-    random.seed(args.seed)
-    buckets = defaultdict(list)
-    for row in rows:
-        buckets[row["task_type"]].append(row)
-
-    val_rows = []
-    train_rows = []
-    for task, task_rows in buckets.items():
-        random.shuffle(task_rows)
-        n_val = max(1, int(len(task_rows) * args.val_ratio))
-        val_rows.extend(task_rows[:n_val])
-        train_rows.extend(task_rows[n_val:])
-
-    random.shuffle(train_rows)
-    random.shuffle(val_rows)
+    (
+        train_rows,
+        val_rows,
+        test_rows,
+        train_case_ids,
+        val_case_ids,
+        test_case_ids,
+    ) = split_rows_by_case(
+        rows=rows,
+        val_ratio=args.val_ratio,
+        test_ratio=args.test_ratio,
+        seed=args.seed,
+    )
 
     write_jsonl(Path(args.train_out), train_rows)
     write_jsonl(Path(args.val_out), val_rows)
+    write_jsonl(Path(args.test_out), test_rows)
 
     print(f"Loaded cases: {len(cases)}")
     print(f"Built samples: {len(rows)}")
+    print(f"Split strategy: case-level (no source_case_id leakage)")
+    print(f"Train cases: {len(train_case_ids)}")
+    print(f"Val cases: {len(val_case_ids)}")
+    print(f"Test cases: {len(test_case_ids)}")
     print(f"Train samples: {len(train_rows)} -> {args.train_out}")
     print(f"Val samples: {len(val_rows)} -> {args.val_out}")
+    print(f"Test samples: {len(test_rows)} -> {args.test_out}")
 
 
 if __name__ == "__main__":

@@ -71,6 +71,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--train", default="data/processed/train_v1.jsonl")
     parser.add_argument("--val", default="data/processed/val_v1.jsonl")
+    parser.add_argument("--test", default="data/processed/test_v1.jsonl")
     parser.add_argument("--output_dir", default="data/processed")
     args = parser.parse_args()
 
@@ -79,6 +80,7 @@ def main() -> None:
 
     export_one(Path(args.train), output_dir)
     export_one(Path(args.val), output_dir)
+    export_one(Path(args.test), output_dir)
 
 
 if __name__ == "__main__":

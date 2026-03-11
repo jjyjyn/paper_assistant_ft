@@ -100,3 +100,10 @@ python scripts/check_dataset_v1.py
 - 确认映射结果：source_case_id=case_005 共 4 条样本（train 3 条 + val 1 条）。
 - 样本 ID：v1_0017, v1_0018, v1_0019, v1_0020。
 - 结论：单个 raw case 改动可稳定传播到四类任务样本，数据闭环验证通过。
+
+## 2026-03-11（阶段2-第3步：test集 + 防泄漏 + 数据定版）
+- 已将数据切分策略从样本级改为 case 级（按 source_case_id 切分）。
+- 新增 test 集产物：data/processed/test_v1.jsonl（及 readable 导出）。
+- 切分结果：train/val/test = 64/8/8（对应 case 数 16/2/2）。
+- 新增检查：三组间 id 不重叠、source_case_id 不重叠，防止数据泄漏。
+- 运行结果：python scripts/check_dataset_v1.py -> Dataset check passed.

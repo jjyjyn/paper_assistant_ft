@@ -37,3 +37,8 @@ python scripts/export_dataset_readable.py
 - `data/processed/val_v1_readable.json`
 
 建议你平时看 `*_readable.md`，训练时用 `*.jsonl`。
+
+## v1 切分升级（2026-03-11）
+- 当前使用 train/val/test 三分集：64/8/8。
+- 切分粒度为 source_case_id（同一 case 不会同时出现在多个 split）。
+- 读取建议：先看 train_v1_readable.md，再抽查 val/test 的 source_case_id 是否未在 train 出现。

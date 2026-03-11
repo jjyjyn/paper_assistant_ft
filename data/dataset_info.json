@@ -16,5 +16,14 @@
       "query": "input",
       "response": "output"
     }
+  },
+  "paper_assistant_v1_test": {
+    "file_name": "processed/test_v1.jsonl",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
   }
 }

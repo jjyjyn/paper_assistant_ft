@@ -3,6 +3,7 @@
 raw_cases: data/raw/paper_cases_v1.json
 train_jsonl: data/processed/train_v1.jsonl
 val_jsonl: data/processed/val_v1.jsonl
+test_jsonl: data/processed/test_v1.jsonl
 dataset_info: data/dataset_info.json
 
 task_types:
@@ -12,5 +13,7 @@ task_types:
   - defense_followup
 
 split:
+  strategy: case_level
   seed: 20260311
   val_ratio: 0.1
+  test_ratio: 0.1
