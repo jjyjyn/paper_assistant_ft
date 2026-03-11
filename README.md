@@ -32,6 +32,8 @@
 - `docs/interview_notes_categorized.md`: 分类版面试笔记（按天/按主题）
 - `docs/dataset_schema.md`: 数据集字段与规则
 - `docs/dataset_reading_guide.md`: 如何阅读 train/val 数据
+- `docs/data_preparation/README.md`: 数据准备分支入口
+- `docs/data_preparation/case_to_sample_mapping_case004.md`: case 到样本一一映射示例
 - `docs/day2_data_hands_on_lab.md`: Day2 手把手实操单
 - `docs/llm_finetune_end2end_playbook.md`: 微调闭环全流程手册
 - `docs/rental_server_guide.md`: 租 4090 执行指南

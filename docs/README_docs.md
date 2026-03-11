@@ -18,6 +18,8 @@
 - `data_cleaning_labeling_guide.md`：清洗与标注实操
 - `day2_hands_on_checklist.md`：你要亲手做的打卡清单
 - `llm_finetune_end2end_playbook.md`：从数据到训练到面试的完整闭环手册
+- `data_preparation/README.md`：数据准备分支入口
+- `data_preparation/case_to_sample_mapping_case004.md`：case_004 一一映射讲解
 
 ## 4) 按执行环境
 
