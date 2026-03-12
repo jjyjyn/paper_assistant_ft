@@ -10,6 +10,38 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+REQUIRED_PREFIXES = {
+    "contribution_extraction": [
+        "核心问题:",
+        "方法要点:",
+        "相对基线增益:",
+        "局限性:",
+    ],
+    "method_comparison": [
+        "对比对象:",
+        "新方法机制:",
+        "主要优势:",
+        "量化结果:",
+        "代价与风险:",
+        "结论:",
+    ],
+    "experiment_interpretation": [
+        "结论:",
+        "原因:",
+        "边界:",
+        "建议:",
+    ],
+    "defense_followup": [
+        "Q1:",
+        "A1:",
+        "Q2:",
+        "A2:",
+        "Q3:",
+        "A3:",
+    ],
+}
+
+
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
     with path.open("r", encoding="utf-8") as f:
@@ -60,14 +92,28 @@ def strip_think_content(text: str) -> str:
     if not text:
         return text
 
-    # Remove complete think blocks first.
     text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
-
-    # If generation was truncated inside a think block, drop the remainder.
     if text.startswith("<think>"):
         return ""
-
     return text.strip()
+
+
+def structure_ok(task_type: str, prediction: str) -> bool:
+    prefixes = REQUIRED_PREFIXES.get(task_type)
+    if not prefixes:
+        return False
+
+    lines = [line.strip() for line in prediction.splitlines() if line.strip()]
+    if len(lines) != len(prefixes):
+        return False
+
+    for line, prefix in zip(lines, prefixes):
+        if not line.startswith(prefix):
+            return False
+        if not line[len(prefix) :].strip():
+            return False
+
+    return True
 
 
 def generate_prediction(
@@ -133,6 +179,10 @@ def save_markdown(path: Path, rows: list[dict[str, Any]], summary: dict[str, Any
     lines.append(f"- total: {summary['overall']['count']}")
     lines.append(f"- exact_match_rate: {summary['overall']['exact_match_rate']:.4f}")
     lines.append(f"- avg_char_f1: {summary['overall']['avg_char_f1']:.4f}")
+    lines.append(f"- empty_prediction_rate: {summary['overall']['empty_prediction_rate']:.4f}")
+    lines.append(f"- raw_think_rate: {summary['overall']['raw_think_rate']:.4f}")
+    lines.append(f"- cleaned_changed_rate: {summary['overall']['cleaned_changed_rate']:.4f}")
+    lines.append(f"- structure_ok_rate: {summary['overall']['structure_ok_rate']:.4f}")
     lines.append(f"- adapter_path: `{summary['adapter_path']}`")
     lines.append(f"- base_model_path: `{summary['base_model_path']}`")
     lines.append("")
@@ -142,7 +192,10 @@ def save_markdown(path: Path, rows: list[dict[str, Any]], summary: dict[str, Any
         lines.append(
             f"- {task_type}: count={metrics['count']}, "
             f"exact_match_rate={metrics['exact_match_rate']:.4f}, "
-            f"avg_char_f1={metrics['avg_char_f1']:.4f}"
+            f"avg_char_f1={metrics['avg_char_f1']:.4f}, "
+            f"empty_prediction_rate={metrics['empty_prediction_rate']:.4f}, "
+            f"raw_think_rate={metrics['raw_think_rate']:.4f}, "
+            f"structure_ok_rate={metrics['structure_ok_rate']:.4f}"
         )
 
     for idx, row in enumerate(rows, start=1):
@@ -154,6 +207,10 @@ def save_markdown(path: Path, rows: list[dict[str, Any]], summary: dict[str, Any
         lines.append(f"- task_type: `{row['task_type']}`")
         lines.append(f"- exact_match: `{row['exact_match']}`")
         lines.append(f"- char_f1: `{row['char_f1']:.4f}`")
+        lines.append(f"- prediction_is_empty: `{row['prediction_is_empty']}`")
+        lines.append(f"- raw_has_think: `{row['raw_has_think']}`")
+        lines.append(f"- cleaned_changed: `{row['cleaned_changed']}`")
+        lines.append(f"- structure_ok: `{row['structure_ok']}`")
         lines.append("")
         lines.append("### Instruction")
         lines.append(row["instruction"])
@@ -165,13 +222,32 @@ def save_markdown(path: Path, rows: list[dict[str, Any]], summary: dict[str, Any
         lines.append(row["reference"])
         lines.append("")
         lines.append("### Prediction")
-        lines.append(row["prediction"])
+        lines.append(row["prediction"] if row["prediction"] else "<EMPTY>")
         if row.get("raw_prediction") and row["raw_prediction"] != row["prediction"]:
             lines.append("")
             lines.append("### Raw Prediction")
             lines.append(row["raw_prediction"])
 
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def summarize_bucket(bucket: list[dict[str, Any]]) -> dict[str, Any]:
+    count = len(bucket)
+    exact_matches = sum(1 for row in bucket if row["exact_match"])
+    avg_char_f1 = sum(row["char_f1"] for row in bucket) / count if count else 0.0
+    empty_predictions = sum(1 for row in bucket if row["prediction_is_empty"])
+    raw_think = sum(1 for row in bucket if row["raw_has_think"])
+    cleaned_changed = sum(1 for row in bucket if row["cleaned_changed"])
+    structure_ok_count = sum(1 for row in bucket if row["structure_ok"])
+    return {
+        "count": count,
+        "exact_match_rate": exact_matches / count if count else 0.0,
+        "avg_char_f1": avg_char_f1,
+        "empty_prediction_rate": empty_predictions / count if count else 0.0,
+        "raw_think_rate": raw_think / count if count else 0.0,
+        "cleaned_changed_rate": cleaned_changed / count if count else 0.0,
+        "structure_ok_rate": structure_ok_count / count if count else 0.0,
+    }
 
 
 def main() -> None:
@@ -243,19 +319,13 @@ def main() -> None:
             "prediction": prediction,
             "exact_match": exact_match(prediction, record["output"]),
             "char_f1": char_f1_score(prediction, record["output"]),
+            "prediction_is_empty": normalize_text(prediction) == "",
+            "raw_has_think": "<think>" in raw_prediction or "</think>" in raw_prediction,
+            "cleaned_changed": raw_prediction != prediction,
+            "structure_ok": structure_ok(record["task_type"], prediction),
         }
         rows.append(row)
         task_buckets[row["task_type"]].append(row)
-
-    def summarize(bucket: list[dict[str, Any]]) -> dict[str, Any]:
-        count = len(bucket)
-        exact_matches = sum(1 for row in bucket if row["exact_match"])
-        avg_char_f1 = sum(row["char_f1"] for row in bucket) / count if count else 0.0
-        return {
-            "count": count,
-            "exact_match_rate": exact_matches / count if count else 0.0,
-            "avg_char_f1": avg_char_f1,
-        }
 
     summary = {
         "dataset_name": dataset_path.stem,
@@ -264,9 +334,9 @@ def main() -> None:
         "adapter_path": args.adapter_path,
         "device": "cuda" if torch.cuda.is_available() else "cpu",
         "max_new_tokens": args.max_new_tokens,
-        "overall": summarize(rows),
+        "overall": summarize_bucket(rows),
         "by_task_type": {
-            task_type: summarize(bucket)
+            task_type: summarize_bucket(bucket)
             for task_type, bucket in sorted(task_buckets.items())
         },
         "worst_examples": [
@@ -275,8 +345,11 @@ def main() -> None:
                 "task_type": row["task_type"],
                 "source_case_id": row["source_case_id"],
                 "char_f1": row["char_f1"],
+                "prediction_is_empty": row["prediction_is_empty"],
+                "raw_has_think": row["raw_has_think"],
+                "structure_ok": row["structure_ok"],
             }
-            for row in sorted(rows, key=lambda item: item["char_f1"])[:5]
+            for row in sorted(rows, key=lambda item: (item["char_f1"], not item["prediction_is_empty"]))[:5]
         ],
     }
 
