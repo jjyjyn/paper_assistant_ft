@@ -1,0 +1,107 @@
+{
+  "dataset_name": "external_eval_v1",
+  "dataset_path": "data/external_eval/processed/external_eval_v1.jsonl",
+  "base_model_path": "/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B",
+  "adapter_path": "outputs/qwen_lora_v1_full",
+  "device": "cuda",
+  "max_new_tokens": 384,
+  "disable_thinking": false,
+  "run_tag": "",
+  "thinking_control_modes": [
+    "default"
+  ],
+  "overall": {
+    "count": 32,
+    "exact_match_rate": 0.0,
+    "avg_char_f1": 0.4350155541027221,
+    "empty_prediction_rate": 0.25,
+    "raw_think_rate": 1.0,
+    "cleaned_changed_rate": 1.0,
+    "structure_ok_rate": 0.34375
+  },
+  "by_task_type": {
+    "contribution_extraction": {
+      "count": 8,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.35544171571833394,
+      "empty_prediction_rate": 0.375,
+      "raw_think_rate": 1.0,
+      "cleaned_changed_rate": 1.0,
+      "structure_ok_rate": 0.0
+    },
+    "defense_followup": {
+      "count": 8,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.2585087578170261,
+      "empty_prediction_rate": 0.375,
+      "raw_think_rate": 1.0,
+      "cleaned_changed_rate": 1.0,
+      "structure_ok_rate": 0.25
+    },
+    "experiment_interpretation": {
+      "count": 8,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.30353119859949296,
+      "empty_prediction_rate": 0.25,
+      "raw_think_rate": 1.0,
+      "cleaned_changed_rate": 1.0,
+      "structure_ok_rate": 0.5
+    },
+    "method_comparison": {
+      "count": 8,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.8225805442760353,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 1.0,
+      "cleaned_changed_rate": 1.0,
+      "structure_ok_rate": 0.625
+    }
+  },
+  "worst_examples": [
+    {
+      "id": "ext_v1_0001",
+      "task_type": "contribution_extraction",
+      "source_case_id": "ext_case_001",
+      "char_f1": 0.0,
+      "prediction_is_empty": true,
+      "raw_has_think": true,
+      "structure_ok": false
+    },
+    {
+      "id": "ext_v1_0004",
+      "task_type": "defense_followup",
+      "source_case_id": "ext_case_001",
+      "char_f1": 0.0,
+      "prediction_is_empty": true,
+      "raw_has_think": true,
+      "structure_ok": false
+    },
+    {
+      "id": "ext_v1_0008",
+      "task_type": "defense_followup",
+      "source_case_id": "ext_case_002",
+      "char_f1": 0.0,
+      "prediction_is_empty": true,
+      "raw_has_think": true,
+      "structure_ok": false
+    },
+    {
+      "id": "ext_v1_0013",
+      "task_type": "contribution_extraction",
+      "source_case_id": "ext_case_004",
+      "char_f1": 0.0,
+      "prediction_is_empty": true,
+      "raw_has_think": true,
+      "structure_ok": false
+    },
+    {
+      "id": "ext_v1_0016",
+      "task_type": "defense_followup",
+      "source_case_id": "ext_case_004",
+      "char_f1": 0.0,
+      "prediction_is_empty": true,
+      "raw_has_think": true,
+      "structure_ok": false
+    }
+  ]
+}

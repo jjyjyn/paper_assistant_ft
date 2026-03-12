@@ -1,0 +1,107 @@
+{
+  "dataset_name": "test_v1",
+  "dataset_path": "data/processed/test_v1.jsonl",
+  "base_model_path": "/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B",
+  "adapter_path": "outputs/qwen_lora_v1_full",
+  "device": "cuda",
+  "max_new_tokens": 384,
+  "disable_thinking": false,
+  "run_tag": "",
+  "thinking_control_modes": [
+    "default"
+  ],
+  "overall": {
+    "count": 8,
+    "exact_match_rate": 0.0,
+    "avg_char_f1": 0.5105000907412257,
+    "empty_prediction_rate": 0.125,
+    "raw_think_rate": 1.0,
+    "cleaned_changed_rate": 1.0,
+    "structure_ok_rate": 0.625
+  },
+  "by_task_type": {
+    "contribution_extraction": {
+      "count": 2,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.27149321266968324,
+      "empty_prediction_rate": 0.5,
+      "raw_think_rate": 1.0,
+      "cleaned_changed_rate": 1.0,
+      "structure_ok_rate": 0.0
+    },
+    "defense_followup": {
+      "count": 2,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.49773034960579754,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 1.0,
+      "cleaned_changed_rate": 1.0,
+      "structure_ok_rate": 1.0
+    },
+    "experiment_interpretation": {
+      "count": 2,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.49222402013664146,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 1.0,
+      "cleaned_changed_rate": 1.0,
+      "structure_ok_rate": 0.5
+    },
+    "method_comparison": {
+      "count": 2,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.7805527805527805,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 1.0,
+      "cleaned_changed_rate": 1.0,
+      "structure_ok_rate": 1.0
+    }
+  },
+  "worst_examples": [
+    {
+      "id": "v1_0061",
+      "task_type": "contribution_extraction",
+      "source_case_id": "case_016",
+      "char_f1": 0.0,
+      "prediction_is_empty": true,
+      "raw_has_think": true,
+      "structure_ok": false
+    },
+    {
+      "id": "v1_0063",
+      "task_type": "experiment_interpretation",
+      "source_case_id": "case_016",
+      "char_f1": 0.45370370370370366,
+      "prediction_is_empty": false,
+      "raw_has_think": true,
+      "structure_ok": false
+    },
+    {
+      "id": "v1_0012",
+      "task_type": "defense_followup",
+      "source_case_id": "case_003",
+      "char_f1": 0.48275862068965514,
+      "prediction_is_empty": false,
+      "raw_has_think": true,
+      "structure_ok": true
+    },
+    {
+      "id": "v1_0064",
+      "task_type": "defense_followup",
+      "source_case_id": "case_016",
+      "char_f1": 0.5127020785219399,
+      "prediction_is_empty": false,
+      "raw_has_think": true,
+      "structure_ok": true
+    },
+    {
+      "id": "v1_0011",
+      "task_type": "experiment_interpretation",
+      "source_case_id": "case_003",
+      "char_f1": 0.5307443365695792,
+      "prediction_is_empty": false,
+      "raw_has_think": true,
+      "structure_ok": true
+    }
+  ]
+}
