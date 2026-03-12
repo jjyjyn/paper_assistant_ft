@@ -761,3 +761,94 @@ bash scripts/run_eval_v1.sh
 - `structure_ok_rate` 是否上升
 - `raw_think_rate` 是否下降
 - 不要先执着 `avg_char_f1` 是否立刻大幅上涨
+
+## 21. 第四轮真实闭环结果（2026-03-12_212350）
+
+### 这轮已经完成了什么
+
+- 目录：
+  - `outputs/evals/qwen_lora_v1_full_2026-03-12_212350/`
+- 已产出：
+  - `test_v1_summary.json`
+  - `external_eval_v1_summary.json`
+  - 两套 report + predictions
+
+### 指标快照
+
+- `test_v1`
+  - `avg_char_f1 = 0.5105`
+  - `empty_prediction_rate = 0.125`
+  - `structure_ok_rate = 0.625`
+  - `raw_think_rate = 1.0`
+- `external_eval_v1`
+  - `avg_char_f1 = 0.4350`
+  - `empty_prediction_rate = 0.25`
+  - `structure_ok_rate = 0.34375`
+  - `raw_think_rate = 1.0`
+
+### 这轮该怎么解释
+
+- 进展：
+  - 相比第三轮“接近 0”的干净分数，本轮内容重合和结构合格率都明显恢复。
+- 主故障仍在：
+  - 原始输出依旧 100% 包含 `<think>`，说明最终答案通道还没完全稳定。
+- 工程判断：
+  - 先修推理口径，再决定是否继续堆训练时长。
+
+## 22. 第五轮前的 A/B 评测（默认 vs no-think）
+
+### 脚本已支持的开关
+
+- `scripts/eval_lora_model.py`
+  - `--disable-thinking`
+- `scripts/run_eval_v1.sh`
+  - `DISABLE_THINKING=0/1`
+  - `RUN_TAG=<text>`
+
+### 推荐命令
+
+```bash
+# A: 默认推理口径
+cd ~/paper_assistant_ft
+unset DISABLE_THINKING
+export RUN_TAG=baseline_after_212350
+bash scripts/run_eval_v1.sh
+
+# B: no-think 推理口径
+export DISABLE_THINKING=1
+export RUN_TAG=nothink_after_212350
+bash scripts/run_eval_v1.sh
+```
+
+### A/B 验收顺序（固定）
+
+1. `raw_think_rate`：是否从 `1.0` 下降
+2. `empty_prediction_rate`：是否下降
+3. `structure_ok_rate`：是否上升
+4. `avg_char_f1`：最后看是否被副作用拖低
+
+## 23. 每轮训练与评测记录模板（面试复盘版）
+
+每次跑完都按这个结构记，后续可直接对着讲：
+
+1. 本轮目标
+- 例如：先降 `raw_think_rate`，不先追高分
+
+2. 本轮改动
+- 改了哪些脚本、参数、数据模板
+
+3. 执行命令
+- 原样记录 `check -> smoke -> full -> eval` 命令块
+
+4. 核心结果
+- test/external 的 `avg_char_f1`
+- `empty_prediction_rate`
+- `raw_think_rate`
+- `structure_ok_rate`
+
+5. 失败样例
+- 至少 3 条：写 `id`、失败类型、证据句
+
+6. 结论与下一步
+- 这轮证明了什么
+- 下一轮只改什么，不改什么

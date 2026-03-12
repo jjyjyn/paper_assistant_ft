@@ -296,3 +296,30 @@
   4. `bash scripts/run_train_smoke.sh`
   5. `bash scripts/run_train_full.sh`
   6. `bash scripts/run_eval_v1.sh`
+
+## 2026-03-12 补充：Fourth Iteration Closed-Loop Result and Next Gate
+
+- 最新完成目录：
+  - `outputs/evals/qwen_lora_v1_full_2026-03-12_212350/`
+- 本轮关键指标：
+  - `test_v1`
+    - `avg_char_f1 = 0.5105`
+    - `empty_prediction_rate = 0.125`
+    - `structure_ok_rate = 0.625`
+    - `raw_think_rate = 1.0`
+  - `external_eval_v1`
+    - `avg_char_f1 = 0.4350`
+    - `empty_prediction_rate = 0.25`
+    - `structure_ok_rate = 0.34375`
+    - `raw_think_rate = 1.0`
+- 状态判断：
+  - 相比第三轮“接近 0”的干净分数，本轮已恢复到可分析区间。
+  - 但原始输出中的 `<think>` 泄漏仍是系统级主故障（`raw_think_rate = 1.0`）。
+- 当前最高优先：
+  - 不先加训练时长，先做推理口径 A/B（默认 vs no-think）。
+  - 先验证输出通道是否真正收敛，再决定是否进入下一轮重训。
+- 已加到脚本的能力：
+  - `scripts/eval_lora_model.py` 支持 `--disable-thinking`
+  - `scripts/run_eval_v1.sh` 支持：
+    - `DISABLE_THINKING=0/1`
+    - `RUN_TAG=<text>`

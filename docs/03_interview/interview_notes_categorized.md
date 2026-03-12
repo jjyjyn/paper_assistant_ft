@@ -177,3 +177,31 @@
 - 可讲结论：
   - 当前是基础设施可达性阻塞，不是训练链路设计问题
   - 服务器恢复后可直接恢复第四轮固定流程，不需要回滚代码或重做本地加固
+
+### 8) 第四轮真实闭环结果（2026-03-12_212350）
+
+- 结果摘要：
+  - `test_v1`
+    - `avg_char_f1 = 0.5105`
+    - `empty_prediction_rate = 0.125`
+    - `structure_ok_rate = 0.625`
+    - `raw_think_rate = 1.0`
+  - `external_eval_v1`
+    - `avg_char_f1 = 0.4350`
+    - `empty_prediction_rate = 0.25`
+    - `structure_ok_rate = 0.34375`
+    - `raw_think_rate = 1.0`
+- 可讲结论：
+  - 通道已从“接近 0 分”恢复到“可分析区间”
+  - 但 `<think>` 泄漏仍是主故障，尚未根治
+
+### 9) 下一轮策略（先 A/B，不先盲目长训）
+
+- 优先做：默认推理 vs no-think 推理 A/B
+- 验收顺序：
+  1. `raw_think_rate`
+  2. `empty_prediction_rate`
+  3. `structure_ok_rate`
+  4. `avg_char_f1`
+- 解释口径：
+  - 先把输出通道稳定住，再谈继续加训练时长

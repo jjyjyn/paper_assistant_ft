@@ -1060,3 +1060,68 @@ python scripts/check_external_eval_v1.py
 - `structure_ok_rate` 是否上升
 - `raw_think_rate` 是否下降
 - 不先执着 `avg_char_f1` 是否立刻明显上涨
+
+## 2026-03-12 补充：Fourth Iteration Server Closed-Loop Completed (Run 212350)
+
+### 本轮执行状态
+
+- 本轮评测目录：
+  - `outputs/evals/qwen_lora_v1_full_2026-03-12_212350/`
+- 服务器闭环已实际执行完成（`check -> smoke -> full -> eval`），并产出 test/external 两套 summary/report/predictions。
+
+### 本轮关键结果（对比第三轮干净分数）
+
+- `test_v1`
+  - 上轮（`2026-03-12_180125`）`avg_char_f1 ≈ 0.0050`
+  - 本轮（`2026-03-12_212350`）`avg_char_f1 = 0.5105`
+  - `empty_prediction_rate = 0.125`
+  - `structure_ok_rate = 0.625`
+  - `raw_think_rate = 1.0`
+- `external_eval_v1`
+  - 上轮（`2026-03-12_180125`）`avg_char_f1 = 0.0000`
+  - 本轮（`2026-03-12_212350`）`avg_char_f1 = 0.4350`
+  - `empty_prediction_rate = 0.25`
+  - `structure_ok_rate = 0.34375`
+  - `raw_think_rate = 1.0`
+
+### 这轮结果怎么解释（必须讲清）
+
+- 正向变化：
+  - “最终答案通道完全失效”的状态已明显缓解，`char_f1` 和 `structure_ok_rate` 均显著回升。
+- 未解决问题：
+  - `raw_think_rate = 1.0` 说明所有样例的原始输出仍含 `<think>`。
+  - 这意味着当前系统仍依赖“评测后清洗”才能得到可评分答案，推理通道和最终答案通道尚未彻底解耦。
+- 结构短板位置：
+  - test/external 都显示 `contribution_extraction` 仍是弱项。
+  - external 上 `defense_followup` 空答案率也偏高（`0.375`），说明跨分布稳定性不足。
+
+### 本轮工程结论
+
+- 这轮不是“已经收工”，而是“完成了从接近 0 到可分析区间的恢复”。
+- 下一轮最优先动作不是继续拉长训练，而是做推理口径 A/B：
+  - 默认推理 vs `no-think` 推理
+  - 先看 `raw_think_rate` 能否从 `1.0` 实质下降
+
+### 本地脚本已追加的支持（为下一轮准备）
+
+- `scripts/eval_lora_model.py`
+  - 新增 `--disable-thinking`
+  - 优先尝试 `tokenizer.apply_chat_template(..., enable_thinking=False)`
+  - 若 tokenizer 不支持，则回退到 prompt 级 `/no_think` 控制
+  - summary/report 新增：
+    - `disable_thinking`
+    - `thinking_control_modes`
+- `scripts/run_eval_v1.sh`
+  - 新增环境变量：
+    - `DISABLE_THINKING=0/1`
+    - `RUN_TAG=<text>`
+  - 当 `DISABLE_THINKING=1` 时，输出目录自动追加 `_nothink` 后缀，便于 A/B 归档
+
+### 下一步执行口径（固定）
+
+1. 保持当前 adapter 不变，先做 `eval A/B`（默认与 no-think）
+2. 先验收：
+  - `raw_think_rate` 是否下降
+  - `empty_prediction_rate` 是否下降
+  - `structure_ok_rate` 是否上升
+3. 再决定是否做下一轮定向补样与重训

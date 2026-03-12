@@ -24,12 +24,28 @@ if [[ -z "${MODEL_PATH}" ]]; then
 fi
 
 ADAPTER_PATH="${ADAPTER_PATH:-outputs/qwen_lora_v1_full}"
+DISABLE_THINKING="${DISABLE_THINKING:-0}"
+RUN_TAG="${RUN_TAG:-}"
 STAMP="$(date +%F_%H%M%S)"
-OUT_DIR="outputs/evals/qwen_lora_v1_full_${STAMP}"
+MODE_SUFFIX=""
+if [[ "${DISABLE_THINKING}" == "1" ]]; then
+  MODE_SUFFIX="_nothink"
+fi
+OUT_DIR="outputs/evals/qwen_lora_v1_full_${STAMP}${MODE_SUFFIX}"
 mkdir -p "${OUT_DIR}"
+
+EXTRA_ARGS=()
+if [[ "${DISABLE_THINKING}" == "1" ]]; then
+  EXTRA_ARGS+=("--disable-thinking")
+fi
+if [[ -n "${RUN_TAG}" ]]; then
+  EXTRA_ARGS+=("--run-tag" "${RUN_TAG}")
+fi
 
 echo "Using model: ${MODEL_PATH}"
 echo "Using adapter: ${ADAPTER_PATH}"
+echo "Disable thinking: ${DISABLE_THINKING}"
+echo "Run tag: ${RUN_TAG:-<none>}"
 echo "Saving reports to: ${OUT_DIR}"
 
 python scripts/eval_lora_model.py \
@@ -38,7 +54,8 @@ python scripts/eval_lora_model.py \
   --dataset data/processed/test_v1.jsonl \
   --output-jsonl "${OUT_DIR}/test_v1_predictions.jsonl" \
   --output-summary "${OUT_DIR}/test_v1_summary.json" \
-  --output-md "${OUT_DIR}/test_v1_report.md"
+  --output-md "${OUT_DIR}/test_v1_report.md" \
+  "${EXTRA_ARGS[@]}"
 
 python scripts/eval_lora_model.py \
   --base-model "${MODEL_PATH}" \
@@ -46,7 +63,8 @@ python scripts/eval_lora_model.py \
   --dataset data/external_eval/processed/external_eval_v1.jsonl \
   --output-jsonl "${OUT_DIR}/external_eval_v1_predictions.jsonl" \
   --output-summary "${OUT_DIR}/external_eval_v1_summary.json" \
-  --output-md "${OUT_DIR}/external_eval_v1_report.md"
+  --output-md "${OUT_DIR}/external_eval_v1_report.md" \
+  "${EXTRA_ARGS[@]}"
 
 echo "Evaluation finished."
 echo "Reports:"

@@ -230,3 +230,32 @@ git log --oneline -n 8
   - Infrastructure reachability only (not local code/data)
 - Resume point when server is back:
   - continue exactly from step `F` and command block `G` in this file (`check -> smoke -> full -> eval`)
+
+## 6. Latest Delta (2026-03-12, server loop completed later)
+
+- Fourth-round server loop has been completed with outputs:
+  - `outputs/evals/qwen_lora_v1_full_2026-03-12_212350/`
+- Key metrics:
+  - `test_v1`
+    - `avg_char_f1 = 0.5105`
+    - `empty_prediction_rate = 0.125`
+    - `structure_ok_rate = 0.625`
+    - `raw_think_rate = 1.0`
+  - `external_eval_v1`
+    - `avg_char_f1 = 0.4350`
+    - `empty_prediction_rate = 0.25`
+    - `structure_ok_rate = 0.34375`
+    - `raw_think_rate = 1.0`
+- New script capabilities for next pass:
+  - `scripts/eval_lora_model.py` now supports:
+    - `--disable-thinking`
+    - `--run-tag`
+    - summary/report fields:
+      - `disable_thinking`
+      - `thinking_control_modes`
+  - `scripts/run_eval_v1.sh` now supports:
+    - `DISABLE_THINKING=0/1`
+    - `RUN_TAG=<text>`
+    - `_nothink` suffix for output directory when `DISABLE_THINKING=1`
+- Next gate:
+  - run eval A/B first (default vs no-think), do not rush into longer training yet.

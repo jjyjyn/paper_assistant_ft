@@ -41,6 +41,12 @@ REQUIRED_PREFIXES = {
     ],
 }
 
+SYSTEM_PROMPT_NO_THINK = (
+    "你必须只输出最终答案。"
+    "禁止输出任何思考过程、分析过程、推理痕迹，"
+    "禁止输出 <think> 或 </think>。"
+)
+
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
     records: list[dict[str, Any]] = []
@@ -122,18 +128,37 @@ def generate_prediction(
     instruction: str,
     input_text: str,
     max_new_tokens: int,
-) -> tuple[str, str]:
+    disable_thinking: bool,
+) -> tuple[str, str, str]:
     import torch
 
     user_prompt = build_user_prompt(instruction, input_text)
-    messages = [{"role": "user", "content": user_prompt}]
+    messages: list[dict[str, str]] = []
+    if disable_thinking:
+        messages.append({"role": "system", "content": SYSTEM_PROMPT_NO_THINK})
+    messages.append({"role": "user", "content": user_prompt})
 
-    inputs = tokenizer.apply_chat_template(
-        messages,
-        add_generation_prompt=True,
-        tokenize=True,
-        return_tensors="pt",
-    )
+    chat_kwargs = {
+        "add_generation_prompt": True,
+        "tokenize": True,
+        "return_tensors": "pt",
+    }
+    thinking_control_mode = "default"
+    if disable_thinking:
+        try:
+            inputs = tokenizer.apply_chat_template(
+                messages,
+                enable_thinking=False,
+                **chat_kwargs,
+            )
+            thinking_control_mode = "chat_template_enable_thinking_false"
+        except TypeError:
+            # Fallback for tokenizers without `enable_thinking` argument.
+            messages[-1]["content"] = f"{messages[-1]['content']}\n\n/no_think"
+            inputs = tokenizer.apply_chat_template(messages, **chat_kwargs)
+            thinking_control_mode = "prompt_no_think_fallback"
+    else:
+        inputs = tokenizer.apply_chat_template(messages, **chat_kwargs)
 
     if torch.cuda.is_available():
         inputs = inputs.to("cuda")
@@ -153,7 +178,7 @@ def generate_prediction(
     new_tokens = output_ids[0, inputs.shape[-1] :]
     raw_prediction = tokenizer.decode(new_tokens, skip_special_tokens=True).strip()
     cleaned_prediction = strip_think_content(raw_prediction)
-    return raw_prediction, cleaned_prediction
+    return raw_prediction, cleaned_prediction, thinking_control_mode
 
 
 def save_json(path: Path, payload: dict[str, Any]) -> None:
@@ -183,6 +208,8 @@ def save_markdown(path: Path, rows: list[dict[str, Any]], summary: dict[str, Any
     lines.append(f"- raw_think_rate: {summary['overall']['raw_think_rate']:.4f}")
     lines.append(f"- cleaned_changed_rate: {summary['overall']['cleaned_changed_rate']:.4f}")
     lines.append(f"- structure_ok_rate: {summary['overall']['structure_ok_rate']:.4f}")
+    lines.append(f"- disable_thinking: {summary['disable_thinking']}")
+    lines.append(f"- thinking_control_modes: `{', '.join(summary['thinking_control_modes'])}`")
     lines.append(f"- adapter_path: `{summary['adapter_path']}`")
     lines.append(f"- base_model_path: `{summary['base_model_path']}`")
     lines.append("")
@@ -211,6 +238,7 @@ def save_markdown(path: Path, rows: list[dict[str, Any]], summary: dict[str, Any
         lines.append(f"- raw_has_think: `{row['raw_has_think']}`")
         lines.append(f"- cleaned_changed: `{row['cleaned_changed']}`")
         lines.append(f"- structure_ok: `{row['structure_ok']}`")
+        lines.append(f"- thinking_control_mode: `{row['thinking_control_mode']}`")
         lines.append("")
         lines.append("### Instruction")
         lines.append(row["instruction"])
@@ -260,6 +288,16 @@ def main() -> None:
     parser.add_argument("--output-md", required=True, help="Readable markdown report output path.")
     parser.add_argument("--max-new-tokens", type=int, default=384)
     parser.add_argument("--limit", type=int, default=0, help="Optional limit for debugging.")
+    parser.add_argument(
+        "--disable-thinking",
+        action="store_true",
+        help="Try to disable model thinking output via chat template/prompt controls.",
+    )
+    parser.add_argument(
+        "--run-tag",
+        default="",
+        help="Optional run tag for audit and report traceability.",
+    )
     args = parser.parse_args()
 
     import torch
@@ -300,12 +338,13 @@ def main() -> None:
     task_buckets: dict[str, list[dict[str, Any]]] = defaultdict(list)
 
     for record in records:
-        raw_prediction, prediction = generate_prediction(
+        raw_prediction, prediction, thinking_control_mode = generate_prediction(
             model=model,
             tokenizer=tokenizer,
             instruction=record["instruction"],
             input_text=record["input"],
             max_new_tokens=args.max_new_tokens,
+            disable_thinking=args.disable_thinking,
         )
 
         row = {
@@ -323,6 +362,7 @@ def main() -> None:
             "raw_has_think": "<think>" in raw_prediction or "</think>" in raw_prediction,
             "cleaned_changed": raw_prediction != prediction,
             "structure_ok": structure_ok(record["task_type"], prediction),
+            "thinking_control_mode": thinking_control_mode,
         }
         rows.append(row)
         task_buckets[row["task_type"]].append(row)
@@ -334,6 +374,9 @@ def main() -> None:
         "adapter_path": args.adapter_path,
         "device": "cuda" if torch.cuda.is_available() else "cpu",
         "max_new_tokens": args.max_new_tokens,
+        "disable_thinking": args.disable_thinking,
+        "run_tag": args.run_tag,
+        "thinking_control_modes": sorted({row["thinking_control_mode"] for row in rows}),
         "overall": summarize_bucket(rows),
         "by_task_type": {
             task_type: summarize_bucket(bucket)

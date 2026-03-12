@@ -582,3 +582,28 @@
   - `ssh -p 15912 root@connect.bjb1.seetacloud.com "echo connected && hostname && pwd"`
 - 这次实际返回 `Connection refused`，所以结论是服务器入口不可达，不是训练方案或脚本失效。
 - 这种拆分能力很关键：它能避免把基础设施故障误判成模型问题，并保证服务器恢复后能按既定顺序直接恢复 `check -> smoke -> full -> eval`。
+
+### 问：第四轮最新一次结果已经回升到 `test 0.5105 / external 0.4350`，为什么你还不直接宣布成功？
+
+答：
+
+- 因为我不会只盯一个 `avg_char_f1`。
+- 这轮虽然分数回升，但 `raw_think_rate = 1.0`，说明原始输出仍 100% 带 `<think>`。
+- 这代表当前系统还在依赖“后处理清洗”兜底，而不是模型原生稳定输出最终答案。
+- 所以结论应是：
+  - 通道从崩溃状态恢复了
+  - 但输出控制主故障还没被根治
+
+### 问：那你下一轮最优先做什么，为什么不是继续加训练时长？
+
+答：
+
+- 我先做推理口径 A/B（默认 vs no-think），先验证输出控制能否改善。
+- 我已经在脚本里加入了：
+  - `eval_lora_model.py --disable-thinking`
+  - `run_eval_v1.sh` 的 `DISABLE_THINKING=1`
+- 先看三件事：
+  1. `raw_think_rate` 是否下降
+  2. `empty_prediction_rate` 是否下降
+  3. `structure_ok_rate` 是否上升
+- 只有输出通道先稳住，再加训练时长才有价值，否则可能只是把不受控的长输出继续放大。
