@@ -274,3 +274,25 @@
     - `empty_prediction_rate`
     - `structure_ok_rate`
     - `raw_think_rate`
+
+## 2026-03-12 补充：Fourth Iteration Server Execution Blocker Captured
+
+- 本地第四轮入口检查已完成：
+  - `git status -sb` 为干净工作区
+  - `check_dataset_v1.py` 通过
+  - `check_external_eval_v1.py` 通过
+  - 关键脚本 `py_compile` 通过
+- 当前阻塞：
+  - 连接训练服务器命令
+    - `ssh -p 15912 root@connect.bjb1.seetacloud.com "echo connected && hostname && pwd"`
+  - 返回 `Connection refused`
+- 结论：
+  - 问题在服务器可达性，不在本地代码与数据链路
+  - 第四轮真实 `smoke/full/eval` 仍处于待执行状态
+- 解锁后按固定顺序继续：
+  1. `git pull --ff-only`
+  2. `python scripts/check_dataset_v1.py`
+  3. `python scripts/check_external_eval_v1.py`
+  4. `bash scripts/run_train_smoke.sh`
+  5. `bash scripts/run_train_full.sh`
+  6. `bash scripts/run_eval_v1.sh`

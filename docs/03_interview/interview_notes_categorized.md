@@ -162,3 +162,18 @@
   - 空答案率是否下降
   - 结构正确率是否上升
   - `<think>` 是否继续进入原始输出
+
+### 7) 第四轮服务器闭环当前阻塞（2026-03-12）
+
+- 已完成的本地入口验收：
+  - 工作区干净（`git status -sb`）
+  - `check_dataset_v1.py` 通过
+  - `check_external_eval_v1.py` 通过
+  - 关键脚本 `py_compile` 通过
+- 服务器探针命令：
+  - `ssh -p 15912 root@connect.bjb1.seetacloud.com "echo connected && hostname && pwd"`
+- 实际返回：
+  - `Connection refused`
+- 可讲结论：
+  - 当前是基础设施可达性阻塞，不是训练链路设计问题
+  - 服务器恢复后可直接恢复第四轮固定流程，不需要回滚代码或重做本地加固

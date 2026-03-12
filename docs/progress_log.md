@@ -1024,3 +1024,39 @@ python scripts/check_external_eval_v1.py
 
 - “第三轮之后，我没有立即继续拉长训练，而是先把输出模板写死，并增加结构正确率指标。”
 - “因为前面已经证明问题集中在最终答案通道，所以第四轮先修模板收束，再看分数变化。”
+
+## 2026-03-12 补充：Fourth Iteration Server Loop Attempt Blocked (Connection Refused)
+
+### 这一步我做了什么
+
+- 按第四轮起点先执行本地仓库核对：
+  - `git status -sb` 显示工作区干净（`## main...origin/main`）
+  - 最新提交仍为 `8197a7d`
+- 重新跑第四轮前置校验：
+  - `python scripts/check_dataset_v1.py`：通过
+  - `python scripts/check_external_eval_v1.py`：通过
+  - `python -m py_compile scripts/build_dataset_v1.py scripts/build_external_eval_v1.py scripts/eval_lora_model.py`：通过
+- 尝试连接服务器并准备进入真实闭环：
+  - `ssh -p 15912 root@connect.bjb1.seetacloud.com "echo connected && hostname && pwd"`
+  - 返回 `Connection refused`
+
+### 当前判断
+
+- 当前阻塞点是服务器入口不可达，不是本地脚本或数据问题。
+- 第四轮真实 `smoke/full/eval` 还没有开始执行。
+
+### 服务器恢复后的执行顺序（保持不变）
+
+1. `git pull --ff-only`
+2. `python scripts/check_dataset_v1.py`
+3. `python scripts/check_external_eval_v1.py`
+4. `bash scripts/run_train_smoke.sh`
+5. `bash scripts/run_train_full.sh`
+6. `bash scripts/run_eval_v1.sh`
+
+### 第四轮验收优先级（保持不变）
+
+- `empty_prediction_rate` 是否下降
+- `structure_ok_rate` 是否上升
+- `raw_think_rate` 是否下降
+- 不先执着 `avg_char_f1` 是否立刻明显上涨

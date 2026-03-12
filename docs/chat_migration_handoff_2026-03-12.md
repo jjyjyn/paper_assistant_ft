@@ -215,3 +215,18 @@ git log --oneline -n 8
 - Third-pass clean-eval directory:
   - `outputs/evals/qwen_lora_v1_full_2026-03-12_180125`
 - This handoff supersedes the older `docs/chat_migration_handoff_2026-03-11.md`.
+
+## 5. Latest Delta (2026-03-12, after this handoff file was created)
+
+- Local entry checks for fourth round have been re-verified:
+  - `git status -sb` clean (`## main...origin/main`)
+  - `python scripts/check_dataset_v1.py` passed
+  - `python scripts/check_external_eval_v1.py` passed
+  - `python -m py_compile scripts/build_dataset_v1.py scripts/build_external_eval_v1.py scripts/eval_lora_model.py` passed
+- Server reachability probe attempted:
+  - `ssh -p 15912 root@connect.bjb1.seetacloud.com "echo connected && hostname && pwd"`
+  - result: `Connection refused`
+- Current blocker:
+  - Infrastructure reachability only (not local code/data)
+- Resume point when server is back:
+  - continue exactly from step `F` and command block `G` in this file (`check -> smoke -> full -> eval`)

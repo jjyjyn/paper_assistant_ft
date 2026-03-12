@@ -725,3 +725,39 @@ bash scripts/run_eval_v1.sh
 
 原因：
 - 这一轮的首要目标是让最终答案通道变得稳定，而不是立刻追一个漂亮分数。
+
+## 20. 第四轮服务器入口不可达时，如何不中断闭环
+
+### 先做最小判断，不要盲目重试
+
+1. 先确认本地入口是干净的
+- `git status -sb` 应为干净工作区
+- `python scripts/check_dataset_v1.py`
+- `python scripts/check_external_eval_v1.py`
+- `python -m py_compile scripts/build_dataset_v1.py scripts/build_external_eval_v1.py scripts/eval_lora_model.py`
+
+2. 再做只读连通性探针
+- `ssh -p 15912 root@connect.bjb1.seetacloud.com "echo connected && hostname && pwd"`
+
+### 2026-03-12 这次真实结果
+
+- 探针返回：`Connection refused`
+- 结论：
+  - 当前阻塞是服务器可达性问题
+  - 不是数据构建脚本、评测脚本或本地环境问题
+
+### 服务器恢复后，直接按这个顺序继续
+
+1. `git pull --ff-only`
+2. `python scripts/check_dataset_v1.py`
+3. `python scripts/check_external_eval_v1.py`
+4. `bash scripts/run_train_smoke.sh`
+5. `bash scripts/run_train_full.sh`
+6. `bash scripts/run_eval_v1.sh`
+
+### 恢复后先验收什么
+
+- `empty_prediction_rate` 是否下降
+- `structure_ok_rate` 是否上升
+- `raw_think_rate` 是否下降
+- 不要先执着 `avg_char_f1` 是否立刻大幅上涨
