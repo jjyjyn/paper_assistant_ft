@@ -1,4 +1,4 @@
-﻿# 过程记录（Progress Log）
+# 过程记录（Progress Log）
 
 ## 2026-03-10（Day 1）
 
@@ -1242,3 +1242,23 @@ python scripts/check_external_eval_v1.py
   - `configs/` 已完成按职责分层
   - 当前下一批应评估 `data/processed/` 是否做物理拆分
 
+
+## 2026-03-13 补充：Direct Chat Entry Added
+
+- 新增脚本：
+  - `scripts/chat/chat_lora_model.py`
+  - `scripts/chat_lora_model.py`（兼容 wrapper）
+- 新能力：
+  - 加载 `Qwen base model + LoRA adapter`
+  - 支持交互式多轮提问
+  - 支持单轮 `--prompt`
+  - 支持 `--disable-thinking`
+  - 支持 `--show-raw` / `--show-meta` 便于调试
+- 设计原则：
+  - 不改训练与评测闭环
+  - 直接复用现有推理加载逻辑
+  - 给项目补一个“像普通 AI 一样直接问模型”的入口
+- 文档已同步：
+  - `README.md`
+  - `scripts/README.md`
+  - `docs/00_meta/repo_structure_guide.md`

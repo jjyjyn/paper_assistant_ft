@@ -1,4 +1,4 @@
-﻿# paper_assistant_ft
+# paper_assistant_ft
 
 基于 Qwen 的中文论文精读与实验解析助手微调项目。当前仓库已经完成 `v1` 数据构建、LoRA SFT 训练、baseline 评测、`no-think` 推理控制验证，以及面试复盘文档沉淀。
 
@@ -52,11 +52,11 @@
 | `docs/` | 计划、日志、训练手册、面试复盘 | `docs/README.md` |
 | `logs/` | 训练日志与运行日志，默认不进 Git | `logs/README.md` |
 | `outputs/` | 评测结果、checkpoint、推理输出，默认不进 Git | `outputs/README.md` |
-| `scripts/` | 数据构建、校验、训练、评测、同步脚本 | `scripts/README.md` |
+| `scripts/` | 数据构建、校验、训练、评测、交互推理、同步脚本 | `scripts/README.md` |
 
 补充说明：
 
-- `scripts/` 现在已经按 `data / train / eval / server` 拆分
+- `scripts/` 现在已经按 `data / train / eval / chat / server` 拆分
 - 根目录旧脚本入口仍保留为兼容 wrapper，所以旧命令暂时还能继续跑
 
 ## 4. 仓库结构
@@ -111,7 +111,38 @@ paper_assistant_ft/
    - `external_eval_v1_report.md`
    - `*_predictions.jsonl`
 
-### 5.4 复盘阶段
+### 5.4 直接问模型
+
+如果你不是想跑批量评测，而是想像普通 AI 一样直接提问，走这个入口：
+
+1. 准备 base model 路径与 LoRA adapter 路径
+2. 运行 `scripts/chat/chat_lora_model.py`
+3. 进入交互模式后直接输入问题
+
+示例：
+
+```bash
+cd ~/paper_assistant_ft
+source "$(conda info --base)/etc/profile.d/conda.sh"
+conda activate paper_ft
+export MODEL_PATH=/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B
+
+python scripts/chat/chat_lora_model.py \
+  --base-model "$MODEL_PATH" \
+  --adapter-path outputs/qwen_lora_v1_full \
+  --disable-thinking
+```
+
+单轮提问：
+
+```bash
+python scripts/chat/chat_lora_model.py \
+  --base-model "$MODEL_PATH" \
+  --adapter-path outputs/qwen_lora_v1_full \
+  --disable-thinking \
+  --prompt "请解释这篇论文实验结果中最关键的一点。"
+```
+### 5.5 复盘阶段
 
 1. 计划与下一步：`docs/00_meta/project_plan.md`
 2. 实际执行日志：`docs/00_meta/progress_log.md`
@@ -188,4 +219,5 @@ paper_assistant_ft/
 - 想看每轮实验怎么演进：`docs/00_meta/progress_log.md`
 - 想直接跑：`scripts/README.md`
 - 想准备答辩：`docs/03_interview/teacher_question_bank.md`
+
 

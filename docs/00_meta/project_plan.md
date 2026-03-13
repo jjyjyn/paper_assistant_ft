@@ -1,4 +1,4 @@
-﻿# 项目计划（Project Plan）
+# 项目计划（Project Plan）
 
 ## 当前阶段
 
@@ -373,3 +373,20 @@
   - `run_eval_v1.sh` 新增 fail-fast：
     - 若 `RUN_TAG` 包含 `nothink` 但 `DISABLE_THINKING` 未开启，直接退出。
   - `run_eval_v1.sh` 对非法 `OMP_NUM_THREADS` 增加自动纠正。
+
+## 2026-03-13 补充：Direct Chat Entry Added
+
+- 新增交互式推理入口：
+  - `scripts/chat/chat_lora_model.py`
+  - 兼容 wrapper：`scripts/chat_lora_model.py`
+- 目标：
+  - 不再只支持批量 eval
+  - 支持像普通 AI 一样直接单轮/多轮提问
+  - 继续复用当前 `Qwen3-4B + LoRA` 与 `no-think` 控制口径
+- 当前推荐用法：
+  - 默认开启 `--disable-thinking`
+  - 论文场景优先问：
+    - 贡献提取
+    - 方法比较
+    - 实验解释
+    - 答辩追问

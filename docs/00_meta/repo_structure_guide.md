@@ -1,4 +1,4 @@
-﻿# 仓库结构总说明
+# 仓库结构总说明
 
 这份文档只回答一件事：`paper_assistant_ft` 这个仓库每一层分别放什么、为什么这样放、遇到问题该先看哪里。
 
@@ -85,6 +85,7 @@ scripts/
 ├─ data/
 ├─ train/
 ├─ eval/
+├─ chat/
 ├─ server/
 └─ 根目录兼容 wrapper
 ```
@@ -94,6 +95,7 @@ scripts/
 - `data/`：构建、校验、导出
 - `train/`：smoke / full 训练
 - `eval/`：评测主逻辑与评测入口
+- `chat/`：交互式推理入口，直接问模型
 - `server/`：服务器初始化、模型下载、同步
 - `scripts/` 根目录旧入口仍保留为兼容 wrapper，避免历史命令立刻失效
 
@@ -195,7 +197,13 @@ docs/
 4. 再看 `*_report.md`
 5. 最后看 `*_predictions.jsonl`
 
-### 4.4 如果你在做复盘或面试准备
+### 4.4 如果你想直接问模型
+
+1. 看 `scripts/chat/chat_lora_model.py`
+2. 准备 `--base-model` 和 `--adapter-path`
+3. 默认加 `--disable-thinking`
+4. 交互式直接输入问题，或用 `--prompt` 做单轮推理
+### 4.5 如果你在做复盘或面试准备
 
 1. 看 `docs/00_meta/project_plan.md`
 2. 看 `docs/00_meta/progress_log.md`
@@ -254,4 +262,6 @@ docs/
 - 看配置地图：`configs/README.md`
 - 看日志目录说明：`logs/README.md`
 - 看输出地图：`outputs/README.md`
+
+
 

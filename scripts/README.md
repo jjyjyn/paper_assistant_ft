@@ -1,6 +1,6 @@
-﻿# scripts 目录说明
+# scripts 目录说明
 
-`scripts/` 只放“动作脚本”。你要构建数据、检查数据、训练、评测、同步服务器，入口基本都在这里。
+`scripts/` 只放“动作脚本”。你要构建数据、检查数据、训练、评测、直接问模型、同步服务器，入口基本都在这里。
 
 ## 0. 当前目录结构
 
@@ -10,13 +10,14 @@ scripts/
 ├─ data/
 ├─ train/
 ├─ eval/
+├─ chat/
 ├─ server/
 └─ 兼容 wrapper（保留旧路径）
 ```
 
 说明：
 
-- `scripts/data/ train/ eval/ server/` 是当前真实实现所在目录
+- `scripts/data/ train/ eval/ chat/ server/` 是当前真实实现所在目录
 - `scripts/*.py`、`scripts/*.sh`、`scripts/sync_to_server.ps1` 旧入口仍保留为兼容 wrapper
 - 所以旧命令暂时还能继续用，但新文档和后续开发应优先使用子目录路径
 
@@ -59,7 +60,35 @@ scripts/
 - `no-think` 目录后缀
 - fail-fast 防误跑
 
-### 1.5 服务器与同步：`scripts/server/`
+### 1.5 直接问模型：`scripts/chat/`
+
+- `chat_lora_model.py`
+  - 交互式加载 `Qwen base model + LoRA adapter`
+  - 支持单轮 `--prompt`
+  - 支持多轮会话
+  - 支持 `--disable-thinking`
+  - 支持 `--show-raw` / `--show-meta`
+
+推荐用法：
+
+```bash
+python scripts/chat/chat_lora_model.py \
+  --base-model "$MODEL_PATH" \
+  --adapter-path outputs/qwen_lora_v1_full \
+  --disable-thinking
+```
+
+单轮问答：
+
+```bash
+python scripts/chat/chat_lora_model.py \
+  --base-model "$MODEL_PATH" \
+  --adapter-path outputs/qwen_lora_v1_full \
+  --disable-thinking \
+  --prompt "请比较这篇论文与 baseline 的核心差异。"
+```
+
+### 1.6 服务端与同步：`scripts/server/`
 
 - `server_day1_init.sh`
   - 服务器首次初始化
@@ -106,14 +135,21 @@ scripts/
 1. `bash scripts/eval/run_eval_v1.sh`
 2. 看 `outputs/evals/<run_name>/`
 
+### 2.4 直接问模型
+
+1. `python scripts/chat_lora_model.py --help`
+2. 交互式：`python scripts/chat/chat_lora_model.py --base-model ... --adapter-path ... --disable-thinking`
+3. 单轮：`python scripts/chat/chat_lora_model.py --base-model ... --adapter-path ... --disable-thinking --prompt "..."`
+
 ## 3. 读脚本的建议顺序
 
 1. `eval/run_eval_v1.sh`
 2. `eval/eval_lora_model.py`
-3. `train/run_train_smoke.sh`
-4. `train/run_train_full.sh`
-5. `data/build_dataset_v1.py`
-6. `data/check_dataset_v1.py`
+3. `chat/chat_lora_model.py`
+4. `train/run_train_smoke.sh`
+5. `train/run_train_full.sh`
+6. `data/build_dataset_v1.py`
+7. `data/check_dataset_v1.py`
 
 ## 4. 维护原则
 
@@ -121,4 +157,3 @@ scripts/
 - 新增脚本优先放入对应子目录，不再继续平铺到 `scripts/` 根目录
 - 大改脚本时，同步更新 `docs/00_meta/progress_log.md`
 - 如果评测口径变了，要同时更新 `docs/00_meta/project_plan.md` 和相关面试文档
-
