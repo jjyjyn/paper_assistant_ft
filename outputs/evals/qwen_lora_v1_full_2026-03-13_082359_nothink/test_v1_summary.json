@@ -1,0 +1,107 @@
+{
+  "dataset_name": "test_v1",
+  "dataset_path": "data/processed/test_v1.jsonl",
+  "base_model_path": "/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B",
+  "adapter_path": "outputs/qwen_lora_v1_full",
+  "device": "cuda",
+  "max_new_tokens": 384,
+  "disable_thinking": true,
+  "run_tag": "nothink_after_sync",
+  "thinking_control_modes": [
+    "chat_template_enable_thinking_false"
+  ],
+  "overall": {
+    "count": 8,
+    "exact_match_rate": 0.0,
+    "avg_char_f1": 0.6698023443190098,
+    "empty_prediction_rate": 0.0,
+    "raw_think_rate": 0.0,
+    "cleaned_changed_rate": 0.0,
+    "structure_ok_rate": 1.0
+  },
+  "by_task_type": {
+    "contribution_extraction": {
+      "count": 2,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.9016057091882248,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 0.0,
+      "cleaned_changed_rate": 0.0,
+      "structure_ok_rate": 1.0
+    },
+    "defense_followup": {
+      "count": 2,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.500045759609518,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 0.0,
+      "cleaned_changed_rate": 0.0,
+      "structure_ok_rate": 1.0
+    },
+    "experiment_interpretation": {
+      "count": 2,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.4746236559139785,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 0.0,
+      "cleaned_changed_rate": 0.0,
+      "structure_ok_rate": 1.0
+    },
+    "method_comparison": {
+      "count": 2,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.8029342525643182,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 0.0,
+      "cleaned_changed_rate": 0.0,
+      "structure_ok_rate": 1.0
+    }
+  },
+  "worst_examples": [
+    {
+      "id": "v1_0012",
+      "task_type": "defense_followup",
+      "source_case_id": "case_003",
+      "char_f1": 0.4228187919463088,
+      "prediction_is_empty": false,
+      "raw_has_think": false,
+      "structure_ok": true
+    },
+    {
+      "id": "v1_0063",
+      "task_type": "experiment_interpretation",
+      "source_case_id": "case_016",
+      "char_f1": 0.4266666666666667,
+      "prediction_is_empty": false,
+      "raw_has_think": false,
+      "structure_ok": true
+    },
+    {
+      "id": "v1_0011",
+      "task_type": "experiment_interpretation",
+      "source_case_id": "case_003",
+      "char_f1": 0.5225806451612903,
+      "prediction_is_empty": false,
+      "raw_has_think": false,
+      "structure_ok": true
+    },
+    {
+      "id": "v1_0064",
+      "task_type": "defense_followup",
+      "source_case_id": "case_016",
+      "char_f1": 0.5772727272727273,
+      "prediction_is_empty": false,
+      "raw_has_think": false,
+      "structure_ok": true
+    },
+    {
+      "id": "v1_0062",
+      "task_type": "method_comparison",
+      "source_case_id": "case_016",
+      "char_f1": 0.7795527156549521,
+      "prediction_is_empty": false,
+      "raw_has_think": false,
+      "structure_ok": true
+    }
+  ]
+}

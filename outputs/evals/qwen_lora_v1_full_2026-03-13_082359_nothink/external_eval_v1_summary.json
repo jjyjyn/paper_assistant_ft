@@ -1,0 +1,107 @@
+{
+  "dataset_name": "external_eval_v1",
+  "dataset_path": "data/external_eval/processed/external_eval_v1.jsonl",
+  "base_model_path": "/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B",
+  "adapter_path": "outputs/qwen_lora_v1_full",
+  "device": "cuda",
+  "max_new_tokens": 384,
+  "disable_thinking": true,
+  "run_tag": "nothink_after_sync",
+  "thinking_control_modes": [
+    "chat_template_enable_thinking_false"
+  ],
+  "overall": {
+    "count": 32,
+    "exact_match_rate": 0.0,
+    "avg_char_f1": 0.6990104494936679,
+    "empty_prediction_rate": 0.0,
+    "raw_think_rate": 0.0,
+    "cleaned_changed_rate": 0.0,
+    "structure_ok_rate": 1.0
+  },
+  "by_task_type": {
+    "contribution_extraction": {
+      "count": 8,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.8905367431271605,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 0.0,
+      "cleaned_changed_rate": 0.0,
+      "structure_ok_rate": 1.0
+    },
+    "defense_followup": {
+      "count": 8,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.578617289954838,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 0.0,
+      "cleaned_changed_rate": 0.0,
+      "structure_ok_rate": 1.0
+    },
+    "experiment_interpretation": {
+      "count": 8,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.5404168222906498,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 0.0,
+      "cleaned_changed_rate": 0.0,
+      "structure_ok_rate": 1.0
+    },
+    "method_comparison": {
+      "count": 8,
+      "exact_match_rate": 0.0,
+      "avg_char_f1": 0.7864709426020241,
+      "empty_prediction_rate": 0.0,
+      "raw_think_rate": 0.0,
+      "cleaned_changed_rate": 0.0,
+      "structure_ok_rate": 1.0
+    }
+  },
+  "worst_examples": [
+    {
+      "id": "ext_v1_0024",
+      "task_type": "defense_followup",
+      "source_case_id": "ext_case_006",
+      "char_f1": 0.41851851851851857,
+      "prediction_is_empty": false,
+      "raw_has_think": false,
+      "structure_ok": true
+    },
+    {
+      "id": "ext_v1_0027",
+      "task_type": "experiment_interpretation",
+      "source_case_id": "ext_case_007",
+      "char_f1": 0.46470588235294114,
+      "prediction_is_empty": false,
+      "raw_has_think": false,
+      "structure_ok": true
+    },
+    {
+      "id": "ext_v1_0031",
+      "task_type": "experiment_interpretation",
+      "source_case_id": "ext_case_008",
+      "char_f1": 0.4747081712062256,
+      "prediction_is_empty": false,
+      "raw_has_think": false,
+      "structure_ok": true
+    },
+    {
+      "id": "ext_v1_0019",
+      "task_type": "experiment_interpretation",
+      "source_case_id": "ext_case_005",
+      "char_f1": 0.48091603053435117,
+      "prediction_is_empty": false,
+      "raw_has_think": false,
+      "structure_ok": true
+    },
+    {
+      "id": "ext_v1_0028",
+      "task_type": "defense_followup",
+      "source_case_id": "ext_case_007",
+      "char_f1": 0.48745519713261654,
+      "prediction_is_empty": false,
+      "raw_has_think": false,
+      "structure_ok": true
+    }
+  ]
+}
