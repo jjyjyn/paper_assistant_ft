@@ -4,8 +4,10 @@ __pycache__/
 *.pyd
 .venv/
 env/
-outputs/
-logs/
+outputs/*
+!outputs/README.md
+logs/*
+!logs/README.md
 checkpoints/
 .cache/
 hf_cache/

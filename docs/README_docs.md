@@ -1,110 +1,150 @@
-# Docs 导航（按阶段读，不要乱翻）
+# Docs 导航
 
-## 1. 根目录这 5 个文件是总控层
+这份文档是 `docs/` 目录的总入口。它不重复讲项目细节，只负责告诉你：哪些文档在什么位置、适合什么场景、推荐按什么顺序阅读。
+
+## 1. docs 目录内部分层
+
+`docs/` 里现在分成两类内容：
+
+### 1.1 总控层
+
+这些文件放在 `docs/` 根目录，负责记录项目阶段状态和跨阶段迁移信息：
 
 - `project_plan.md`
-  - 当前阶段、下一步动作、固定口径
 - `progress_log.md`
-  - 每天做了什么、遇到什么问题、如何修掉
 - `interview_notes.md`
-  - 最短可复述答法，适合临近沟通前快速看
 - `chat_migration_handoff_2026-03-11.md`
-  - 开新对话窗口时的迁移包
+- `chat_migration_handoff_2026-03-12.md`
+- `repo_structure_guide.md`
 - `README_docs.md`
-  - 当前这份导航
 
-说明：
-- 这 5 份放在根目录，是因为它们承担“总控”和“迁移”职责。
-- 其他材料已经按阶段拆到子目录，不再全部堆在根目录。
+### 1.2 阶段层
 
-## 2. 推荐阅读顺序（第一次完整过项目）
+这些子目录按主题拆分，不再把所有内容堆在根目录：
 
-1. `project_plan.md`
-2. `progress_log.md`
-3. `01_data/dataset_schema.md`
-4. `01_data/data_cleaning_labeling_guide.md`
-5. `02_training/environment_setup_guide.md`
+- `01_data/`
+- `02_training/`
+- `03_interview/`
+
+## 2. 推荐阅读路径
+
+### 2.1 第一次完整熟悉项目
+
+1. `../README.md`
+2. `repo_structure_guide.md`
+3. `project_plan.md`
+4. `progress_log.md`
+5. `01_data/dataset_schema.md`
 6. `02_training/day3_training_hands_on_lab.md`
 7. `03_interview/teacher_question_bank.md`
 
-如果你是明天要给老师讲项目，最少读这 4 份：
+### 2.2 只想快速知道项目现在做到哪
 
 1. `project_plan.md`
-2. `01_data/data_cleaning_labeling_guide.md`
-3. `02_training/environment_setup_guide.md`
-4. `03_interview/teacher_question_bank.md`
+2. `progress_log.md`
+3. `interview_notes.md`
 
-## 3. 按阶段分类
+### 2.3 明天要答辩或给老师讲
 
-### 3.1 数据准备与清洗：`docs/01_data/`
+1. `project_plan.md`
+2. `interview_notes.md`
+3. `03_interview/teacher_question_bank.md`
+4. `03_interview/interview_notes_categorized.md`
+
+### 2.4 要自己接着跑实验
+
+1. `repo_structure_guide.md`
+2. `02_training/environment_setup_guide.md`
+3. `02_training/day3_training_hands_on_lab.md`
+4. `../scripts/README.md`
+
+## 3. 按主题查文档
+
+### 3.1 数据
+
+目录：`01_data/`
+
+核心文件：
 
 - `dataset_schema.md`
-  - 训练样本字段定义、split 口径、防泄漏规则
 - `dataset_reading_guide.md`
-  - train/val/test/external 该怎么看
 - `data_cleaning_labeling_guide.md`
-  - 清洗规则、标注标准、常见问题与处理
-- `day2_data_hands_on_lab.md`
-  - Day 2 你亲手做数据的完整实验单
-- `day2_hands_on_checklist.md`
-  - Day 2 打卡版清单
 - `external_eval_guide.md`
-  - 外部评测集怎么构建、怎么用、怎么冻结
+- `day2_data_hands_on_lab.md`
+- `day2_hands_on_checklist.md`
 
-### 3.2 数据映射与案例复盘：`docs/01_data/data_preparation/`
+如果你要看“一个 raw case 是怎么变成训练样本的”，继续看：
 
-- `README.md`
-  - 这个子目录是干什么的
-- `case_to_sample_mapping_case004.md`
-  - raw case 如何映射成训练样本
-- `case_test_log.md`
-  - 每次改 case 后，样本层面发生了什么变化
+- `01_data/data_preparation/README.md`
+- `01_data/data_preparation/case_to_sample_mapping_case004.md`
+- `01_data/data_preparation/case_test_log.md`
 
-### 3.3 环境与训练执行：`docs/02_training/`
+### 3.2 训练与环境
+
+目录：`02_training/`
+
+核心文件：
 
 - `environment_setup_guide.md`
-  - 服务器环境怎么配、这次踩了哪些坑、最后固定了哪些版本
 - `rental_server_guide.md`
-  - 为什么租 4090、怎么控成本、磁盘怎么选
 - `day3_training_hands_on_lab.md`
-  - 从数据冻结到 smoke/full 的逐步训练手册
 - `llm_finetune_end2end_playbook.md`
-  - 从任务定义到面试讲述的完整闭环手册
 
-### 3.4 面试与老师追问：`docs/03_interview/`
+### 3.3 面试与复盘
 
-- `interview_notes_categorized.md`
-  - 按主题归档的复习材料
+目录：`03_interview/`
+
+核心文件：
+
 - `teacher_question_bank.md`
-  - 按阶段分组的高压追问问答
+- `interview_notes_categorized.md`
 
-## 4. 老师最可能怎么问，你该看哪份
+## 4. 根目录总控文档各自负责什么
 
-- 问“你到底做了什么项目”：
-  - `project_plan.md`
-  - `03_interview/teacher_question_bank.md`
-- 问“数据怎么来的，质量怎么保证”：
-  - `01_data/data_cleaning_labeling_guide.md`
-  - `01_data/data_preparation/case_to_sample_mapping_case004.md`
-  - `01_data/data_preparation/case_test_log.md`
-- 问“为什么这样切分，怎么防泄漏”：
-  - `01_data/dataset_schema.md`
-  - `01_data/dataset_reading_guide.md`
-- 问“服务器环境和依赖怎么配，遇到什么坑”：
-  - `02_training/environment_setup_guide.md`
-- 问“为什么先 smoke 再 full”：
-  - `02_training/day3_training_hands_on_lab.md`
-  - `03_interview/teacher_question_bank.md`
+### 4.1 `project_plan.md`
 
-## 5. 文档维护规则
+负责：
 
-- 旧记录不删，只追加
-- 关键口径变更时，先更新 `project_plan.md`
-- 实际执行与踩坑，追加到 `progress_log.md`
-- 面试能不能讲清楚，回写到 `interview_notes.md` 或 `03_interview/teacher_question_bank.md`
+- 当前阶段目标
+- 下一步行动
+- 固定执行口径
 
-## 6. 兼容说明
+适合在项目开始做事前先看。
 
-- 早期日志里会出现旧路径，例如 `docs/day2_data_hands_on_lab.md`
-- 现在的新路径是 `docs/01_data/day2_data_hands_on_lab.md`
-- 这是因为文档后来按阶段重组了；历史记录保留，当前导航以本文件为准
+### 4.2 `progress_log.md`
+
+负责：
+
+- 每次真实执行了什么
+- 遇到了什么坑
+- 是怎么定位和修掉的
+
+适合做复盘和写实验过程。
+
+### 4.3 `interview_notes.md`
+
+负责：
+
+- 压缩后的项目讲法
+- 最短可复述版本
+- 临近沟通前的快速复习
+
+### 4.4 `chat_migration_handoff_*.md`
+
+负责：
+
+- 新开对话时的最小接手包
+- 避免重复解释背景
+
+## 5. docs 的使用原则
+
+- 阶段计划先写 `project_plan.md`
+- 实际执行结果回写 `progress_log.md`
+- 能不能讲清楚，回写 `interview_notes.md` 或 `03_interview/`
+- 历史记录不删，只追加和标记
+
+## 6. 你最常用的三份文档
+
+- 想知道现在到哪一步：`project_plan.md`
+- 想知道这一路怎么做过来的：`progress_log.md`
+- 想准备讲项目：`03_interview/teacher_question_bank.md`
