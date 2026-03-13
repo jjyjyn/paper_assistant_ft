@@ -20,8 +20,11 @@
 - 第二批 `scripts/` 物理重构已完成
   - 真实实现迁入 `scripts/data/ train/ eval/ server/`
   - 根目录旧脚本入口保留为兼容 wrapper
+- 第三批 `configs/` 物理重构已完成
+  - 配置迁入 `configs/datasets/` 和 `configs/train/`
+  - 训练脚本默认路径已切换到 `configs/train/`
+  - 训练脚本保留旧配置路径兼容映射
 - 当前下一批应聚焦：
-  - `configs/` 分层
   - `data/processed/` 是否值得物理拆分
 
 ## 1. 当前结构的主要问题
@@ -53,14 +56,19 @@
 - 在 docs 中逐步把推荐命令切到新路径
 - 等一段兼容期后，再决定是否移除旧 wrapper
 
-### 1.3 `configs/` 语义还不够分层
+### 1.3 `configs/` 分层问题已完成首轮修复
 
-当前 `configs/` 里数据配置和训练配置平铺在一起。
+已完成修复：
 
-问题：
+- 新建 `configs/datasets/` 与 `configs/train/`
+- 数据配置迁入 `configs/datasets/paper_assistant_v1.yaml`
+- 训练配置迁入 `configs/train/`
+- 训练脚本默认路径已切到新目录
 
-- 规模再增大后，不容易区分“dataset config”和“train config”
-- 文件名里历史版本和当前版本混排
+剩余工作：
+
+- 在历史文档中逐步把推荐路径更新到新目录
+- 观察兼容期后再决定是否移除旧路径映射
 
 ### 1.4 `data/processed/` 可读导出和训练 JSONL 混放
 
@@ -281,11 +289,13 @@ external eval 同理：
 4. 用新旧两套入口验证 `check_dataset_v1.py`
 5. 更新 `scripts/README.md`
 
-### 第三批：中风险，整理配置
+### 第三批：中风险，已完成
 
 1. 新建 `configs/datasets/` 和 `configs/train/`
 2. 迁移配置
-3. 更新训练脚本和文档路径
+3. 更新训练脚本默认配置路径
+4. 增加旧配置路径兼容映射
+5. 更新主入口文档路径
 
 ### 第四批：中风险，整理数据目录
 
@@ -321,8 +331,7 @@ external eval 同理：
 
 从当前状态继续做“物理重构”，建议严格按这个顺序：
 
-1. 先做 `configs/` 重构
-2. 再评估 `data/processed/` 是否值得物理迁移
+1. 评估 `data/processed/` 是否值得物理迁移
 
 ## 8. 验收标准
 
@@ -338,8 +347,8 @@ external eval 同理：
 
 当前最值得真的动手的不是 `outputs/`，也不是 `data/`，而是：
 
-1. `docs/` 根目录分层
-2. `scripts/` 命名空间拆分
-3. `configs/` 语义分层
+1. `docs/` 根目录分层（已完成）
+2. `scripts/` 命名空间拆分（已完成）
+3. `configs/` 语义分层（已完成）
 
-这三件事做完，仓库会从“能用但越来越满”变成“结构稳定、后续能继续长”的状态。
+现在最值得继续投入的是 `data/processed/` 是否做物理分层，以及是否需要一轮“去兼容层”收口。

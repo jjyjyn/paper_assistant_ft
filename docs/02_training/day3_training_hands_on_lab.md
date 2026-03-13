@@ -172,7 +172,7 @@ export MODEL_PATH=/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B
 bash scripts/run_train_full.sh
 ```
 
-对应配置：`configs/lora_sft_qwen_v1_full.yaml`
+对应配置：`configs/train/lora_sft_qwen_v1_full.yaml`
 
 ### 验收
 

@@ -123,9 +123,9 @@ python scripts/export_dataset_readable.py
 
 ### 4.2 当前关键配置文件
 
-- `configs/lora_sft_qwen25_3b_v1.yaml`
+- `configs/train/lora_sft_qwen25_3b_v1.yaml`
 - `scripts/run_train_smoke.sh`
-- `configs/lora_sft_qwen_v1_full.yaml`
+- `configs/train/lora_sft_qwen_v1_full.yaml`
 - `scripts/run_train_full.sh`
 
 ### 4.3 冒烟成功标准

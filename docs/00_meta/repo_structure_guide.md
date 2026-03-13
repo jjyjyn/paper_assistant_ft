@@ -22,11 +22,20 @@ paper_assistant_ft/
 
 用途：保存训练配置和数据配置，尽量只放“声明式”文件，不放实验日志。
 
+当前结构：
+
+```text
+configs/
+├─ README.md
+├─ datasets/
+└─ train/
+```
+
 当前主要文件：
 
-- `dataset_paper_assistant_v1.yaml`
-- `lora_sft_qwen25_3b_v1.yaml`
-- `lora_sft_qwen_v1_full.yaml`
+- `datasets/paper_assistant_v1.yaml`
+- `train/lora_sft_qwen25_3b_v1.yaml`
+- `train/lora_sft_qwen_v1_full.yaml`
 
 适合放在这里的内容：
 

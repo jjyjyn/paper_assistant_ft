@@ -137,8 +137,9 @@ paper_assistant_ft/
 ### 6.2 配置
 
 - 数据注册：`data/dataset_info.json`
-- 早期配置：`configs/lora_sft_qwen25_3b_v1.yaml`
-- 当前 full 配置：`configs/lora_sft_qwen_v1_full.yaml`
+- 数据快捷配置：`configs/datasets/paper_assistant_v1.yaml`
+- 早期 smoke 配置：`configs/train/lora_sft_qwen25_3b_v1.yaml`
+- 当前 full 配置：`configs/train/lora_sft_qwen_v1_full.yaml`
 
 ### 6.3 评测结果
 

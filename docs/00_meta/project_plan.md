@@ -26,7 +26,7 @@
 - 已完成租用服务器环境重建与版本固定（无卡模式验证通过）
 - 已完成 smoke 训练脚本升级：优先 `Qwen3-4B`，兼容回退 `Qwen2.5-3B-Instruct`
 - 已新增正式训练入口：
-  - `configs/lora_sft_qwen_v1_full.yaml`
+  - `configs/train/lora_sft_qwen_v1_full.yaml`
   - `scripts/run_train_full.sh`
 - 已完成 full 训练
 - 已完成 baseline / clean / hardening / no-think 多轮评测
@@ -46,8 +46,13 @@
   - `scripts/eval/`
   - `scripts/server/`
   - 根目录旧脚本入口保留为 wrapper
+- 已完成 configs 物理迁移第三批：
+  - `configs/datasets/paper_assistant_v1.yaml`
+  - `configs/train/lora_sft_qwen25_3b_v1.yaml`
+  - `configs/train/lora_sft_qwen_v1_full.yaml`
+  - 训练脚本默认配置路径已切换到 `configs/train/*`
+  - 旧配置路径兼容映射已加到训练脚本
 - 下一步聚焦：
-  - `configs/` 分层
   - `data/processed/` 物理分层评估
 
 ## 今日执行清单（Phase 3 启动日）

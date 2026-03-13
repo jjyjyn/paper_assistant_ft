@@ -45,7 +45,13 @@ if [[ -z "${MODEL_PATH}" ]]; then
   fi
 fi
 
-BASE_CONFIG="${BASE_CONFIG:-configs/lora_sft_qwen25_3b_v1.yaml}"
+BASE_CONFIG="${BASE_CONFIG:-configs/train/lora_sft_qwen25_3b_v1.yaml}"
+if [[ ! -f "${BASE_CONFIG}" ]]; then
+  # Compatibility fallback for legacy config path.
+  if [[ "${BASE_CONFIG}" == "configs/lora_sft_qwen25_3b_v1.yaml" ]]; then
+    BASE_CONFIG="configs/train/lora_sft_qwen25_3b_v1.yaml"
+  fi
+fi
 TMP_CONFIG="$(mktemp /tmp/lora_sft_smoke.XXXX.yaml)"
 cp "${BASE_CONFIG}" "${TMP_CONFIG}"
 sed -i "s|^model_name_or_path:.*|model_name_or_path: ${MODEL_PATH}|" "${TMP_CONFIG}"

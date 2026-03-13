@@ -1220,3 +1220,25 @@ python scripts/check_external_eval_v1.py
   - `scripts/` 已从平铺结构转为分层结构
   - 下一批最值得继续做的是 `configs/` 分层
 
+## 2026-03-13 补充：Configs Physical Refactor Batch 3 Completed
+
+- 本轮真实迁移：
+  - `configs/dataset_paper_assistant_v1.yaml` -> `configs/datasets/paper_assistant_v1.yaml`
+  - `configs/lora_sft_qwen25_3b_v1.yaml` -> `configs/train/lora_sft_qwen25_3b_v1.yaml`
+  - `configs/lora_sft_qwen_v1_full.yaml` -> `configs/train/lora_sft_qwen_v1_full.yaml`
+- 训练脚本同步：
+  - `scripts/train/run_train_smoke.sh`
+    - 默认 `BASE_CONFIG` 切换到 `configs/train/lora_sft_qwen25_3b_v1.yaml`
+    - 增加旧路径兼容映射
+  - `scripts/train/run_train_full.sh`
+    - 默认 `BASE_CONFIG` 切换到 `configs/train/lora_sft_qwen_v1_full.yaml`
+    - 增加旧路径兼容映射
+- 自检结果：
+  - `python scripts/check_dataset_v1.py` 通过
+  - `python scripts/data/check_dataset_v1.py` 通过
+  - `python scripts/check_external_eval_v1.py` 通过
+  - `python scripts/data/check_external_eval_v1.py` 通过
+- 本轮结论：
+  - `configs/` 已完成按职责分层
+  - 当前下一批应评估 `data/processed/` 是否做物理拆分
+
