@@ -16,6 +16,7 @@
 - `chat_migration_handoff_2026-03-11.md`
 - `chat_migration_handoff_2026-03-12.md`
 - `repo_structure_guide.md`
+- `repo_physical_refactor_plan.md`
 - `README_docs.md`
 
 ### 1.2 阶段层
@@ -32,11 +33,12 @@
 
 1. `../README.md`
 2. `repo_structure_guide.md`
-3. `project_plan.md`
-4. `progress_log.md`
-5. `01_data/dataset_schema.md`
-6. `02_training/day3_training_hands_on_lab.md`
-7. `03_interview/teacher_question_bank.md`
+3. `repo_physical_refactor_plan.md`
+4. `project_plan.md`
+5. `progress_log.md`
+6. `01_data/dataset_schema.md`
+7. `02_training/day3_training_hands_on_lab.md`
+8. `03_interview/teacher_question_bank.md`
 
 ### 2.2 只想快速知道项目现在做到哪
 
@@ -54,9 +56,10 @@
 ### 2.4 要自己接着跑实验
 
 1. `repo_structure_guide.md`
-2. `02_training/environment_setup_guide.md`
-3. `02_training/day3_training_hands_on_lab.md`
-4. `../scripts/README.md`
+2. `repo_physical_refactor_plan.md`
+3. `02_training/environment_setup_guide.md`
+4. `02_training/day3_training_hands_on_lab.md`
+5. `../scripts/README.md`
 
 ## 3. 按主题查文档
 
@@ -135,6 +138,14 @@
 
 - 新开对话时的最小接手包
 - 避免重复解释背景
+
+### 4.5 `repo_physical_refactor_plan.md`
+
+负责：
+
+- 下一轮目录物理迁移应该怎么做
+- 哪些文件值得真的搬
+- 哪些路径应该统一但当前先别动
 
 ## 5. docs 的使用原则
 

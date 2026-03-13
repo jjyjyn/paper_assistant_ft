@@ -23,11 +23,12 @@
 
 1. `README.md`
 2. `docs/repo_structure_guide.md`
-3. `docs/project_plan.md`
-4. `docs/progress_log.md`
-5. `docs/01_data/dataset_schema.md`
-6. `docs/02_training/day3_training_hands_on_lab.md`
-7. `docs/03_interview/teacher_question_bank.md`
+3. `docs/repo_physical_refactor_plan.md`
+4. `docs/project_plan.md`
+5. `docs/progress_log.md`
+6. `docs/01_data/dataset_schema.md`
+7. `docs/02_training/day3_training_hands_on_lab.md`
+8. `docs/03_interview/teacher_question_bank.md`
 
 如果你只是要快速知道“项目现在到哪一步了”，只看这 4 份：
 
@@ -70,6 +71,7 @@ paper_assistant_ft/
 更细的目录说明见：
 
 - `docs/repo_structure_guide.md`
+- `docs/repo_physical_refactor_plan.md`
 - `configs/README.md`
 - `data/README.md`
 - `logs/README.md`
@@ -163,6 +165,7 @@ paper_assistant_ft/
 
 - `docs/README_docs.md`
 - `docs/repo_structure_guide.md`
+- `docs/repo_physical_refactor_plan.md`
 
 ## 8. 提交与同步约定
 
@@ -174,6 +177,7 @@ paper_assistant_ft/
 ## 9. 你接下来最常用的入口
 
 - 想看项目全貌：`docs/repo_structure_guide.md`
+- 想看后续重构路线：`docs/repo_physical_refactor_plan.md`
 - 想知道现在做到哪：`docs/project_plan.md`
 - 想看每轮实验怎么演进：`docs/progress_log.md`
 - 想直接跑：`scripts/README.md`
