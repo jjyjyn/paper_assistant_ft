@@ -1,4 +1,4 @@
-# Day 2 实操实验单（你亲手做，按步骤打卡）
+﻿# Day 2 实操实验单（你亲手做，按步骤打卡）
 
 > 本文档是“动手版”。每一步都要执行、截图或记录结果。
 
@@ -111,7 +111,7 @@ python scripts/export_dataset_readable.py
 
 ## Step 7. 写复盘记录（必须）
 
-写入 `docs/progress_log.md`：
+写入 `docs/00_meta/progress_log.md`：
 
 1. 你改了哪 3 条（case_id）
 2. 为什么改
@@ -132,3 +132,4 @@ python scripts/export_dataset_readable.py
 6. 下一步训练怎么做
 
 这 6 句话你写完发我，我帮你打磨成“能背”的面试版本。
+

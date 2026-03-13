@@ -1,4 +1,4 @@
-# Day 2 亲手执行清单（打卡版）
+﻿# Day 2 亲手执行清单（打卡版）
 
 ## 必做（今天）
 
@@ -7,7 +7,7 @@
 - [ ] 查看 `data/processed/train_v1.jsonl` 前 5 条
 - [ ] 查看 `data/processed/val_v1.jsonl` 前 5 条
 - [ ] 手工修改至少 3 条样本（不同任务类型）
-- [ ] 在 `docs/progress_log.md` 记录：
+- [ ] 在 `docs/00_meta/progress_log.md` 记录：
   - 执行命令
   - 发现的问题
   - 你做的修改
@@ -25,3 +25,4 @@
 - [ ] 验证 `torch.cuda.is_available() == True`
 - [ ] 执行 `bash scripts/run_train_smoke.sh`
 - [ ] 记录首轮训练的 loss/log 路径
+

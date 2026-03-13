@@ -206,9 +206,9 @@ bash scripts/run_train_full.sh
 5. 结论：下一轮改进计划
 
 建议更新文件：
-- `docs/progress_log.md`
-- `docs/project_plan.md`
-- `docs/interview_notes.md`
+- `docs/00_meta/progress_log.md`
+- `docs/00_meta/project_plan.md`
+- `docs/03_interview/interview_notes_quick.md`
 
 ---
 
@@ -898,3 +898,4 @@ bash scripts/run_eval_v1.sh
   - `disable_thinking = true`
   - `run_tag` 与预期一致
   - `thinking_control_modes` 非 `default`
+

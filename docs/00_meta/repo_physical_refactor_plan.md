@@ -8,23 +8,35 @@
 - 先做不破坏脚本的重构，再做路径迁移
 - 每一批迁移都必须保证训练与评测入口仍然可用
 
+## 0. 当前执行状态
+
+截至 `2026-03-13`：
+
+- 第一批 `docs/` 物理重构已完成
+  - `docs/README_docs.md` -> `docs/README.md`
+  - 总控文档迁入 `docs/00_meta/`
+  - handoff 文档迁入 `docs/00_meta/handoffs/`
+  - `interview_notes.md` 迁入 `docs/03_interview/interview_notes_quick.md`
+- 当前下一批应聚焦：
+  - `scripts/` 命名空间拆分
+  - `configs/` 分层
+  - `data/processed/` 是否值得物理拆分
+
 ## 1. 当前结构的主要问题
 
-### 1.1 `docs/` 根目录仍然偏拥挤
+### 1.1 `docs/` 根目录问题已完成首轮修复
 
-当前 `docs/` 根目录同时放了：
+已完成修复：
 
-- 总控文档
-- interview 快速笔记
-- chat handoff
-- docs 导航
-- 仓库结构说明
+- `docs/README.md` 成为统一入口
+- 总控文档迁入 `docs/00_meta/`
+- handoff 迁入 `docs/00_meta/handoffs/`
+- 面试快读口径迁入 `docs/03_interview/`
 
-问题：
+剩余工作：
 
-- “总控层”和“迁移层”混在一起
-- `interview_notes.md` 实际属于面试域，但现在挂在根目录
-- `README_docs.md` 不是标准命名，入口不够直观
+- 继续清理少量历史文档中的旧口径描述
+- 保持所有新文档引用使用新路径
 
 ### 1.2 `scripts/` 仍然是平铺结构
 
@@ -252,7 +264,7 @@ external eval 同理：
 
 ## 5. 执行优先级
 
-### 第一批：低风险，优先做
+### 第一批：低风险，已完成
 
 1. `docs/README_docs.md` 改为 `docs/README.md`
 2. 新建 `docs/00_meta/`
@@ -260,7 +272,7 @@ external eval 同理：
 4. 把 `interview_notes.md` 收口到 `docs/03_interview/`
 5. 全量更新 Markdown 链接
 
-这一批不会影响训练脚本本身，是最适合作为下一轮真实重构的起点。
+这一批已经完成，并且没有破坏训练与评测入口。
 
 ### 第二批：中风险，先做兼容壳
 
@@ -308,12 +320,11 @@ external eval 同理：
 
 ## 7. 推荐的下一步真实执行方案
 
-如果要真正开始做“物理重构”，建议严格按这个顺序：
+从当前状态继续做“物理重构”，建议严格按这个顺序：
 
-1. 先做 `docs/` 重构
-2. 再做 `scripts/` 重构，并保留旧路径 wrapper
-3. 再做 `configs/` 重构
-4. 最后评估 `data/` 是否值得物理迁移
+1. 先做 `scripts/` 重构，并保留旧路径 wrapper
+2. 再做 `configs/` 重构
+3. 最后评估 `data/` 是否值得物理迁移
 
 ## 8. 验收标准
 

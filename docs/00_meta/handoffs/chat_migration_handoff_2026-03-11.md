@@ -1,4 +1,4 @@
-# Chat Migration Handoff (2026-03-11)
+﻿# Chat Migration Handoff (2026-03-11)
 
 ## 1. Purpose
 
@@ -17,7 +17,7 @@ Paste everything between the two lines into the first message of the new chat.
 2) 路线：LLaMA-Factory + Qwen3-4B + LoRA SFT。
 3) 工作流：本地开发 + 服务器执行 + 手动同步（git / rsync / scp）。
 4) 目标：5 天 first usable，6-7 天 resume-ready。
-5) docs 体系必须持续更新：docs/progress_log.md, docs/project_plan.md, docs/interview_notes.md。
+5) docs 体系必须持续更新：docs/00_meta/progress_log.md, docs/00_meta/project_plan.md, docs/03_interview/interview_notes_quick.md。
 
 当前代码与数据状态（已完成）：
 1) 数据主链路已完成：
@@ -40,7 +40,7 @@ Paste everything between the two lines into the first message of the new chat.
 - overlap 检查：external 与主训练 raw 在 case_id/title 上做去重校验
 
 4) docs 侧已有数据学习与复盘材料：
-- docs/README_docs.md
+- docs/README.md
 - docs/01_data/dataset_schema.md
 - docs/01_data/dataset_reading_guide.md
 - docs/01_data/data_cleaning_labeling_guide.md
@@ -114,9 +114,9 @@ If Codex in new chat asks for state, paste:
 
 - Keep historical notes and logs. Do not delete old interview/docs content.
 - Keep these files continuously maintained:
-  - `docs/progress_log.md`
-  - `docs/project_plan.md`
-  - `docs/interview_notes.md`
+  - `docs/00_meta/progress_log.md`
+  - `docs/00_meta/project_plan.md`
+  - `docs/03_interview/interview_notes_quick.md`
 - Keep the fixed route unchanged unless user explicitly approves changes:
   - LLaMA-Factory + Qwen3-4B + LoRA SFT
 - Keep split strategy unchanged:
@@ -130,8 +130,8 @@ If Codex in new chat asks for state, paste:
 - You can refine prompt templates and outputs for better label quality.
 - You can tune training hyperparameters (batch size, grad acc, lr, cutoff_len).
 - Any change above must be recorded in:
-  - `docs/progress_log.md` (what changed)
-  - `docs/interview_notes.md` (why changed)
+  - `docs/00_meta/progress_log.md` (what changed)
+  - `docs/03_interview/interview_notes_quick.md` (why changed)
 
 ### 6.3 Execution Discipline
 
@@ -142,3 +142,4 @@ If Codex in new chat asks for state, paste:
   - common failure points
 - Prefer copy-paste command blocks for server operations.
 - Append docs by Day/topic; do not overwrite older sections.
+

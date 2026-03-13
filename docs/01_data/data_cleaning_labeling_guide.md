@@ -1,4 +1,4 @@
-# 数据清洗与标注实操指南（你需要亲手做）
+﻿# 数据清洗与标注实操指南（你需要亲手做）
 
 ## 目标
 
@@ -38,7 +38,7 @@ python scripts/check_dataset_v1.py
 
 5. 记录修改原因
 
-- 把每条修改写进 `docs/progress_log.md`（原因 + 修改前后差异）
+- 把每条修改写进 `docs/00_meta/progress_log.md`（原因 + 修改前后差异）
 
 ## 二、清洗规则（面试可直接讲）
 
@@ -89,3 +89,4 @@ python scripts/check_dataset_v1.py
 
 4. 问题：只在 in-domain 上效果好，外部泛化差
 - 处理：保留独立 external_eval，不参与训练；汇报时同时给出 in-domain + external 结果。
+

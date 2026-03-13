@@ -104,7 +104,7 @@ python scripts/export_dataset_readable.py
 2. 找出 3 条质量一般的样本（不同任务类型）
 3. 回到 `paper_cases_v1.json` 或脚本模板逻辑修改
 4. 重新构建 + 校验 + 导出
-5. 在 `progress_log.md` 记录“改了什么、为什么”
+5. 在 `../00_meta/progress_log.md` 记录“改了什么、为什么”
 
 ### 3.5 数据质量红线
 

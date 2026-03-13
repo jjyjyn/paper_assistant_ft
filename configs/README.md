@@ -1,4 +1,4 @@
-# configs 目录说明
+﻿# configs 目录说明
 
 `configs/` 只放配置文件，不放执行日志和临时记录。
 
@@ -21,5 +21,6 @@
 ## 维护原则
 
 - 配置文件只描述参数，不记录实验结论
-- 重大配置变更需要在 `docs/project_plan.md` 和 `docs/progress_log.md` 留痕
+- 重大配置变更需要在 `docs/00_meta/project_plan.md` 和 `docs/00_meta/progress_log.md` 留痕
 - 不同阶段的配置文件尽量保留，不覆盖历史版本
+

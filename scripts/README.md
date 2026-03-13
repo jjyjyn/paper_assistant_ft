@@ -1,4 +1,4 @@
-# scripts 目录说明
+﻿# scripts 目录说明
 
 `scripts/` 只放“动作脚本”。你要构建数据、检查数据、训练、评测、同步服务器，入口基本都在这里。
 
@@ -83,5 +83,6 @@
 ## 4. 维护原则
 
 - 同类动作优先复用已有脚本，不临时造新入口
-- 大改脚本时，同步更新 `docs/progress_log.md`
-- 如果评测口径变了，要同时更新 `docs/project_plan.md` 和相关面试文档
+- 大改脚本时，同步更新 `docs/00_meta/progress_log.md`
+- 如果评测口径变了，要同时更新 `docs/00_meta/project_plan.md` 和相关面试文档
+

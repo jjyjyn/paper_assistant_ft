@@ -1,6 +1,6 @@
-# 面试笔记（分类版，可长期累积）
+﻿# 面试笔记（分类版，可长期累积）
 
-> 说明：此文件用于分类沉淀，不替代 `docs/interview_notes.md`。如果你要按老师追问逐项准备，优先看 `docs/03_interview/teacher_question_bank.md`。
+> 说明：此文件用于分类沉淀，不替代 `docs/03_interview/interview_notes_quick.md`。如果你要按老师追问逐项准备，优先看 `docs/03_interview/teacher_question_bank.md`。
 
 ## A. 按天复盘
 
@@ -230,3 +230,4 @@
   - 开跑前脚本参数 `grep` 校验
   - 运行时 fail-fast 校验
   - 跑后 summary 元信息校验
+

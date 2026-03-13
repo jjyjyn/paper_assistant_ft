@@ -1,4 +1,4 @@
-# Chat Migration Handoff (2026-03-12)
+﻿# Chat Migration Handoff (2026-03-12)
 
 ## 1. Purpose
 
@@ -127,9 +127,9 @@ D. 关键解释（必须保持）
 
 E. docs 已经维护到的重点
 请继续维护这些文件，不要删历史内容：
-- docs/progress_log.md
-- docs/project_plan.md
-- docs/interview_notes.md
+- docs/00_meta/progress_log.md
+- docs/00_meta/project_plan.md
+- docs/03_interview/interview_notes_quick.md
 - docs/02_training/day3_training_hands_on_lab.md
 - docs/03_interview/teacher_question_bank.md
 - docs/03_interview/interview_notes_categorized.md
@@ -214,7 +214,7 @@ git log --oneline -n 8
   - `/root/autodl-tmp/modelscope-cache/Qwen/Qwen3-4B`
 - Third-pass clean-eval directory:
   - `outputs/evals/qwen_lora_v1_full_2026-03-12_180125`
-- This handoff supersedes the older `docs/chat_migration_handoff_2026-03-11.md`.
+- This handoff supersedes the older `docs/00_meta/handoffs/chat_migration_handoff_2026-03-11.md`.
 
 ## 5. Latest Delta (2026-03-12, after this handoff file was created)
 
@@ -282,3 +282,4 @@ git log --oneline -n 8
 - Process hardening added:
   - `scripts/run_eval_v1.sh` fail-fast when tag/flag mismatch (`nothink` tag but `DISABLE_THINKING!=1`)
   - invalid `OMP_NUM_THREADS` auto-correction to `8`
+

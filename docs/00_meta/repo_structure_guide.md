@@ -1,4 +1,4 @@
-# 仓库结构总说明
+﻿# 仓库结构总说明
 
 这份文档只回答一件事：`paper_assistant_ft` 这个仓库每一层分别放什么、为什么这样放、遇到问题该先看哪里。
 
@@ -97,7 +97,7 @@ data/
 - `logs/` 默认不进 Git
 - `logs/README.md` 会保留，用来说明目录用途
 - 这里适合放原始执行日志，不适合放整理后的结论
-- 结论应该回写到 `docs/progress_log.md`
+- 结论应该回写到 `docs/00_meta/progress_log.md`
 
 ### 2.6 `docs/`
 
@@ -107,18 +107,25 @@ data/
 
 ```text
 docs/
-├─ README_docs.md
-├─ repo_structure_guide.md
-├─ project_plan.md
-├─ progress_log.md
-├─ interview_notes.md
-├─ chat_migration_handoff_*.md
+├─ README.md
+├─ 00_meta/
+│  ├─ project_plan.md
+│  ├─ progress_log.md
+│  ├─ repo_structure_guide.md
+│  ├─ repo_physical_refactor_plan.md
+│  └─ handoffs/
 ├─ 01_data/
 ├─ 02_training/
 └─ 03_interview/
 ```
 
-目录说明见：`docs/README_docs.md`
+其中：
+
+- `README.md` 是 docs 总入口
+- `00_meta/` 是跨阶段总控层
+- `03_interview/` 里包含 `interview_notes_quick.md`
+
+目录说明见：`docs/README.md`
 
 ## 3. 根目录文件各自干什么
 
@@ -168,9 +175,9 @@ docs/
 
 ### 4.4 如果你在做复盘或面试准备
 
-1. 看 `docs/project_plan.md`
-2. 看 `docs/progress_log.md`
-3. 看 `docs/interview_notes.md`
+1. 看 `docs/00_meta/project_plan.md`
+2. 看 `docs/00_meta/progress_log.md`
+3. 看 `docs/03_interview/interview_notes_quick.md`
 4. 看 `docs/03_interview/teacher_question_bank.md`
 
 ## 5. 哪些文件是“代码”，哪些是“项目资产”
@@ -189,10 +196,10 @@ docs/
 
 ### 5.3 过程资产
 
-- `docs/project_plan.md`
-- `docs/progress_log.md`
-- `docs/interview_notes.md`
-- `docs/chat_migration_handoff_*.md`
+- `docs/00_meta/project_plan.md`
+- `docs/00_meta/progress_log.md`
+- `docs/03_interview/interview_notes_quick.md`
+- `docs/00_meta/handoffs/*`
 
 ### 5.4 实验资产
 
@@ -218,10 +225,11 @@ docs/
 ## 7. 当前推荐的阅读入口
 
 - 看仓库总貌：`README.md`
-- 看目录解释：`docs/repo_structure_guide.md`
-- 看文档地图：`docs/README_docs.md`
+- 看目录解释：`docs/00_meta/repo_structure_guide.md`
+- 看文档地图：`docs/README.md`
 - 看脚本地图：`scripts/README.md`
 - 看数据地图：`data/README.md`
 - 看配置地图：`configs/README.md`
 - 看日志目录说明：`logs/README.md`
 - 看输出地图：`outputs/README.md`
+

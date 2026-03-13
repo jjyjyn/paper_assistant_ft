@@ -4,7 +4,8 @@
 
 - 阶段 1：环境与仓库跑通（已完成）
 - 阶段 2：数据集第一版制作（已完成）
-- 阶段 3：LoRA 微调训练（进行中：已完成训练前准备）
+- 阶段 3：LoRA 微调训练与评测闭环（已完成）
+- 阶段 4：仓库结构整理与物理重构（进行中：已完成 docs 批次）
 
 ## 阶段状态
 
@@ -20,13 +21,29 @@
 - 外部评测分集：`external_eval_v1 = 32`（8 case x 4 任务）
 - 已通过 build/check/export + 防泄漏校验
 
-3. LoRA 微调训练（In Progress）
+3. LoRA 微调训练与评测闭环（Done）
 - 已完成训练前检查（主数据 + external_eval 校验全部通过）
 - 已完成租用服务器环境重建与版本固定（无卡模式验证通过）
 - 已完成 smoke 训练脚本升级：优先 `Qwen3-4B`，兼容回退 `Qwen2.5-3B-Instruct`
 - 已新增正式训练入口：
   - `configs/lora_sft_qwen_v1_full.yaml`
   - `scripts/run_train_full.sh`
+- 已完成 full 训练
+- 已完成 baseline / clean / hardening / no-think 多轮评测
+- 已完成 `no-think` 生效验证，最佳目录：
+  - `outputs/evals/qwen_lora_v1_full_2026-03-13_082359_nothink/`
+
+4. 仓库结构整理与物理重构（In Progress）
+- 已完成根 README、目录 README、文档导航清理
+- 已完成 docs 物理迁移第一批：
+  - `docs/README.md`
+  - `docs/00_meta/`
+  - `docs/00_meta/handoffs/`
+  - `docs/03_interview/interview_notes_quick.md`
+- 下一步聚焦：
+  - `scripts/` 命名空间拆分
+  - `configs/` 分层
+  - `data/processed/` 物理分层评估
 
 ## 今日执行清单（Phase 3 启动日）
 

@@ -1,4 +1,4 @@
-# 过程记录（Progress Log）
+﻿# 过程记录（Progress Log）
 
 ## 2026-03-10（Day 1）
 
@@ -79,7 +79,7 @@ python scripts/check_dataset_v1.py
 - `docs/day2_data_hands_on_lab.md`
 - `docs/interview_notes_categorized.md`
 - `docs/dataset_reading_guide.md`
-- `docs/README_docs.md` 导航增强
+- `docs/README.md` 导航增强
 
 ### 目标
 
@@ -119,7 +119,7 @@ python scripts/check_dataset_v1.py
 - 目的：同时覆盖同分布评测与外部泛化评测，减少单一测试结论偏差。
 
 ## 2026-03-11 Chat Migration Prep
-- Added migration handoff document: `docs/chat_migration_handoff_2026-03-11.md`.
+- Added migration handoff document: `docs/00_meta/handoffs/chat_migration_handoff_2026-03-11.md`.
 - Document includes: fixed constraints, current dataset/eval status, next-step execution order, and paste-ready prompt block for starting a new Codex chat.
 - Goal: avoid token-limit context loss and continue directly from Phase 2 -> Phase 3 (training).
 
@@ -157,11 +157,11 @@ python scripts/check_external_eval_v1.py
 
 ### 本轮文档同步
 
-- 更新：`docs/project_plan.md`（Phase 3 状态与执行清单对齐）。
-- 更新：`docs/README_docs.md`（加入 Day3 手册导航）。
-- 更新：`docs/llm_finetune_end2end_playbook.md`（补 full 训练入口）。
-- 更新：`docs/interview_notes.md`（新增 Phase 3 高频追问）。
-- 新增：`docs/day3_training_hands_on_lab.md`（按“原理+操作+验收+常见坑”沉淀）。
+- 更新：`docs/00_meta/project_plan.md`（Phase 3 状态与执行清单对齐）。
+- 更新：`docs/README.md`（加入 Day3 手册导航）。
+- 更新：`docs/02_training/llm_finetune_end2end_playbook.md`（补 full 训练入口）。
+- 更新：`docs/03_interview/interview_notes_quick.md`（新增 Phase 3 高频追问）。
+- 新增：`docs/02_training/day3_training_hands_on_lab.md`（按“原理+操作+验收+常见坑”沉淀）。
 
 ### 关键结论（阶段口径）
 
@@ -258,12 +258,14 @@ python scripts/check_external_eval_v1.py
 
 ### 本次重组结果
 
-- 根目录只保留总控文档：
-  - `README_docs.md`
+- `docs/` 根目录现在只保留入口文件：`README.md`
+- 总控文档迁入：`docs/00_meta/`
   - `project_plan.md`
   - `progress_log.md`
-  - `interview_notes.md`
-  - `chat_migration_handoff_2026-03-11.md`
+  - `repo_structure_guide.md`
+  - `repo_physical_refactor_plan.md`
+- handoff 文档迁入：`docs/00_meta/handoffs/`
+- 面试快读口径迁入：`docs/03_interview/interview_notes_quick.md`
 - 数据阶段文档归入：`docs/01_data/`
 - 训练阶段文档归入：`docs/02_training/`
 - 面试阶段文档归入：`docs/03_interview/`
@@ -1168,3 +1170,23 @@ python scripts/check_external_eval_v1.py
 - `scripts/run_eval_v1.sh` 新增：
   - 若 `RUN_TAG` 包含 `nothink` 但 `DISABLE_THINKING!=1`，直接失败退出。
   - 若继承到非法 `OMP_NUM_THREADS`，自动重置为 `8` 并告警。
+
+## 2026-03-13 补充：Docs Physical Refactor Batch 1 Completed
+
+- 本轮真实迁移：
+  - `docs/README_docs.md` -> `docs/README.md`
+  - `docs/project_plan.md` -> `docs/00_meta/project_plan.md`
+  - `docs/progress_log.md` -> `docs/00_meta/progress_log.md`
+  - `docs/repo_structure_guide.md` -> `docs/00_meta/repo_structure_guide.md`
+  - `docs/repo_physical_refactor_plan.md` -> `docs/00_meta/repo_physical_refactor_plan.md`
+  - `docs/chat_migration_handoff_2026-03-11.md` -> `docs/00_meta/handoffs/chat_migration_handoff_2026-03-11.md`
+  - `docs/chat_migration_handoff_2026-03-12.md` -> `docs/00_meta/handoffs/chat_migration_handoff_2026-03-12.md`
+  - `docs/interview_notes.md` -> `docs/03_interview/interview_notes_quick.md`
+- 同步完成：
+  - 根 `README.md` 更新新路径
+  - `docs/README.md` 改成新导航
+  - 仓库内对旧 docs 路径的主要引用已切到新路径
+- 本轮结论：
+  - docs 层级从“根目录平铺”变成“入口层 + 00_meta 总控层 + 分阶段目录”
+  - 下一批最值得继续做的是 `scripts/` 命名空间拆分
+

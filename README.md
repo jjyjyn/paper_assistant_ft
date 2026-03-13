@@ -1,4 +1,4 @@
-# paper_assistant_ft
+﻿# paper_assistant_ft
 
 基于 Qwen 的中文论文精读与实验解析助手微调项目。当前仓库已经完成 `v1` 数据构建、LoRA SFT 训练、baseline 评测、`no-think` 推理控制验证，以及面试复盘文档沉淀。
 
@@ -22,10 +22,10 @@
 如果你第一次进仓库，按这个顺序读：
 
 1. `README.md`
-2. `docs/repo_structure_guide.md`
-3. `docs/repo_physical_refactor_plan.md`
-4. `docs/project_plan.md`
-5. `docs/progress_log.md`
+2. `docs/00_meta/repo_structure_guide.md`
+3. `docs/00_meta/repo_physical_refactor_plan.md`
+4. `docs/00_meta/project_plan.md`
+5. `docs/00_meta/progress_log.md`
 6. `docs/01_data/dataset_schema.md`
 7. `docs/02_training/day3_training_hands_on_lab.md`
 8. `docs/03_interview/teacher_question_bank.md`
@@ -33,9 +33,9 @@
 如果你只是要快速知道“项目现在到哪一步了”，只看这 4 份：
 
 1. `README.md`
-2. `docs/project_plan.md`
-3. `docs/progress_log.md`
-4. `docs/interview_notes.md`
+2. `docs/00_meta/project_plan.md`
+3. `docs/00_meta/progress_log.md`
+4. `docs/03_interview/interview_notes_quick.md`
 
 如果你要直接执行训练或评测，优先看：
 
@@ -49,7 +49,7 @@
 | --- | --- | --- |
 | `configs/` | 训练与数据配置文件 | `configs/README.md` |
 | `data/` | 原始数据、训练集、评测集、数据注册 | `data/README.md` |
-| `docs/` | 计划、日志、训练手册、面试复盘 | `docs/README_docs.md` |
+| `docs/` | 计划、日志、训练手册、面试复盘 | `docs/README.md` |
 | `logs/` | 训练日志与运行日志，默认不进 Git | `logs/README.md` |
 | `outputs/` | 评测结果、checkpoint、推理输出，默认不进 Git | `outputs/README.md` |
 | `scripts/` | 数据构建、校验、训练、评测、同步脚本 | `scripts/README.md` |
@@ -70,8 +70,8 @@ paper_assistant_ft/
 
 更细的目录说明见：
 
-- `docs/repo_structure_guide.md`
-- `docs/repo_physical_refactor_plan.md`
+- `docs/00_meta/repo_structure_guide.md`
+- `docs/00_meta/repo_physical_refactor_plan.md`
 - `configs/README.md`
 - `data/README.md`
 - `logs/README.md`
@@ -108,9 +108,9 @@ paper_assistant_ft/
 
 ### 5.4 复盘阶段
 
-1. 计划与下一步：`docs/project_plan.md`
-2. 实际执行日志：`docs/progress_log.md`
-3. 可直接复述的讲法：`docs/interview_notes.md`
+1. 计划与下一步：`docs/00_meta/project_plan.md`
+2. 实际执行日志：`docs/00_meta/progress_log.md`
+3. 可直接复述的讲法：`docs/03_interview/interview_notes_quick.md`
 4. 老师/面试追问：`docs/03_interview/teacher_question_bank.md`
 
 ## 6. 当前关键产物
@@ -150,10 +150,10 @@ paper_assistant_ft/
 
 ### 7.1 总控文档
 
-- `docs/project_plan.md`
-- `docs/progress_log.md`
-- `docs/interview_notes.md`
-- `docs/chat_migration_handoff_2026-03-12.md`
+- `docs/00_meta/project_plan.md`
+- `docs/00_meta/progress_log.md`
+- `docs/03_interview/interview_notes_quick.md`
+- `docs/00_meta/handoffs/chat_migration_handoff_2026-03-12.md`
 
 ### 7.2 阶段文档
 
@@ -163,9 +163,9 @@ paper_assistant_ft/
 
 ### 7.3 文档总入口
 
-- `docs/README_docs.md`
-- `docs/repo_structure_guide.md`
-- `docs/repo_physical_refactor_plan.md`
+- `docs/README.md`
+- `docs/00_meta/repo_structure_guide.md`
+- `docs/00_meta/repo_physical_refactor_plan.md`
 
 ## 8. 提交与同步约定
 
@@ -176,9 +176,10 @@ paper_assistant_ft/
 
 ## 9. 你接下来最常用的入口
 
-- 想看项目全貌：`docs/repo_structure_guide.md`
-- 想看后续重构路线：`docs/repo_physical_refactor_plan.md`
-- 想知道现在做到哪：`docs/project_plan.md`
-- 想看每轮实验怎么演进：`docs/progress_log.md`
+- 想看项目全貌：`docs/00_meta/repo_structure_guide.md`
+- 想看后续重构路线：`docs/00_meta/repo_physical_refactor_plan.md`
+- 想知道现在做到哪：`docs/00_meta/project_plan.md`
+- 想看每轮实验怎么演进：`docs/00_meta/progress_log.md`
 - 想直接跑：`scripts/README.md`
 - 想准备答辩：`docs/03_interview/teacher_question_bank.md`
+

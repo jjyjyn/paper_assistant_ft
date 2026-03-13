@@ -1,4 +1,4 @@
-# logs 目录说明
+﻿# logs 目录说明
 
 `logs/` 用来放运行过程中的原始日志。
 
@@ -17,9 +17,9 @@
 
 这些内容应该回写到：
 
-- `docs/progress_log.md`
-- `docs/project_plan.md`
-- `docs/interview_notes.md`
+- `docs/00_meta/progress_log.md`
+- `docs/00_meta/project_plan.md`
+- `docs/03_interview/interview_notes_quick.md`
 
 ## 3. 版本控制策略
 
@@ -30,3 +30,4 @@
 
 - 运行时可以按日期或任务名建子目录
 - 真正重要的结论不要只留在日志里，必须回写到 `docs/`
+
