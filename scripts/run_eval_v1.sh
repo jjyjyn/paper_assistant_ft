@@ -26,6 +26,20 @@ fi
 ADAPTER_PATH="${ADAPTER_PATH:-outputs/qwen_lora_v1_full}"
 DISABLE_THINKING="${DISABLE_THINKING:-0}"
 RUN_TAG="${RUN_TAG:-}"
+
+# Fail fast: avoid accidental expensive runs with mismatched flags.
+if [[ "${RUN_TAG}" == *"nothink"* && "${DISABLE_THINKING}" != "1" ]]; then
+  echo "ERROR: RUN_TAG contains 'nothink' but DISABLE_THINKING=${DISABLE_THINKING}."
+  echo "Set: export DISABLE_THINKING=1"
+  exit 2
+fi
+
+# Guard against noisy invalid OMP values inherited from shell sessions.
+if [[ -n "${OMP_NUM_THREADS:-}" && ! "${OMP_NUM_THREADS}" =~ ^[0-9]+$ ]]; then
+  echo "WARN: invalid OMP_NUM_THREADS='${OMP_NUM_THREADS}', reset to 8."
+  export OMP_NUM_THREADS=8
+fi
+
 STAMP="$(date +%F_%H%M%S)"
 MODE_SUFFIX=""
 if [[ "${DISABLE_THINKING}" == "1" ]]; then

@@ -607,3 +607,31 @@
   2. `empty_prediction_rate` 是否下降
   3. `structure_ok_rate` 是否上升
 - 只有输出通道先稳住，再加训练时长才有价值，否则可能只是把不受控的长输出继续放大。
+
+### 问：你后面有拿到 no-think 真生效的结果吗？怎么证明不是口头说说？
+
+答：
+
+- 有，目录是 `outputs/evals/qwen_lora_v1_full_2026-03-13_082359_nothink/`。
+- 我用三类证据证明它生效：
+  1. summary 元信息：
+     - `disable_thinking = true`
+     - `run_tag = nothink_after_sync`
+     - `thinking_control_modes = chat_template_enable_thinking_false`
+  2. 通道指标：
+     - test/external 的 `raw_think_rate` 都是 `0.0`
+     - `cleaned_changed_rate` 都是 `0.0`
+  3. 交付指标：
+     - test/external 的 `structure_ok_rate` 都到 `1.0`
+     - `empty_prediction_rate` 都降到 `0.0`
+
+### 问：为什么中间会出现一次“设置了 no-think 但结果没变”的白跑？
+
+答：
+
+- 根因是服务器代码版本没同步成功：`git pull` 因 SSL 超时失败，服务器仍是旧脚本。
+- 所以环境变量虽然设置了，但参数没有真正传给评测脚本。
+- 我后面做了三层防呆：
+  1. 开跑前 `grep` 脚本确认参数存在；
+  2. `run_eval_v1.sh` 加 fail-fast：`RUN_TAG` 包含 `nothink` 但未开启 `DISABLE_THINKING` 直接退出；
+  3. 跑完必须检查 summary 的 `disable_thinking/run_tag/thinking_control_modes`。

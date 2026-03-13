@@ -1125,3 +1125,46 @@ python scripts/check_external_eval_v1.py
   - `empty_prediction_rate` 是否下降
   - `structure_ok_rate` 是否上升
 3. 再决定是否做下一轮定向补样与重训
+
+## 2026-03-13 补充：No-Think Evaluation Run Succeeded (Run 082359_nothink)
+
+### 这一步做了什么
+
+- 先定位到一个关键执行问题：
+  - 服务器 `git pull --ff-only` 因 `SSL connection timeout` 失败。
+  - 导致服务器仍是旧版 `run_eval_v1.sh` / `eval_lora_model.py`，出现“看起来在跑 no-think，实际 `disable_thinking=false`”的白跑。
+- 纠正方式：
+  - 用本地 `scp` 直接覆盖服务器脚本。
+  - 先 `grep` 确认脚本包含 `--disable-thinking` 与 `RUN_TAG` 逻辑后再开跑。
+- 最终成功目录：
+  - `outputs/evals/qwen_lora_v1_full_2026-03-13_082359_nothink/`
+
+### 关键结果（本轮）
+
+- `test_v1`
+  - `avg_char_f1 = 0.6698`
+  - `empty_prediction_rate = 0.0`
+  - `raw_think_rate = 0.0`
+  - `cleaned_changed_rate = 0.0`
+  - `structure_ok_rate = 1.0`
+  - `disable_thinking = true`
+  - `thinking_control_modes = ["chat_template_enable_thinking_false"]`
+- `external_eval_v1`
+  - `avg_char_f1 = 0.6990`
+  - `empty_prediction_rate = 0.0`
+  - `raw_think_rate = 0.0`
+  - `cleaned_changed_rate = 0.0`
+  - `structure_ok_rate = 1.0`
+  - `disable_thinking = true`
+  - `thinking_control_modes = ["chat_template_enable_thinking_false"]`
+
+### 这轮怎么讲（面试口径）
+
+- “同一版 adapter 下，只改推理口径（禁止 thinking）就把 `raw_think_rate` 从 `1.0` 拉到 `0.0`，并把结构正确率拉到 `1.0`，说明主瓶颈确实是输出通道控制，而不是训练标签污染。”
+- “这一步还验证了流程工程能力：我不是继续盲跑，而是先做版本核对，再开 GPU 任务，避免重复成本。”
+
+### 本轮额外防呆改动
+
+- `scripts/run_eval_v1.sh` 新增：
+  - 若 `RUN_TAG` 包含 `nothink` 但 `DISABLE_THINKING!=1`，直接失败退出。
+  - 若继承到非法 `OMP_NUM_THREADS`，自动重置为 `8` 并告警。

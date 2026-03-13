@@ -323,3 +323,26 @@
   - `scripts/run_eval_v1.sh` 支持：
     - `DISABLE_THINKING=0/1`
     - `RUN_TAG=<text>`
+
+## 2026-03-13 补充：No-Think Gate Passed
+
+- 完成目录：
+  - `outputs/evals/qwen_lora_v1_full_2026-03-13_082359_nothink/`
+- Gate 结果：
+  - `test_v1`
+    - `raw_think_rate = 0.0`
+    - `empty_prediction_rate = 0.0`
+    - `structure_ok_rate = 1.0`
+    - `avg_char_f1 = 0.6698`
+  - `external_eval_v1`
+    - `raw_think_rate = 0.0`
+    - `empty_prediction_rate = 0.0`
+    - `structure_ok_rate = 1.0`
+    - `avg_char_f1 = 0.6990`
+- 结论：
+  - 输出通道主故障（`<think>` 泄漏）已被推理口径控制显著修复。
+  - 短期内不需要盲目追加训练时长，优先固化推理策略与流程防呆。
+- 流程防呆（已落地）：
+  - `run_eval_v1.sh` 新增 fail-fast：
+    - 若 `RUN_TAG` 包含 `nothink` 但 `DISABLE_THINKING` 未开启，直接退出。
+  - `run_eval_v1.sh` 对非法 `OMP_NUM_THREADS` 增加自动纠正。

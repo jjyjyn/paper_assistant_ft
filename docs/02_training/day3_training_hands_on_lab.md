@@ -852,3 +852,49 @@ bash scripts/run_eval_v1.sh
 6. 结论与下一步
 - 这轮证明了什么
 - 下一轮只改什么，不改什么
+
+## 24. no-think 真正生效的一轮（2026-03-13_082359_nothink）
+
+### 结果快照
+
+- `test_v1`
+  - `avg_char_f1 = 0.6698`
+  - `empty_prediction_rate = 0.0`
+  - `raw_think_rate = 0.0`
+  - `structure_ok_rate = 1.0`
+- `external_eval_v1`
+  - `avg_char_f1 = 0.6990`
+  - `empty_prediction_rate = 0.0`
+  - `raw_think_rate = 0.0`
+  - `structure_ok_rate = 1.0`
+- 元信息：
+  - `disable_thinking = true`
+  - `run_tag = nothink_after_sync`
+  - `thinking_control_modes = chat_template_enable_thinking_false`
+
+### 这轮说明了什么
+
+- 这轮是“推理口径修复”生效的直接证据。
+- 它证明输出通道控制是主变量，而不是训练标签本身脏了。
+
+## 25. 成本防呆：如何避免 no-think 再白跑
+
+### 真实踩坑
+
+- 服务器 `git pull` 失败（SSL timeout）时，工作区可能仍是旧脚本。
+- 旧脚本即使设置了 `DISABLE_THINKING=1`，也可能不会真正传参到评测脚本。
+
+### 现有防呆
+
+1. 开跑前脚本内容校验（必须做）
+- `grep -n -- "DISABLE_THINKING\|--disable-thinking\|RUN_TAG" scripts/run_eval_v1.sh`
+- `grep -n -- "--disable-thinking\|--run-tag\|thinking_control_modes" scripts/eval_lora_model.py`
+
+2. 运行时 fail-fast（已写进脚本）
+- 当 `RUN_TAG` 包含 `nothink` 但 `DISABLE_THINKING!=1` 时直接退出。
+
+3. 结果后验校验（必须做）
+- `summary.json` 里必须看到：
+  - `disable_thinking = true`
+  - `run_tag` 与预期一致
+  - `thinking_control_modes` 非 `default`

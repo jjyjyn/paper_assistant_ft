@@ -149,3 +149,9 @@
 
 29. 第四轮之后为什么不立刻继续加时长训练？
 - 回答：因为现在的主故障不是“内容完全答不上来”，而是“原始输出控制失败”。所以我先做推理口径 A/B（默认 vs no-think），先看 `raw_think_rate`、`empty_prediction_rate`、`structure_ok_rate` 能不能改善。只有先证明输出通道可控，再继续加训练时长才有性价比，否则可能只是把带 `<think>` 的长输出继续放大。
+
+30. no-think 真正生效后（`2026-03-13_082359_nothink`）结果说明了什么？
+- 回答：说明主瓶颈确实在推理输出通道。`disable_thinking=true` 后，test/external 都出现了 `raw_think_rate=0.0`、`empty_prediction_rate=0.0`、`structure_ok_rate=1.0`，并且 `avg_char_f1` 同时提升到 `0.6698/0.6990`。这证明之前不是“模型完全没学会”，而是“输出被 thinking 通道污染”。 
+
+31. 这次为什么会先出现一次 no-think 白跑，你怎么避免再次发生？
+- 回答：根因是服务器 `git pull` 因 SSL 超时失败，导致仍在跑旧脚本，看起来设置了环境变量但参数没真正传进评测脚本。后续我加了两层防呆：第一，开跑前必须 `grep` 检查脚本里存在 `--disable-thinking`；第二，`run_eval_v1.sh` 增加 fail-fast，如果 `RUN_TAG` 包含 `nothink` 但 `DISABLE_THINKING` 没开就直接退出，避免再次烧钱白跑。

@@ -205,3 +205,28 @@
   4. `avg_char_f1`
 - 解释口径：
   - 先把输出通道稳定住，再谈继续加训练时长
+
+### 10) no-think 生效确认（2026-03-13_082359_nothink）
+
+- 目录：
+  - `outputs/evals/qwen_lora_v1_full_2026-03-13_082359_nothink/`
+- 元信息确认：
+  - `disable_thinking = true`
+  - `run_tag = nothink_after_sync`
+  - `thinking_control_modes = chat_template_enable_thinking_false`
+- 指标确认：
+  - test/external 均达到：
+    - `raw_think_rate = 0.0`
+    - `empty_prediction_rate = 0.0`
+    - `structure_ok_rate = 1.0`
+- 可讲结论：
+  - 主故障已从“输出通道污染”转移到“内容细节打磨”，后续优化可以回到任务内容质量本身。
+
+### 11) 成本控制教训（必须讲）
+
+- 真实问题：
+  - 服务器 `git pull` 网络失败会导致脚本版本滞后，造成“看似开了 no-think，实际未生效”的白跑。
+- 改进动作：
+  - 开跑前脚本参数 `grep` 校验
+  - 运行时 fail-fast 校验
+  - 跑后 summary 元信息校验

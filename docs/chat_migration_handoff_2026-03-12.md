@@ -259,3 +259,26 @@ git log --oneline -n 8
     - `_nothink` suffix for output directory when `DISABLE_THINKING=1`
 - Next gate:
   - run eval A/B first (default vs no-think), do not rush into longer training yet.
+
+## 7. Latest Delta (2026-03-13, no-think gate passed)
+
+- Successful no-think run:
+  - `outputs/evals/qwen_lora_v1_full_2026-03-13_082359_nothink/`
+- Proof of effective no-think control:
+  - `disable_thinking = true`
+  - `run_tag = nothink_after_sync`
+  - `thinking_control_modes = chat_template_enable_thinking_false`
+- Key metrics:
+  - `test_v1`
+    - `avg_char_f1 = 0.6698`
+    - `empty_prediction_rate = 0.0`
+    - `raw_think_rate = 0.0`
+    - `structure_ok_rate = 1.0`
+  - `external_eval_v1`
+    - `avg_char_f1 = 0.6990`
+    - `empty_prediction_rate = 0.0`
+    - `raw_think_rate = 0.0`
+    - `structure_ok_rate = 1.0`
+- Process hardening added:
+  - `scripts/run_eval_v1.sh` fail-fast when tag/flag mismatch (`nothink` tag but `DISABLE_THINKING!=1`)
+  - invalid `OMP_NUM_THREADS` auto-correction to `8`
