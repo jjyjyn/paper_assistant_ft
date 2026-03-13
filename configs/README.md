@@ -15,8 +15,13 @@
 
 1. 先确认 `data/dataset_info.json` 注册的数据集名称
 2. 再检查这里的训练配置是否引用了正确的数据集
-3. 先用 `scripts/run_train_smoke.sh` 做冒烟
-4. 冒烟通过后再用 `scripts/run_train_full.sh`
+3. 先用 `scripts/train/run_train_smoke.sh` 做冒烟
+4. 冒烟通过后再用 `scripts/train/run_train_full.sh`
+
+兼容说明：
+
+- 旧入口 `scripts/run_train_smoke.sh` / `scripts/run_train_full.sh` 仍保留为 wrapper
+- 当前真实实现已经迁入 `scripts/train/`
 
 ## 维护原则
 

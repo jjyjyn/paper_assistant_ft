@@ -68,12 +68,25 @@ data/
 
 用途：保存所有“可执行动作”。
 
-这里的脚本分四类：
+当前结构：
 
-1. 数据构建与校验
-2. 训练与评测
-3. 服务器初始化与同步
-4. 辅助导出
+```text
+scripts/
+├─ README.md
+├─ data/
+├─ train/
+├─ eval/
+├─ server/
+└─ 根目录兼容 wrapper
+```
+
+说明：
+
+- `data/`：构建、校验、导出
+- `train/`：smoke / full 训练
+- `eval/`：评测主逻辑与评测入口
+- `server/`：服务器初始化、模型下载、同步
+- `scripts/` 根目录旧入口仍保留为兼容 wrapper，避免历史命令立刻失效
 
 目录说明见：`scripts/README.md`
 
@@ -155,19 +168,19 @@ docs/
 1. 看 `data/README.md`
 2. 看 `docs/01_data/dataset_schema.md`
 3. 改 `data/raw/`
-4. 跑 `scripts/build_dataset_v1.py`
-5. 跑 `scripts/check_dataset_v1.py`
+4. 跑 `scripts/data/build_dataset_v1.py`
+5. 跑 `scripts/data/check_dataset_v1.py`
 
 ### 4.2 如果你在做训练
 
 1. 看 `scripts/README.md`
 2. 看 `configs/README.md`
-3. 先 smoke：`scripts/run_train_smoke.sh`
-4. 再 full：`scripts/run_train_full.sh`
+3. 先 smoke：`scripts/train/run_train_smoke.sh`
+4. 再 full：`scripts/train/run_train_full.sh`
 
 ### 4.3 如果你在做评测
 
-1. 看 `scripts/run_eval_v1.sh`
+1. 看 `scripts/eval/run_eval_v1.sh`
 2. 输出会到 `outputs/evals/<run_name>/`
 3. 重点先看 `*_summary.json`
 4. 再看 `*_report.md`

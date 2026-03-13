@@ -71,15 +71,20 @@ external_eval/
 ### 5.1 主数据集
 
 1. 原始输入：`raw/paper_cases_v1.json`
-2. 构建脚本：`../scripts/build_dataset_v1.py`
-3. 校验脚本：`../scripts/check_dataset_v1.py`
-4. 导出可读版本：`../scripts/export_dataset_readable.py`
+2. 构建脚本：`../scripts/data/build_dataset_v1.py`
+3. 校验脚本：`../scripts/data/check_dataset_v1.py`
+4. 导出可读版本：`../scripts/data/export_dataset_readable.py`
 
 ### 5.2 外部评测集
 
 1. 原始输入：`external_eval/raw/external_eval_cases_v1.json`
-2. 构建脚本：`../scripts/build_external_eval_v1.py`
-3. 校验脚本：`../scripts/check_external_eval_v1.py`
+2. 构建脚本：`../scripts/data/build_external_eval_v1.py`
+3. 校验脚本：`../scripts/data/check_external_eval_v1.py`
+
+兼容说明：
+
+- 旧入口 `../scripts/build_dataset_v1.py` 等 wrapper 仍可运行
+- 但后续文档与开发统一以 `scripts/data/` 为准
 
 ## 6. 读取建议
 

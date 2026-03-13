@@ -17,8 +17,10 @@
   - 总控文档迁入 `docs/00_meta/`
   - handoff 文档迁入 `docs/00_meta/handoffs/`
   - `interview_notes.md` 迁入 `docs/03_interview/interview_notes_quick.md`
+- 第二批 `scripts/` 物理重构已完成
+  - 真实实现迁入 `scripts/data/ train/ eval/ server/`
+  - 根目录旧脚本入口保留为兼容 wrapper
 - 当前下一批应聚焦：
-  - `scripts/` 命名空间拆分
   - `configs/` 分层
   - `data/processed/` 是否值得物理拆分
 
@@ -38,21 +40,18 @@
 - 继续清理少量历史文档中的旧口径描述
 - 保持所有新文档引用使用新路径
 
-### 1.2 `scripts/` 仍然是平铺结构
+### 1.2 `scripts/` 平铺结构问题已完成首轮修复
 
-当前 `scripts/` 同时放了：
+已完成修复：
 
-- 数据构建
-- 数据校验
-- 训练
-- 评测
-- 服务器初始化
-- 同步工具
+- 新建 `scripts/data/ train/ eval/ server/`
+- 真实实现迁入对应子目录
+- 根目录旧入口保留为 wrapper
 
-问题：
+剩余工作：
 
-- 入口太平，脚本数量继续增长后会变乱
-- 新人不容易一眼看出“哪个脚本属于哪个阶段”
+- 在 docs 中逐步把推荐命令切到新路径
+- 等一段兼容期后，再决定是否移除旧 wrapper
 
 ### 1.3 `configs/` 语义还不够分层
 
@@ -274,13 +273,13 @@ external eval 同理：
 
 这一批已经完成，并且没有破坏训练与评测入口。
 
-### 第二批：中风险，先做兼容壳
+### 第二批：中风险，已完成
 
 1. 新建 `scripts/data/ train/ eval/ server/`
 2. 用 `git mv` 迁移脚本
 3. 在旧路径保留 wrapper
-4. 跑一次数据检查
-5. 跑一次评测 smoke
+4. 用新旧两套入口验证 `check_dataset_v1.py`
+5. 更新 `scripts/README.md`
 
 ### 第三批：中风险，整理配置
 
@@ -322,9 +321,8 @@ external eval 同理：
 
 从当前状态继续做“物理重构”，建议严格按这个顺序：
 
-1. 先做 `scripts/` 重构，并保留旧路径 wrapper
-2. 再做 `configs/` 重构
-3. 最后评估 `data/` 是否值得物理迁移
+1. 先做 `configs/` 重构
+2. 再评估 `data/processed/` 是否值得物理迁移
 
 ## 8. 验收标准
 

@@ -40,8 +40,13 @@
   - `docs/00_meta/`
   - `docs/00_meta/handoffs/`
   - `docs/03_interview/interview_notes_quick.md`
+- 已完成 scripts 物理迁移第二批：
+  - `scripts/data/`
+  - `scripts/train/`
+  - `scripts/eval/`
+  - `scripts/server/`
+  - 根目录旧脚本入口保留为 wrapper
 - 下一步聚焦：
-  - `scripts/` 命名空间拆分
   - `configs/` 分层
   - `data/processed/` 物理分层评估
 

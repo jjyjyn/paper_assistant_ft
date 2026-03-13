@@ -54,6 +54,11 @@
 | `outputs/` | 评测结果、checkpoint、推理输出，默认不进 Git | `outputs/README.md` |
 | `scripts/` | 数据构建、校验、训练、评测、同步脚本 | `scripts/README.md` |
 
+补充说明：
+
+- `scripts/` 现在已经按 `data / train / eval / server` 拆分
+- 根目录旧脚本入口仍保留为兼容 wrapper，所以旧命令暂时还能继续跑
+
 ## 4. 仓库结构
 
 ```text
@@ -83,21 +88,21 @@ paper_assistant_ft/
 ### 5.1 数据阶段
 
 1. 在 `data/raw/` 准备原始论文案例
-2. 用 `scripts/build_dataset_v1.py` 构建 `train/val/test`
-3. 用 `scripts/check_dataset_v1.py` 做字段与分布校验
-4. 用 `scripts/build_external_eval_v1.py` 构建 external eval
-5. 用 `scripts/check_external_eval_v1.py` 做外部评测集校验
+2. 用 `scripts/data/build_dataset_v1.py` 构建 `train/val/test`
+3. 用 `scripts/data/check_dataset_v1.py` 做字段与分布校验
+4. 用 `scripts/data/build_external_eval_v1.py` 构建 external eval
+5. 用 `scripts/data/check_external_eval_v1.py` 做外部评测集校验
 
 ### 5.2 训练阶段
 
 1. 在 `configs/` 选择训练配置
-2. 先运行 `scripts/run_train_smoke.sh`
-3. Smoke 通过后运行 `scripts/run_train_full.sh`
+2. 先运行 `scripts/train/run_train_smoke.sh`
+3. Smoke 通过后运行 `scripts/train/run_train_full.sh`
 4. 训练产物默认写入 `outputs/`
 
 ### 5.3 评测阶段
 
-1. 运行 `scripts/run_eval_v1.sh`
+1. 运行 `scripts/eval/run_eval_v1.sh`
 2. 评测目录写入 `outputs/evals/<run_name>/`
 3. 重点看：
    - `test_v1_summary.json`

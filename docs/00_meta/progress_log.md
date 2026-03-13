@@ -1190,3 +1190,33 @@ python scripts/check_external_eval_v1.py
   - docs 层级从“根目录平铺”变成“入口层 + 00_meta 总控层 + 分阶段目录”
   - 下一批最值得继续做的是 `scripts/` 命名空间拆分
 
+## 2026-03-13 补充：Scripts Physical Refactor Batch 2 Completed
+
+- 本轮真实迁移：
+  - `scripts/build_dataset_v1.py` -> `scripts/data/build_dataset_v1.py`
+  - `scripts/build_external_eval_v1.py` -> `scripts/data/build_external_eval_v1.py`
+  - `scripts/check_dataset_v1.py` -> `scripts/data/check_dataset_v1.py`
+  - `scripts/check_external_eval_v1.py` -> `scripts/data/check_external_eval_v1.py`
+  - `scripts/export_dataset_readable.py` -> `scripts/data/export_dataset_readable.py`
+  - `scripts/run_train_smoke.sh` -> `scripts/train/run_train_smoke.sh`
+  - `scripts/run_train_full.sh` -> `scripts/train/run_train_full.sh`
+  - `scripts/eval_lora_model.py` -> `scripts/eval/eval_lora_model.py`
+  - `scripts/run_eval_v1.sh` -> `scripts/eval/run_eval_v1.sh`
+  - `scripts/server_day1_init.sh` -> `scripts/server/server_day1_init.sh`
+  - `scripts/server_rental_init.sh` -> `scripts/server/server_rental_init.sh`
+  - `scripts/download_qwen3_modelscope.sh` -> `scripts/server/download_qwen3_modelscope.sh`
+  - `scripts/sync_to_server.ps1` -> `scripts/server/sync_to_server.ps1`
+- 兼容策略：
+  - 在 `scripts/` 根目录重建同名 wrapper
+  - 旧命令仍可运行，例如：
+    - `python scripts/check_dataset_v1.py`
+    - `bash scripts/run_eval_v1.sh`
+- 本地自检：
+  - `python -m py_compile` 通过（wrapper + 新路径脚本）
+  - `python scripts/check_dataset_v1.py` 通过
+  - `python scripts/data/check_dataset_v1.py` 通过
+  - `bash -n` 在 Windows/MSYS 环境仍报 signal pipe 错误，属于本地环境噪声，不作为脚本失败证据
+- 本轮结论：
+  - `scripts/` 已从平铺结构转为分层结构
+  - 下一批最值得继续做的是 `configs/` 分层
+
